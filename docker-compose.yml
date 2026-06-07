@@ -1,0 +1,42 @@
+services:
+  app:
+    build: .
+    # Port lie a la boucle locale uniquement : pas d'exposition directe sur le reseau.
+    # L'acces distant se fait via le reverse proxy HTTPS ci-dessous (a activer en prod).
+    ports:
+      - "127.0.0.1:8501:8501"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      # Identifiants (hash bcrypt) montes en lecture seule ; le fichier n'est pas dans l'image.
+      - ./auth_config.yaml:/app/auth_config.yaml:ro
+    restart: unless-stopped
+    # Garde-fous de ressources (l'appli est mono-utilisateur cote calcul).
+    mem_limit: 1g
+    cpus: "1.0"
+
+  # Reverse proxy HTTPS + terminaison TLS. Decommenter et adapter le domaine en prod interne.
+  # Caddy obtient/renouvelle le certificat automatiquement (Let's Encrypt).
+  # Authentification applicative deja assuree par streamlit-authenticator dans l'appli ;
+  # pour du SSO d'entreprise, intercaler oauth2-proxy ici a la place.
+  #
+  # proxy:
+  #   image: caddy:2
+  #   depends_on:
+  #     - app
+  #   ports:
+  #     - "443:443"
+  #     - "80:80"
+  #   volumes:
+  #     - ./Caddyfile:/etc/caddy/Caddyfile:ro
+  #     - caddy_data:/data
+  #   restart: unless-stopped
+  #
+  # Caddyfile (exemple) :
+  #   comparables.intra.ncf-advisory.fr {
+  #       reverse_proxy app:8501
+  #   }
+
+# volumes:
+#   caddy_data:

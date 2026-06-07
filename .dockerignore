@@ -1,0 +1,15 @@
+# Secrets et donnees locales : jamais dans l'image (montes en volume a l'execution).
+.env
+auth_config.yaml
+data/
+*.log
+
+# Artefacts de dev
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.git/
+.DS_Store

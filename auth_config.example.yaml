@@ -1,0 +1,19 @@
+# Modele d'identifiants pour l'authentification interne (streamlit-authenticator).
+#
+# 1. Copier ce fichier en `auth_config.yaml` (NON versionne, voir .gitignore).
+# 2. Generer un hash bcrypt par utilisateur :
+#       python -m comparables.auth hash "MotDePasseDeLAnalyste"
+# 3. Coller le hash dans le champ `password` ci-dessous.
+#
+# La cle de signature du cookie ne se met PAS ici : elle est dans .env (AUTH_COOKIE_KEY).
+
+credentials:
+  usernames:
+    jdupont:
+      email: jdupont@ncf-advisory.fr
+      name: Jean Dupont
+      password: "$2b$12$REMPLACER_PAR_UN_VRAI_HASH_BCRYPT_GENERE_VIA_LA_CLI"
+    # mdurand:
+    #   email: mdurand@ncf-advisory.fr
+    #   name: Marie Durand
+    #   password: "$2b$12$..."
