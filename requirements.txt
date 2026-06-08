@@ -1,0 +1,17 @@
+# Dependances runtime pour le deploiement Streamlit Community Cloud.
+# Miroir des [project].dependencies de pyproject.toml (hors extras "dev").
+# Le package local `comparables` n'a pas besoin d'etre installe : app/streamlit_app.py
+# ajoute la racine du repo au sys.path. bcrypt / PyYAML / PyJWT arrivent en transitif
+# via streamlit-authenticator.
+streamlit>=1.40
+pandas>=2.2
+numpy>=1.26
+statsmodels>=0.14
+yfinance>=0.2.40
+openpyxl>=3.1
+plotly>=5.22
+pydantic>=2.7
+pydantic-settings>=2.3
+requests>=2.32
+requests-cache>=1.2
+streamlit-authenticator>=0.4
