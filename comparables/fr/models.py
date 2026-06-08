@@ -20,6 +20,7 @@ class Cession(BaseModel):
     # Enrichissement : identite (Recherche d'entreprises) + finances (ratios_inpi_bce)
     naf: Optional[str] = None               # code activite principale
     activite: Optional[str] = None          # libelle d'activite
+    nb_etablissements: Optional[int] = None # nb total d'etablissements (biais fonds vs entite)
     ca: Optional[float] = None              # chiffre d'affaires (euros)
     ebe: Optional[float] = None             # excedent brut d'exploitation (~EBITDA)
     ebit: Optional[float] = None            # resultat d'exploitation
@@ -30,5 +31,6 @@ class Cession(BaseModel):
     mult_ebe: Optional[float] = None        # prix / EBE (multiple, ex: 4.2 = 4,2x l'EBE)
 
     # Tracabilite
+    ann_id: Optional[str] = None            # identifiant de l'annonce BODACC (cle de dedup)
     descriptif: Optional[str] = None
     url: Optional[str] = None

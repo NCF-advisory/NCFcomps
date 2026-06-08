@@ -12,14 +12,27 @@ from typing import Optional
 
 import pandas as pd
 import requests_cache
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from comparables.config import settings
 
 
 def get_session(expire_after: int = 24 * 3600) -> requests_cache.CachedSession:
-    """Session HTTP avec cache SQLite (defaut : 24 h)."""
+    """Session HTTP avec cache SQLite (defaut : 24 h) et retry/backoff sur 429 et 5xx.
+
+    Le retry respecte l'en-tete Retry-After et applique un backoff exponentiel : indispensable
+    pour l'ingestion en masse (recherche-entreprises plafonne ~7 req/s -> 429). Les 429 ne sont
+    pas mis en cache (requests-cache ne garde que les 200) : ils seront re-tentes plus tard.
+    """
     backend = requests_cache.SQLiteCache(settings.cache_path)
-    return requests_cache.CachedSession(backend=backend, expire_after=expire_after)
+    session = requests_cache.CachedSession(backend=backend, expire_after=expire_after)
+    retry = Retry(total=5, backoff_factor=1.5, status_forcelist=(429, 500, 502, 503, 504),
+                  allowed_methods=frozenset({"GET", "POST"}), respect_retry_after_header=True)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount("https://", adapter)
+    session.mount("http://", adapter)
+    return session
 
 
 # --- Cache disque des series de cours (yfinance n'utilise pas `requests`) ---

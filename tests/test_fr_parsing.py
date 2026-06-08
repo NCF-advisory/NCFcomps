@@ -45,6 +45,74 @@ def test_extract_sirens_dedup_and_formats():
     assert p.extract_sirens(None) == []
 
 
+def test_parse_search_terms_splits_on_comma_and_space():
+    # virgules ET espaces séparent des termes indépendants (combinés en OU en aval).
+    assert p.parse_search_terms("celf, menuiserie") == ["celf", "menuiserie"]
+    assert p.parse_search_terms("bar tabac") == ["bar", "tabac"]
+    assert p.parse_search_terms("") == [] and p.parse_search_terms(None) == []
+
+
+def test_parse_search_terms_dedup_stopwords_and_short():
+    # doublons (casse/accents) supprimés ; mots-outils et jetons < 3 car. ignorés.
+    assert p.parse_search_terms("Menuiserie, menuiserie, MENUISERIE") == ["Menuiserie"]
+    assert p.parse_search_terms("salon de coiffure") == ["salon", "coiffure"]  # 'de' écarté
+    assert p.parse_search_terms("ébénisterie, ebenisterie") == ["ébénisterie"]  # accents = doublon
+
+
+def test_parse_search_terms_quoted_phrase_kept():
+    # une expression entre guillemets reste un terme unique (phrase exacte).
+    assert p.parse_search_terms('"salon de coiffure"') == ["salon de coiffure"]
+    assert p.parse_search_terms('"salon de coiffure", barbier') == ["salon de coiffure", "barbier"]
+
+
+def test_parse_search_terms_drops_bodacc_boilerplate():
+    # « publicité » est du texte juridique présent dans ~93 % des annonces -> écarté du texte.
+    assert p.parse_search_terms("agence de publicité") == ["agence"]
+    assert p.parse_search_terms("publicité") == []           # 100 % boilerplate -> aucun terme
+    assert p.parse_search_terms("vente fonds de commerce") == []   # tous génériques/redondants
+
+
+def test_naf_codes_for_known_sectors():
+    assert "7311" in p.naf_codes_for("agence de publicité")   # détecté via le mot écarté du texte
+    assert "1071" in p.naf_codes_for("boulangerie")
+    assert "4520" in p.naf_codes_for("garage")
+    assert "4332" in p.naf_codes_for("menuiserie, charpente")
+    assert p.naf_codes_for("zzz-inconnu") == []
+    assert p.naf_codes_for("") == [] and p.naf_codes_for(None) == []
+
+
+def test_parse_naf_filters_normalizes():
+    assert p.parse_naf_filters("43.32A, 16.23Z") == ["4332A", "1623Z"]
+    assert p.parse_naf_filters("43") == ["43"]
+    assert p.parse_naf_filters("43.32a 16") == ["4332A", "16"]    # casse + espace = liste
+    assert p.parse_naf_filters("") == [] and p.parse_naf_filters(None) == []
+
+
+def test_naf_matches_prefix_and_exact():
+    assert p.naf_matches("43.32A", ["4332A"]) is True
+    assert p.naf_matches("43.32A", ["43"]) is True               # préfixe
+    assert p.naf_matches("56.10A", ["43"]) is False
+    assert p.naf_matches("43.32A", []) is True                   # pas de filtre -> tout passe
+    assert p.naf_matches(None, ["43"]) is False                  # NAF inconnu, filtre actif
+
+
+def test_filter_by_naf():
+    cessions = [Cession(naf="43.32A"), Cession(naf="56.10A"), Cession(naf=None)]
+    kept = p.filter_by_naf(cessions, ["43"])
+    assert [c.naf for c in kept] == ["43.32A"]
+    assert len(p.filter_by_naf(cessions, [])) == 3               # filtre vide -> inchangé
+
+
+def test_expand_synonyms_pulls_family_and_keeps_unknown():
+    out = p.expand_synonyms(["menuiserie"])
+    assert "menuiserie" in out and "charpente" in out and "agencement" in out
+    # un terme inconnu est conservé tel quel, sans bruit.
+    assert p.expand_synonyms(["zzz-inconnu"]) == ["zzz-inconnu"]
+    # pas de doublon quand deux termes partagent une famille.
+    out2 = p.expand_synonyms(["boulangerie", "patisserie"])
+    assert len(out2) == len({p.strip_accents(t) for t in out2})
+
+
 def test_compute_pct_ca():
     assert p.compute_pct_ca(85000.0, 100000.0) == 0.85
     assert p.compute_pct_ca(85000.0, 0.0) is None       # CA nul -> pas de ratio
@@ -85,6 +153,14 @@ def test_robust_values_no_trim_when_mad_zero():
     # valeurs identiques -> MAD = 0 -> aucun trim (évite la division par zéro).
     kept, out = p.robust_values([4.0] * 9, p.MULT_EBE_BOUNDS)
     assert len(kept) == 9 and out == 0
+
+
+def test_robust_median_excludes_out_of_band():
+    # une valeur hors borne (20.6x) ne doit PAS entrer dans la médiane ×EBE.
+    med, n = p.robust_median([3.9, 6.4, 9.6, 20.6], p.MULT_EBE_BOUNDS)
+    assert n == 3 and med == 6.4                       # médiane de [3.9, 6.4, 9.6]
+    assert p.robust_median([], p.MULT_EBE_BOUNDS) == (None, 0)
+    assert p.robust_median([100.0], p.MULT_EBE_BOUNDS) == (None, 0)   # tout hors borne
 
 
 def test_is_plausible_pct():

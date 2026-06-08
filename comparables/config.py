@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     cache_path: str = "data/cache.sqlite"
     price_cache_ttl_hours: int = 24        # duree de vie du cache disque des cours (0 = desactive)
     history_db_path: str = "data/history.sqlite"   # base SQLite d'historisation des analyses
+    cessions_db_path: str = "data/cessions_fr.sqlite"  # base locale des cessions FR (ingestion en masse)
 
     # Authentification interne (Step 5) - secrets via .env, jamais en dur
     auth_enabled: bool = True
@@ -30,6 +31,12 @@ class Settings(BaseSettings):
     # Cles optionnelles (sources a paliers gratuits) - non requises par defaut
     fmp_api_key: Optional[str] = None
     alphavantage_api_key: Optional[str] = None
+
+    # INPI RNE (Registre National des Entreprises) - 2e source financiere optionnelle.
+    # Compte GRATUIT a creer sur data.inpi.fr ; identifiants via .env (jamais en dur).
+    # Quand renseignes, le pipeline FR complete le CA/EBE manquant via le RNE (cf. finances_rne).
+    inpi_rne_username: Optional[str] = None
+    inpi_rne_password: Optional[str] = None
 
 
 settings = Settings()

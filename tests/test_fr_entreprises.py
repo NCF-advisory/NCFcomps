@@ -18,8 +18,15 @@ def test_latest_ca_ignores_zero_and_null():
 
 def test_parse_company():
     result = {"nom_complet": "LE SLIP FRANCAIS", "activite_principale": "47.91B",
+              "nombre_etablissements": 3,
               "finances": {"2023": {"ca": 18754140, "resultat_net": -1692858}}}
     info = e.parse_company(result)
     assert info["nom"] == "LE SLIP FRANCAIS"
     assert info["naf"] == "47.91B"
+    assert info["nb_etablissements"] == 3                       # biais multi-établissements
     assert info["ca"] == 18754140.0 and info["ca_annee"] == 2023
+
+
+def test_parse_company_nb_etablissements_absent():
+    info = e.parse_company({"nom_complet": "X", "activite_principale": "10.71C"})
+    assert info["nb_etablissements"] is None

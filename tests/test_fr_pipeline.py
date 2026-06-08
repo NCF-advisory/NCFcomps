@@ -36,8 +36,7 @@ def _fake_company(siren):
 
 
 def _patch(monkeypatch):
-    monkeypatch.setattr(bodacc, "fetch_cessions",
-                        lambda departement=None, contains=None, since=None, limit=50: _fake_cessions())
+    monkeypatch.setattr(bodacc, "fetch_cessions", lambda *a, **k: _fake_cessions())
     monkeypatch.setattr(finances_inpi, "fetch_financials", _fake_financials)
     monkeypatch.setattr(entreprises, "fetch_company", _fake_company)
 
@@ -80,3 +79,44 @@ def test_to_dataframe(monkeypatch):
 def test_default_since_is_ten_years_iso():
     s = pipeline.default_since(10)
     assert len(s) == 10 and s[4] == "-"                 # format YYYY-MM-DD
+
+
+def test_build_cessions_fills_stats(monkeypatch):
+    _patch(monkeypatch)
+    stats: dict = {}
+    pipeline.build_cessions(limit=10, require_ca=False, stats=stats)
+    # 4 cessions examinées ; seule A (111111111) a un CA public ; A a aussi un EBE > 0.
+    assert stats["n_examined"] == 4
+    assert stats["n_ca_public"] == 1
+    assert stats["n_ebe_public"] == 1
+    assert stats["n_returned"] == 4                     # require_ca=False -> tout gardé
+
+
+def test_build_cessions_naf_filter(monkeypatch):
+    # 3 cessions enrichissables ; seule A est identifiée (NAF 10.71C) par _fake_company.
+    _patch(monkeypatch)
+    # Sans filtre NAF : A retenue (require_ca True n'en garde qu'une de toute façon).
+    assert [c.siren for c in pipeline.build_cessions(limit=10, require_ca=True)] == ["111111111"]
+    # Filtre NAF concordant -> A conservée.
+    keep = pipeline.build_cessions(limit=10, require_ca=True, naf_filters=["10"])
+    assert [c.siren for c in keep] == ["111111111"] and keep[0].naf == "10.71C"
+    # Filtre NAF non concordant -> A écartée (NAF 10.71C ne commence pas par 56).
+    assert pipeline.build_cessions(limit=10, require_ca=True, naf_filters=["56"]) == []
+
+
+def test_build_cessions_captures_nb_etablissements(monkeypatch):
+    monkeypatch.setattr(bodacc, "fetch_cessions", lambda *a, **k: _fake_cessions())
+    monkeypatch.setattr(finances_inpi, "fetch_financials", _fake_financials)
+    monkeypatch.setattr(entreprises, "fetch_company",
+                        lambda s: {"nom": "A", "naf": "10.71C", "nb_etablissements": 2}
+                        if s == "111111111" else None)
+    a = pipeline.build_cessions(limit=10, require_ca=True)[0]
+    assert a.nb_etablissements == 2
+
+
+def test_resolve_terms_or_split_and_synonyms():
+    # multi-termes -> liste (OU) ; sans expansion, pas de synonymes.
+    assert pipeline.resolve_terms("celf, menuiserie", expand=False) == ["celf", "menuiserie"]
+    # avec expansion : la famille menuiserie est tirée.
+    expanded = pipeline.resolve_terms("menuiserie", expand=True)
+    assert "menuiserie" in expanded and "charpente" in expanded and len(expanded) > 1

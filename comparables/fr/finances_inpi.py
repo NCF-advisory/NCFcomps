@@ -34,12 +34,8 @@ def fetch_financials(siren: str) -> list[dict]:
     return resp.json().get("results", [])
 
 
-def pick_for_date(financials: list[dict], cession_date: Optional[str],
-                  require: str = "chiffre_d_affaires") -> Optional[dict]:
-    """Choisit l'exercice pertinent : le plus récent CLOS AVANT la cession et portant la
-    donnée requise (CA) ; sinon le plus récent disponible. PURE (testée)."""
-    cand = [f for f in financials
-            if f.get(require) and f.get(require) > 0 and f.get("date_cloture_exercice")]
+def _pick(cand: list[dict], cession_date: Optional[str]) -> Optional[dict]:
+    """Parmi `cand`, l'exercice le plus récent clos AVANT la cession ; sinon le plus récent."""
     if not cand:
         return None
     if cession_date:
@@ -47,3 +43,28 @@ def pick_for_date(financials: list[dict], cession_date: Optional[str],
         if before:
             return max(before, key=lambda f: f["date_cloture_exercice"])
     return max(cand, key=lambda f: f["date_cloture_exercice"])
+
+
+def pick_for_date(financials: list[dict], cession_date: Optional[str],
+                  require: str = "chiffre_d_affaires") -> Optional[dict]:
+    """Choisit l'exercice pertinent : le plus récent CLOS AVANT la cession et portant la
+    donnée requise (CA par défaut) ; sinon le plus récent disponible. PURE (testée)."""
+    cand = [f for f in financials
+            if f.get(require) and f.get(require) > 0 and f.get("date_cloture_exercice")]
+    return _pick(cand, cession_date)
+
+
+def _positive(f: dict, field: str) -> bool:
+    v = f.get(field)
+    return isinstance(v, (int, float)) and v > 0
+
+
+def pick_financials(financials: list[dict], cession_date: Optional[str]) -> Optional[dict]:
+    """Comme pick_for_date mais accepte un exercice portant le CA **OU** l'EBE (> 0).
+
+    Permet de calculer un multiple × EBE même quand le CA manque (couverture élargie).
+    PURE (testée)."""
+    cand = [f for f in financials
+            if f.get("date_cloture_exercice") and (_positive(f, "chiffre_d_affaires")
+                                                   or _positive(f, "ebe"))]
+    return _pick(cand, cession_date)

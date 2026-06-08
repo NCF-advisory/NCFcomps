@@ -33,11 +33,13 @@ def latest_ca(finances: Optional[dict]) -> tuple[Optional[float], Optional[int]]
 
 
 def parse_company(result: dict) -> dict:
-    """Extrait nom / NAF / CA d'un résultat de l'API Recherche d'entreprises."""
+    """Extrait nom / NAF / nb d'établissements / CA d'un résultat Recherche d'entreprises."""
     ca, ca_year = latest_ca(result.get("finances"))
+    nb = result.get("nombre_etablissements")
     return {
         "nom": result.get("nom_complet"),
         "naf": result.get("activite_principale"),
+        "nb_etablissements": int(nb) if isinstance(nb, (int, float)) else None,
         "ca": ca,
         "ca_annee": ca_year,
     }
