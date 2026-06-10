@@ -1,8 +1,9 @@
 """Orchestration : pour chaque ticker -> fondamentaux + cours -> calculs -> CompanyRecord."""
 from __future__ import annotations
 import logging
+import threading
 from concurrent.futures import ThreadPoolExecutor
-from typing import Optional
+from typing import Callable, Optional
 
 import pandas as pd
 
@@ -71,21 +72,35 @@ def _prefetch_indices(tickers: list[str], period: str,
 
 def build_comparables(tickers: list[str], tax_rate: Optional[float] = None,
                       period: Optional[str] = None,
-                      frequency: Optional[str] = None) -> list[CompanyRecord]:
+                      frequency: Optional[str] = None,
+                      progress: Optional[Callable[[int, int], None]] = None) -> list[CompanyRecord]:
+    """Construit le lot. `progress(fait, total)` est appele apres chaque societe traitee
+    (toutes branches confondues), pour affichage d'avancement (UI / API)."""
     tax_rate = settings.tax_rate if tax_rate is None else tax_rate
     period = settings.beta_period if period is None else period
     frequency = settings.beta_frequency if frequency is None else frequency
 
     indices = _prefetch_indices(tickers, period, frequency)
+    done = {"n": 0}
+    done_lock = threading.Lock()
 
     def task(t: str) -> CompanyRecord:
         try:
-            return build_record(t, tax_rate, period, frequency,
-                                index_prices=indices.get(index_for(t)))
+            rec = build_record(t, tax_rate, period, frequency,
+                               index_prices=indices.get(index_for(t)))
         except Exception as exc:
             # Filet de securite (regle 5) : l'echec d'un ticker ne casse pas le lot.
             logger.warning("Echec du traitement de %s : %s", t, exc)
-            return CompanyRecord(ticker=t)
+            rec = CompanyRecord(ticker=t)
+        if progress is not None:
+            with done_lock:
+                done["n"] += 1
+                n = done["n"]
+            try:
+                progress(n, len(tickers))
+            except Exception:               # un callback defaillant ne casse pas le lot
+                pass
+        return rec
 
     workers = max(1, min(int(settings.pipeline_max_workers), len(tickers) or 1))
     if workers == 1:
