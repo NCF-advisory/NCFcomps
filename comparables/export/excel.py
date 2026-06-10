@@ -1,7 +1,6 @@
 """Export Excel formate du tableau de comparables (openpyxl). Renvoie des bytes (telechargement)."""
 from __future__ import annotations
 import io
-import statistics
 from typing import Optional
 
 from openpyxl import Workbook
@@ -10,6 +9,7 @@ from openpyxl.utils import get_column_letter
 
 from comparables.models import CompanyRecord
 from comparables.config import settings
+from comparables.finance.multiples import summary_stats
 
 # (champ, libelle, type, largeur)
 DISPLAY = [
@@ -40,13 +40,16 @@ STATS_FIELDS = ["beta_source", "beta_regression", "r2", "gearing", "beta_unlever
 _FMT = {"M": "# ##0", "beta": "0.00", "r2": "0.00", "pct": "0.0%", "mult": '0.0"x"'}
 
 
+_STAT_LABELS = {"median": "Mediane", "mean": "Moyenne", "min": "Minimum", "max": "Maximum"}
+
+
 def _stats(records: list[CompanyRecord]) -> dict[str, dict[str, float]]:
+    # Delegue a summary_stats (filtre None ET inf/nan) : memes stats que l'ecran.
     out: dict[str, dict[str, float]] = {}
     for f in STATS_FIELDS:
-        vals = [getattr(r, f) for r in records if getattr(r, f) is not None]
-        if vals:
-            out[f] = {"Mediane": statistics.median(vals), "Moyenne": statistics.mean(vals),
-                      "Minimum": min(vals), "Maximum": max(vals)}
+        s = summary_stats(getattr(r, f) for r in records)
+        if s:
+            out[f] = {_STAT_LABELS[k]: v for k, v in s.items()}
     return out
 
 
