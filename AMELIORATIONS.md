@@ -12,6 +12,17 @@ gérés (gitignore + `.env`/`auth_config.yaml` non suivis), Docker durci. Ce bac
 l'**amélioration**, pas du sauvetage — à **une exception** : le bug de correctness sur l'export Excel
 (voir §1).
 
+## Avancement (maj 2026-06-10)
+
+**Lot 0 du cahier des charges réalisé** (cf. [`CAHIER_DES_CHARGES.md`](CAHIER_DES_CHARGES.md)) :
+🐛 bug Excel `_stats` corrigé (délègue à `summary_stats`, + `tests/test_excel.py`) ;
+retry/backoff Yahoo (`_with_retry`, réglages `yahoo_max_attempts`/`yahoo_backoff_seconds`) ;
+cache disque des fondamentaux (`cache.load/store_cached_fundamentals`, TTL 72 h, échecs non mis
+en cache) ; parallélisation du lot (`pipeline_max_workers`, ordre préservé, règle 5 conservée) ;
+indices pré-téléchargés une seule fois (`_prefetch_indices`) ; dédoublonnage BODACC + filtre
+rectificatifs/annulations + `_cedant_siren` déterministe (+ `tests/test_fr_bodacc.py`) ;
+CI GitHub Actions (3.11/3.12) + `.gitattributes`. Suite : 93 tests.
+
 ## Ordre d'attaque suggéré
 
 - **Lot 1 — quick wins, fort levier, faible risque** : 🐛 bug Excel `_stats` (§1) → `.gitattributes`

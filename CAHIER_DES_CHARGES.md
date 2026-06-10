@@ -1,0 +1,106 @@
+# Cahier des charges — Plateforme d'évaluation NCF
+
+> Validé le 2026-06-10 avec l'utilisateur. Ce document cadre l'évolution de NCFcomps
+> vers un site web interne complet. Il complète `CLAUDE.md` (règles de code) et
+> `AMELIORATIONS.md` (backlog détaillé issu de l'audit du 2026-06-07).
+
+## 1. Objectif et décisions de cadrage
+
+Site web **interne** au cabinet d'évaluation (analystes uniquement) couvrant deux besoins :
+
+- **Module 1 — Comparables boursiers** : bêtas endettés/désendettés et multiples de
+  valorisation d'un échantillon de sociétés cotées.
+- **Module 2 — Cessions de fonds de commerce (France)** : prix de cession en **% du CA**
+  et en **multiple d'EBE**, à partir des sources publiques gratuites.
+
+Décisions actées :
+
+| Question | Décision |
+|---|---|
+| Audience | **Interne cabinet uniquement** (pas de vitrine publique, pas de SaaS) |
+| Interface | **Vrai site web** : backend FastAPI + frontend Next.js (référence d'ambition : caudia.fr) |
+| Hébergement | **VPS du cabinet** (docker-compose + Caddy HTTPS) |
+| Extraction comptes INPI | **Dès le départ**, via une cascade majoritairement gratuite (voir §5) |
+| Base existante | **On garde le moteur `comparables/`** (cœur financier testé) ; on rebâtit l'enveloppe. Pas de réécriture from scratch. |
+
+## 2. Architecture cible
+
+```
+NCFcomps/  (monorepo)
+├── comparables/        # moteur existant : calculs purs (finance/*) + sources + fr/
+├── backend/            # NOUVEAU — API FastAPI
+│   ├── api/            # endpoints REST : auth, comparables, cessions, runs, exports
+│   ├── worker/         # tâches longues : batch tickers, extraction comptes INPI
+│   └── db/             # SQLAlchemy (SQLite WAL au départ, migrable Postgres)
+├── frontend/           # NOUVEAU — Next.js + Tailwind
+└── deploy/             # docker-compose : caddy (HTTPS) + api + front + worker
+```
+
+- Les calculs longs (lot de tickers, extraction) passent par une file de tâches avec
+  progression consultable depuis l'UI.
+- Auth : comptes internes (bcrypt, migration des utilisateurs `auth_config.yaml`),
+  sessions par cookie. Exposition réseau uniquement via Caddy en HTTPS.
+- L'app Streamlit existante reste utilisable pendant la transition, puis sera retirée.
+
+## 3. Module 1 — Comparables boursiers
+
+- Saisie par tickers ou noms de sociétés ; paramètres : période, fréquence, taux d'IS.
+- Par société : bêta publié, bêta de régression + R² + n_obs, bêta ajusté Blume,
+  gearing, bêta désendetté (Hamada), re-endettement à structure cible, multiples
+  (VE/CA, VE/EBITDA, VE/EBIT, PER, P/B).
+- Sélection/exclusion de comparables **sans recalcul réseau** (stats recalculées en direct).
+- Fiabilité visible : R² faible signalé, couverture par ligne (✓/⚠/✗), source affichée.
+- Export Excel formaté ; historisation des runs + comparaison entre deux dates.
+- Sources : **Yahoo Finance** (retry/backoff + caches disque), contrôle via bêtas
+  sectoriels Damodaran ; **SEC EDGAR** en extension ultérieure (fondamentaux US).
+
+## 4. Module 2 — Cessions de fonds de commerce France
+
+- Recherche par activité (NAF), zone géographique, période (fenêtre 10 ans).
+- Résultats : % du CA et × EBE, médiane/quartiles/n par activité, indicateur de
+  fiabilité par ligne, liens de vérification (annonce BODACC, annuaire-entreprises).
+- Sources : **BODACC** (cessions + prix), **ratios INPI/BCE** (CA/EBE),
+  **Recherche d'entreprises** data.gouv (identité/NAF) — l'existant, fiabilisé
+  (dédoublonnage des annonces, correction du SIREN cédant).
+- Limite structurelle assumée : comptes confidentiels (~45 % des dépôts) hors de portée.
+
+## 5. Extraction des comptes annuels INPI (cascade)
+
+Quand le CA/EBE manque dans le dataset ratios INPI/BCE, le worker récupère les comptes
+déposés via l'**API INPI/RNE** (compte gratuit requis) et les traite en cascade :
+
+1. **XBRL / dépôt structuré** → parsing Python direct (gratuit, fiabilité max).
+2. **PDF avec couche texte** → extraction par position (`pdfplumber`/`PyMuPDF`) sur la
+   liasse fiscale standardisée CERFA 2050-2053 (gratuit).
+3. **PDF scanné** → OCR **Tesseract** + lecture du formulaire (gratuit).
+4. **API Claude en dernier recours** (Haiku + Batch API −50 %, ~0,4 ct €/document) pour
+   les documents que la cascade n'a pas su lire.
+
+Chaque document n'est extrait **qu'une fois** (cache définitif en base). Budget API
+estimé : ~10-20 € au démarrage, quelques €/mois ensuite. L'abonnement Claude ne couvre
+pas l'API : prévoir une clé API dédiée avec petit budget.
+
+## 6. Exigences non fonctionnelles
+
+- **Déploiement** : docker-compose sur VPS, Caddy frontal HTTPS, sauvegardes
+  automatiques de la base, logs.
+- **Quotas / CGU** : tout appel Yahoo derrière cache + retry borné ; respect du quota
+  API INPI ; User-Agent conforme partout ; sources strictement gratuites (règle CLAUDE.md).
+- **Secrets** : `.env` non versionné (clé Claude API, jeton INPI, clé cookie).
+- **Qualité** : CI GitHub Actions (pytest + ruff), tests obligatoires sur tout calcul
+  financier, cœur `finance/*` pur (aucune I/O).
+- **RGPD** : données d'entreprises publiques uniquement ; registre minimal pour les
+  comptes utilisateurs internes.
+
+## 7. Phasage
+
+| Lot | Contenu | Statut |
+|---|---|---|
+| **0 — Fiabilisation du moteur** | Bug Excel `_stats`, retry Yahoo + cache fondamentaux, parallélisation du lot, dédoublonnage BODACC, fix SIREN cédant, CI GitHub Actions, `.gitattributes` | en cours |
+| **1 — Backend API** | FastAPI, auth, endpoints des 2 modules, file de tâches, runs | à faire |
+| **2 — Frontend** | Next.js : login, module comparables, module cessions, historique, exports | à faire |
+| **3 — Extraction comptes INPI** | Client API RNE, cascade XBRL → PDF texte → Tesseract → Claude (Batch), cache définitif | à faire |
+| **4 — Déploiement VPS** | docker-compose complet, Caddy, backups, recette | à faire |
+
+Prérequis côté cabinet pour le lot 3 : compte INPI (data.inpi.fr, gratuit) + clé API
+Claude avec petit budget.

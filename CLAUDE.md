@@ -145,6 +145,12 @@ européenne payante **sans rien réécrire**.
   `pipeline.py`, onglet `app/pages/2_Cessions_FR.py`. **Limite structurelle** : CA/EBE absents des
   comptes confidentiels (~45 % des dépôts, art. L232-25) → couverture partielle affichée. Tests `test_fr_*`.
 
+- **[FAIT 2026-06-10] Lot 0 — fiabilisation du moteur** (cf. `CAHIER_DES_CHARGES.md` et
+  `AMELIORATIONS.md` § Avancement) : bug Excel `_stats`, retry + cache fondamentaux Yahoo,
+  parallélisation du lot + mutualisation des indices, dédoublonnage BODACC + SIREN cédant
+  déterministe, CI GitHub Actions, `.gitattributes`. Prochaines étapes (cahier des charges) :
+  lot 1 backend FastAPI, lot 2 frontend Next.js, lot 3 extraction comptes INPI, lot 4 VPS.
+
 ## Commandes
 
 ```bash
