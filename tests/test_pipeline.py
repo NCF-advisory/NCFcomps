@@ -118,3 +118,54 @@ def test_to_dataframe_round_trips_fields(monkeypatch):
     for field in CompanyRecord.model_fields:
         assert field in df.columns
     assert df.loc[0, "ticker"] == "TEST"
+
+
+class CountingPriceSource(DataSource):
+    """Source de cours comptant les fetchs par symbole (verifie la mutualisation)."""
+
+    def __init__(self):
+        self.calls: dict[str, int] = {}
+
+    def fetch_fundamentals(self, ticker: str) -> CompanyRecord | None:
+        return None
+
+    def fetch_prices(self, ticker: str, period: str, interval: str) -> pd.Series | None:
+        self.calls[ticker] = self.calls.get(ticker, 0) + 1
+        return _price_series(3)
+
+
+def test_build_comparables_fetches_each_index_once(monkeypatch):
+    """L'indice partage (^GSPC pour les tickers US) n'est telecharge qu'une fois."""
+    price = CountingPriceSource()
+    monkeypatch.setattr(pipeline, "fundamentals_source_for",
+                        lambda ticker: FakeSource(record=CompanyRecord(ticker=ticker)))
+    monkeypatch.setattr(pipeline, "price_source_for", lambda ticker: price)
+
+    recs = pipeline.build_comparables(["AAA", "BBB", "CCC"], tax_rate=0.25,
+                                      period="5y", frequency="1mo")
+
+    assert [r.ticker for r in recs] == ["AAA", "BBB", "CCC"]   # ordre preserve
+    assert price.calls["^GSPC"] == 1                           # 1 fetch d'indice, pas 3
+    assert all(price.calls[t] == 1 for t in ("AAA", "BBB", "CCC"))
+
+
+def test_build_comparables_parallel_preserves_order_and_rule5(monkeypatch):
+    """Avec plusieurs workers, l'ordre est preserve et un echec reste isole."""
+    monkeypatch.setattr(pipeline.settings, "pipeline_max_workers", 4)
+
+    def fund_for(ticker: str) -> DataSource:
+        if ticker == "BAD":
+            return FakeSource(raise_fundamentals=True)
+        return FakeSource(record=CompanyRecord(ticker=ticker, market_cap=100.0,
+                                               total_debt=40.0, total_cash=10.0))
+
+    monkeypatch.setattr(pipeline, "fundamentals_source_for", fund_for)
+    monkeypatch.setattr(pipeline, "price_source_for",
+                        lambda ticker: FakeSource(prices=_price_series(4)))
+
+    tickers = ["T1", "T2", "BAD", "T3", "T4"]
+    recs = pipeline.build_comparables(tickers, tax_rate=0.25, period="5y", frequency="1mo")
+
+    assert [r.ticker for r in recs] == tickers
+    assert recs[2].net_debt is None                  # BAD : record partiel
+    assert all(r.net_debt == 30.0 for i, r in enumerate(recs) if i != 2)

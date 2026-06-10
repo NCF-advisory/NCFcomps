@@ -1,6 +1,7 @@
 """Orchestration : pour chaque ticker -> fondamentaux + cours -> calculs -> CompanyRecord."""
 from __future__ import annotations
 import logging
+from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
 
 import pandas as pd
@@ -15,7 +16,8 @@ from comparables.finance import multiples as m
 logger = logging.getLogger(__name__)
 
 
-def build_record(ticker: str, tax_rate: float, period: str, frequency: str) -> CompanyRecord:
+def build_record(ticker: str, tax_rate: float, period: str, frequency: str,
+                 index_prices: Optional[pd.Series] = None) -> CompanyRecord:
     rec = fundamentals_source_for(ticker).fetch_fundamentals(ticker) or CompanyRecord(ticker=ticker)
 
     # Derives manquants
@@ -36,7 +38,7 @@ def build_record(ticker: str, tax_rate: float, period: str, frequency: str) -> C
     ps = price_source_for(ticker)
     try:
         stock = ps.fetch_prices(ticker, period, frequency)
-        index = ps.fetch_prices(idx, period, frequency)
+        index = index_prices if index_prices is not None else ps.fetch_prices(idx, period, frequency)
         if stock is not None and index is not None:
             br = compute_beta(returns_from_prices(stock), returns_from_prices(index),
                               settings.min_beta_obs)
@@ -52,21 +54,44 @@ def build_record(ticker: str, tax_rate: float, period: str, frequency: str) -> C
     return rec
 
 
+def _prefetch_indices(tickers: list[str], period: str,
+                      frequency: str) -> dict[str, pd.Series]:
+    """Telecharge une seule fois chaque indice de reference distinct du lot."""
+    out: dict[str, pd.Series] = {}
+    for idx in {index_for(t) for t in tickers}:
+        try:
+            series = price_source_for(idx).fetch_prices(idx, period, frequency)
+        except Exception as exc:
+            logger.warning("Echec du telechargement de l'indice %s : %s", idx, exc)
+            series = None
+        if series is not None:
+            out[idx] = series
+    return out
+
+
 def build_comparables(tickers: list[str], tax_rate: Optional[float] = None,
                       period: Optional[str] = None,
                       frequency: Optional[str] = None) -> list[CompanyRecord]:
     tax_rate = settings.tax_rate if tax_rate is None else tax_rate
     period = settings.beta_period if period is None else period
     frequency = settings.beta_frequency if frequency is None else frequency
-    records: list[CompanyRecord] = []
-    for t in tickers:
+
+    indices = _prefetch_indices(tickers, period, frequency)
+
+    def task(t: str) -> CompanyRecord:
         try:
-            records.append(build_record(t, tax_rate, period, frequency))
+            return build_record(t, tax_rate, period, frequency,
+                                index_prices=indices.get(index_for(t)))
         except Exception as exc:
             # Filet de securite (regle 5) : l'echec d'un ticker ne casse pas le lot.
             logger.warning("Echec du traitement de %s : %s", t, exc)
-            records.append(CompanyRecord(ticker=t))
-    return records
+            return CompanyRecord(ticker=t)
+
+    workers = max(1, min(int(settings.pipeline_max_workers), len(tickers) or 1))
+    if workers == 1:
+        return [task(t) for t in tickers]
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        return list(executor.map(task, tickers))   # map preserve l'ordre des tickers
 
 
 def to_dataframe(records: list[CompanyRecord]) -> pd.DataFrame:
