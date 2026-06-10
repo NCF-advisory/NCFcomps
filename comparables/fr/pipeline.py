@@ -8,6 +8,7 @@ from typing import Optional
 import pandas as pd
 
 from comparables.fr import bodacc, entreprises, finances_inpi
+from comparables.fr.comptes import cascade, inpi_client
 from comparables.fr.models import Cession
 from comparables.fr.parsing import compute_pct_ca, compute_mult_ebe, summarize_by_activity
 
@@ -59,6 +60,21 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
                 c.ebe = fin.get("ebe")
                 c.ebit = fin.get("ebit")
                 cloture = fin.get("date_cloture_exercice") or ""
+                c.ca_annee = int(cloture[:4]) if cloture[:4].isdigit() else None
+                c.pct_ca = compute_pct_ca(c.prix, c.ca)
+                c.mult_ebe = compute_mult_ebe(c.prix, c.ebe)
+        # 1bis) Comptes déposés INPI (cascade PDF/OCR/LLM) quand le dataset ratios n'a
+        #        rien donné — inactif sans credentials INPI (lot 3 du cahier des charges).
+        if c.siren and c.ca is None and inpi_client.configured():
+            try:
+                fetched = inpi_client.fetch_comptes_pdf(c.siren, before_date=c.date)
+                extraction = cascade.extract_comptes(fetched[1]) if fetched else None
+            except Exception as exc:
+                logger.warning("Echec comptes déposés SIREN %s : %s", c.siren, exc)
+                fetched, extraction = None, None
+            if fetched and extraction:
+                c.ca, c.ebe, c.ebit = extraction.ca, extraction.ebe, extraction.ebit
+                cloture = fetched[0].get("dateCloture") or ""
                 c.ca_annee = int(cloture[:4]) if cloture[:4].isdigit() else None
                 c.pct_ca = compute_pct_ca(c.prix, c.ca)
                 c.mult_ebe = compute_mult_ebe(c.prix, c.ebe)

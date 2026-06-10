@@ -157,8 +157,16 @@ européenne payante **sans rien réécrire**.
 - **[FAIT 2026-06-10] Lot 0 — fiabilisation du moteur** (cf. `CAHIER_DES_CHARGES.md` et
   `AMELIORATIONS.md` § Avancement) : bug Excel `_stats`, retry + cache fondamentaux Yahoo,
   parallélisation du lot + mutualisation des indices, dédoublonnage BODACC + SIREN cédant
-  déterministe, CI GitHub Actions, `.gitattributes`. Prochaines étapes (cahier des charges) :
-  lot 1 backend FastAPI, lot 2 frontend Next.js, lot 3 extraction comptes INPI, lot 4 VPS.
+  déterministe, CI GitHub Actions, `.gitattributes`.
+- **[FAIT 2026-06-10] Lots 1 & 2 — backend FastAPI (`backend/`) + site Next.js (`frontend/`).**
+- **[PARTIEL 2026-06-10] Lot 3 — extraction comptes INPI (`comparables/fr/comptes/`).**
+  Liasse 2052/2033-B (codes en tables, EBE recalculé convention BdF), cascade PDF texte →
+  OCR (optionnel) → Claude (inactif sans clé, modèle via `CLAUDE_MODEL`), client API RNE,
+  fallback branché dans `fr/pipeline.build_cessions` (inactif sans credentials INPI).
+  **Bloqué sur** : compte INPI (`INPI_USERNAME`/`INPI_PASSWORD`) + clé Claude
+  (`ANTHROPIC_API_KEY`) dans `.env`. À la levée : valider les schémas RNE réels et les
+  codes 2033-B sur liasse réelle, ajouter le cache définitif des extractions + Batch API.
+- **Lot 4 — déploiement VPS** (docker-compose api + front + caddy) : à faire.
 
 ## Commandes
 

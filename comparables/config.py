@@ -34,6 +34,12 @@ class Settings(BaseSettings):
     # Backend API (lot 1) - origines CORS du front (separees par des virgules)
     cors_origins: str = "http://localhost:3000"
 
+    # Extraction des comptes annuels INPI (lot 3) - inactifs sans credentials
+    inpi_username: Optional[str] = None    # compte data.inpi.fr (gratuit)
+    inpi_password: Optional[str] = None
+    anthropic_api_key: Optional[str] = None  # cle API Claude (etape LLM de la cascade)
+    claude_model: str = "claude-haiku-4-5"   # decision cout 2026-06-10 (~0,5 ct/document)
+
     # Cles optionnelles (sources a paliers gratuits) - non requises par defaut
     fmp_api_key: Optional[str] = None
     alphavantage_api_key: Optional[str] = None

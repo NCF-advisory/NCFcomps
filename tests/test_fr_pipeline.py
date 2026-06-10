@@ -80,3 +80,45 @@ def test_to_dataframe(monkeypatch):
 def test_default_since_is_ten_years_iso():
     s = pipeline.default_since(10)
     assert len(s) == 10 and s[4] == "-"                 # format YYYY-MM-DD
+
+
+def test_build_cessions_fallback_comptes_deposes(monkeypatch):
+    """Quand le dataset ratios n'a rien (comptes confidentiels exclus du jeu mais bilan
+    déposé), la cascade sur les comptes INPI comble le CA/EBE — si credentials présents."""
+    from comparables.fr.comptes import cascade as comptes_cascade
+    from comparables.fr.comptes import inpi_client
+    from comparables.fr.comptes.cascade import ExtractionResult
+
+    _patch(monkeypatch)
+    monkeypatch.setattr(inpi_client, "configured", lambda: True)
+    monkeypatch.setattr(
+        inpi_client, "fetch_comptes_pdf",
+        lambda siren, before_date=None, client=None:
+            ({"id": "b1", "dateCloture": "2022-12-31"}, b"%PDF-fake") if siren == "222222222"
+            else None)
+    monkeypatch.setattr(
+        comptes_cascade, "extract_comptes",
+        lambda pdf: ExtractionResult(ca=300000.0, ebe=45000.0, ebit=30000.0,
+                                     method="pdf_texte", regime="normal", missing_codes=[]))
+
+    cessions = pipeline.build_cessions(limit=10, require_ca=True)
+    by = {c.siren: c for c in cessions}
+
+    # B (222...) absente du dataset ratios mais comblée par les comptes déposés
+    assert "222222222" in by
+    b = by["222222222"]
+    assert b.ca == 300000.0 and b.ebe == 45000.0
+    assert b.ca_annee == 2022
+    assert abs(b.pct_ca - 0.30) < 1e-9                  # 90000 / 300000
+    # A vient toujours du dataset ratios (pas écrasée par la cascade)
+    assert by["111111111"].ca == 200000.0
+
+
+def test_build_cessions_fallback_inactif_sans_credentials(monkeypatch):
+    """Sans credentials INPI, le fallback est sauté : comportement historique inchangé."""
+    from comparables.fr.comptes import inpi_client
+
+    _patch(monkeypatch)
+    monkeypatch.setattr(inpi_client, "configured", lambda: False)
+    cessions = pipeline.build_cessions(limit=10, require_ca=True)
+    assert [c.siren for c in cessions] == ["111111111"]
