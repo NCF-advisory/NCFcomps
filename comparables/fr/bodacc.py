@@ -29,12 +29,15 @@ def _acte_dict(fields: dict) -> dict:
 def _cedant_siren(fields: dict, descriptif: str) -> Optional[str]:
     """SIREN du cédant. Le champ `registre` donne les SIREN *validés* (cédant + cessionnaire) ;
     le cédant est nommé en premier dans le descriptif. On prend donc le 1er SIREN du descriptif
-    qui figure aussi dans `registre` (évite les n° de dossier/enregistrement parasites)."""
-    registre = set(extract_sirens(fields.get("registre")))
+    qui figure aussi dans `registre` (évite les n° de dossier/enregistrement parasites).
+    À défaut, le 1er SIREN du `registre` dans son ordre de publication (cédant en tête) —
+    jamais une itération de set, non déterministe, qui pourrait retenir le cessionnaire."""
+    registre = extract_sirens(fields.get("registre"))      # liste ordonnée, dédupliquée
+    valides = set(registre)
     for s in extract_sirens(descriptif):
-        if s in registre:
+        if s in valides:
             return s
-    return next(iter(registre), None)
+    return registre[0] if registre else None
 
 
 def fetch_cessions(departement: Optional[str] = None, contains: Optional[str] = None,
@@ -63,6 +66,7 @@ def fetch_cessions(departement: Optional[str] = None, contains: Optional[str] = 
 
     session = cache.get_session()
     out: list[Cession] = []
+    seen: set[tuple] = set()
     offset = 0
     page = min(100, max(limit, 10))
     while len(out) < limit and offset < 3000:           # garde-fou (API plafonne à 10000)
@@ -75,13 +79,23 @@ def fetch_cessions(departement: Optional[str] = None, contains: Optional[str] = 
             break
         for rec in records:
             fields = rec.get("record", {}).get("fields", {})
+            # Rectificatifs / annulations : republient un acte déjà compté -> exclus.
+            typeavis = (fields.get("typeavis") or "").strip().lower()
+            if typeavis.startswith(("rectificatif", "annulation")):
+                continue
             descriptif = _acte_dict(fields).get("descriptif", "") or ""
             prix = extract_price(descriptif)
             if prix is None:
                 continue
+            siren = _cedant_siren(fields, descriptif)
+            # Dédoublonnage (additifs, republications) : même cédant + même prix = même acte.
+            key = (siren or fields.get("commercant"), prix)
+            if key in seen:
+                continue
+            seen.add(key)
             vente = _acte_dict(fields).get("vente", {})
             out.append(Cession(
-                siren=_cedant_siren(fields, descriptif),
+                siren=siren,
                 nom=fields.get("commercant"),
                 ville=fields.get("ville"),
                 departement=fields.get("numerodepartement"),
