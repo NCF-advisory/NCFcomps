@@ -1,0 +1,29 @@
+# CI : lint + tests (suite 100 % offline, ~30 s). Garde-fou n°1 du cœur financier (règle 1).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          uv venv
+          uv pip install -e ".[dev]"
+      - name: Lint (ruff)
+        run: uv run ruff check .
+      - name: Tests (pytest)
+        run: uv run pytest -q

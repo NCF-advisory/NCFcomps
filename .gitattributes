@@ -1,0 +1,11 @@
+# Fins de ligne normalisées (LF dans l'index, quel que soit l'OS du clone).
+* text=auto eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+uv.lock -text
+*.xlsx binary
+*.pkl binary
+*.sqlite binary
