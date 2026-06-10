@@ -55,6 +55,10 @@ backend/               # API FastAPI (lot 1 du cahier des charges)
   security.py          # cookie de session signé (itsdangerous) + dépendance current_user
   jobs.py              # file de tâches en mémoire (1 worker uvicorn) avec progression
   routers/             # auth, comparables (jobs/stats/resolve/export), cessions, runs
+frontend/              # Site web Next.js 15 + Tailwind 4 (lot 2) — npm run dev (port 3000)
+  next.config.ts       # proxy /api -> FastAPI (même origine : cookies sans CORS)
+  app/                 # login, (app)/comparables, (app)/cessions, (app)/historique
+  lib/api.ts           # client API typé ; lib/format.ts : formats FR
 tests/                 # tests du cœur financier + backend (TestClient, offline)
 ```
 
@@ -162,8 +166,12 @@ européenne payante **sans rien réécrire**.
 # Installation
 uv venv && uv pip install -e ".[dev]"
 
-# Lancer l'appli (depuis la racine)
+# Lancer l'appli Streamlit héritée (depuis la racine)
 streamlit run app/streamlit_app.py
+
+# Lancer le site web (backend + frontend, 2 terminaux)
+uvicorn backend.main:app --port 8000        # API (AUTH_ENABLED=false pour le dev)
+cd frontend && npm install && npm run dev   # http://localhost:3000
 
 # Tests + lint
 pytest

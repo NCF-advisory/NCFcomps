@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+/* ——— Registre de banque privée : papier chaud, encre vert bouteille, laiton ——— */
+@theme {
+  --color-paper: #f5f2ea;
+  --color-paper-deep: #ede9dd;
+  --color-card: #fdfcf8;
+  --color-ink: #11241d;
+  --color-ink-soft: #1d3a30;
+  --color-ink-mut: #5d6b60;
+  --color-hairline: #ddd6c4;
+  --color-brass: #a8842c;
+  --color-brass-soft: #c9a84c;
+  --color-ok: #2e7d4f;
+  --color-warn: #b07818;
+  --color-alert: #a8362c;
+
+  --font-display: var(--font-newsreader), "Georgia", serif;
+  --font-sans: var(--font-plex), "Helvetica Neue", sans-serif;
+  --font-mono: var(--font-plex-mono), "Menlo", monospace;
+}
+
+html {
+  background: var(--color-paper);
+}
+
+body {
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Grain de papier très léger sur tout le fond */
+.paper-grain {
+  background-image:
+    radial-gradient(ellipse at 18% 6%, rgba(168, 132, 44, 0.05), transparent 55%),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(17, 36, 29, 0.012) 3px);
+}
+
+/* Filigrane « registre » du panneau encre (login + sidebar) */
+.ledger-panel {
+  background-color: var(--color-ink);
+  background-image:
+    linear-gradient(160deg, rgba(201, 168, 76, 0.07), transparent 38%),
+    repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(245, 242, 234, 0.045) 32px),
+    repeating-linear-gradient(90deg, transparent, transparent 127px, rgba(245, 242, 234, 0.025) 128px);
+}
+
+/* Étiquettes petites capitales façon imprimé financier */
+.label-caps {
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* Chiffres tabulaires partout où l'on aligne des montants */
+.tabular {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Apparition en cascade des blocs de résultats */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise-in {
+  animation: rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Trait de plume sous les titres de page */
+.rule-brass {
+  position: relative;
+}
+.rule-brass::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 56px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-brass), transparent);
+}
+
+/* Barre de progression fine, laiton */
+.progress-track {
+  height: 3px;
+  background: var(--color-hairline);
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-brass), var(--color-brass-soft));
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.progress-indeterminate {
+  width: 35% !important;
+  animation: slide 1.4s ease-in-out infinite;
+}
+@keyframes slide {
+  0% { transform: translateX(-110%); }
+  100% { transform: translateX(320%); }
+}

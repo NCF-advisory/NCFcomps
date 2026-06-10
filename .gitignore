@@ -13,3 +13,10 @@ data/prices/
 .pytest_cache/
 .ruff_cache/
 .DS_Store
+data/fundamentals/
+# Frontend (Next.js)
+frontend/node_modules/
+frontend/.next/
+frontend/next-env.d.ts
+frontend/.env*.local
+.playwright-mcp/
