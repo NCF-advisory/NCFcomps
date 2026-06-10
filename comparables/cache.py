@@ -4,6 +4,8 @@
   yfinance gere son propre transport (curl_cffi) et ne passe pas par cette session.
 - load_cached_prices / store_cached_prices : cache disque des series de cours yfinance, pour
   ne pas re-telecharger l'historique a chaque execution (cle = ticker + periode + intervalle).
+- load_cached_fundamentals / store_cached_fundamentals : cache disque (JSON) des fondamentaux
+  Yahoo, l'appel le plus lourd et le plus throttle (TTL plus long que les cours).
 """
 from __future__ import annotations
 import time
@@ -14,6 +16,7 @@ import pandas as pd
 import requests_cache
 
 from comparables.config import settings
+from comparables.models import CompanyRecord
 
 
 def get_session(expire_after: int = 24 * 3600) -> requests_cache.CachedSession:
@@ -65,5 +68,42 @@ def store_cached_prices(ticker: str, period: str, interval: str,
     path = _price_cache_dir() / f"{_price_key(ticker, period, interval)}.pkl"
     try:
         series.to_pickle(path)
+    except Exception:
+        pass                           # un echec d'ecriture du cache ne doit jamais casser le calcul
+
+
+# --- Cache disque des fondamentaux (CompanyRecord serialise en JSON) ---
+
+def _fundamentals_ttl_seconds() -> int:
+    return int(getattr(settings, "fundamentals_cache_ttl_hours", 72)) * 3600
+
+
+def _fundamentals_cache_dir() -> Path:
+    d = Path(settings.cache_path).parent / "fundamentals"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+
+def load_cached_fundamentals(ticker: str) -> Optional[CompanyRecord]:
+    """CompanyRecord en cache si present et non expire, sinon None."""
+    ttl = _fundamentals_ttl_seconds()
+    if ttl <= 0:
+        return None
+    path = _fundamentals_cache_dir() / f"{_price_key(ticker, 'fund', 'json')}.json"
+    if not path.exists() or (time.time() - path.stat().st_mtime) > ttl:
+        return None
+    try:
+        return CompanyRecord.model_validate_json(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None                    # cache illisible -> on re-telecharge
+
+
+def store_cached_fundamentals(ticker: str, record: Optional[CompanyRecord]) -> None:
+    """Enregistre un CompanyRecord sur disque ; ignore None."""
+    if _fundamentals_ttl_seconds() <= 0 or record is None:
+        return
+    path = _fundamentals_cache_dir() / f"{_price_key(ticker, 'fund', 'json')}.json"
+    try:
+        path.write_text(record.model_dump_json(), encoding="utf-8")
     except Exception:
         pass                           # un echec d'ecriture du cache ne doit jamais casser le calcul

@@ -18,6 +18,10 @@ class Settings(BaseSettings):
 
     cache_path: str = "data/cache.sqlite"
     price_cache_ttl_hours: int = 24        # duree de vie du cache disque des cours (0 = desactive)
+    fundamentals_cache_ttl_hours: int = 72 # duree de vie du cache disque des fondamentaux (0 = desactive)
+    yahoo_max_attempts: int = 3            # tentatives par appel Yahoo (1 = pas de retry)
+    yahoo_backoff_seconds: float = 1.0     # attente avant nouvelle tentative (doublee a chaque essai)
+    pipeline_max_workers: int = 4          # parallelisme du lot (borne pour menager les quotas)
     history_db_path: str = "data/history.sqlite"   # base SQLite d'historisation des analyses
 
     # Authentification interne (Step 5) - secrets via .env, jamais en dur

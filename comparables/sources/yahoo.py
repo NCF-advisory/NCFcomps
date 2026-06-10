@@ -4,15 +4,21 @@ Limites connues : champs parfois incomplets sur les small/mid caps ; multiples n
 retraites ; acces non officiel (scraping) susceptible de casser. Voir CLAUDE.md.
 """
 from __future__ import annotations
+import logging
+import time
 import unicodedata
-from typing import Optional
+from typing import Callable, Optional, TypeVar
 
 import pandas as pd
 import yfinance as yf
 
 from comparables import cache
+from comparables.config import settings
 from comparables.models import CompanyRecord
 from comparables.sources.base import DataSource
+
+logger = logging.getLogger(__name__)
+T = TypeVar("T")
 
 SEARCH_URL = "https://query2.finance.yahoo.com/v1/finance/search"
 _SEARCH_HEADERS = {"User-Agent": "Mozilla/5.0"}
@@ -67,6 +73,26 @@ def best_symbol(query: str) -> Optional[dict]:
     return cands[0] if cands else None
 
 
+def _with_retry(fn: Callable[[], T], what: str) -> Optional[T]:
+    """Execute un appel Yahoo avec retry borne + backoff exponentiel.
+
+    Seules les exceptions (erreur reseau, 429...) declenchent un nouvel essai : un
+    resultat vide est traite comme un echec definitif par l'appelant (ticker inconnu).
+    Renvoie None apres epuisement des tentatives (contrat DataSource : None, pas d'exception).
+    """
+    attempts = max(1, int(settings.yahoo_max_attempts))
+    delay = max(0.0, float(settings.yahoo_backoff_seconds))
+    for i in range(attempts):
+        try:
+            return fn()
+        except Exception as exc:
+            if i == attempts - 1:
+                logger.warning("Echec Yahoo (%s) apres %d tentatives : %s", what, attempts, exc)
+                return None
+            time.sleep(delay * (2 ** i))
+    return None
+
+
 def _val(info: dict, *keys):
     for k in keys:
         v = info.get(k)
@@ -97,12 +123,12 @@ class YahooSource(DataSource):
     provides_prices = True
 
     def fetch_fundamentals(self, ticker: str) -> Optional[CompanyRecord]:
+        cached = cache.load_cached_fundamentals(ticker)
+        if cached is not None:
+            return cached
         tk = yf.Ticker(ticker)
-        try:
-            info = tk.info or {}
-        except Exception:
-            info = {}
-        return CompanyRecord(
+        info = _with_retry(lambda: tk.info or {}, f"fondamentaux {ticker}") or {}
+        rec = CompanyRecord(
             ticker=ticker,
             name=_val(info, "longName", "shortName"),
             country=_val(info, "country"),
@@ -123,13 +149,21 @@ class YahooSource(DataSource):
             pb=_val(info, "priceToBook"),
             source="yahoo",
         )
+        # Ne cache que les recuperations utiles : figer 72 h un record vide issu d'un
+        # echec transitoire empecherait toute nouvelle tentative.
+        if rec.name is not None or rec.market_cap is not None:
+            cache.store_cached_fundamentals(ticker, rec)
+        return rec
 
     def fetch_prices(self, ticker: str, period: str, interval: str) -> Optional[pd.Series]:
         cached = cache.load_cached_prices(ticker, period, interval)
         if cached is not None:
             return cached
-        df = yf.download(ticker, period=period, interval=interval,
-                         auto_adjust=True, progress=False)
+        df = _with_retry(
+            lambda: yf.download(ticker, period=period, interval=interval,
+                                auto_adjust=True, progress=False),
+            f"cours {ticker}",
+        )
         if df is None or len(df) == 0:
             return None
         close = df["Close"]
