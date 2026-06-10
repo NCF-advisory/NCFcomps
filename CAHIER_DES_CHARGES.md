@@ -64,6 +64,34 @@ NCFcomps/  (monorepo)
   (dédoublonnage des annonces, correction du SIREN cédant).
 - Limite structurelle assumée : comptes confidentiels (~45 % des dépôts) hors de portée.
 
+### 4 bis. Fraîcheur des comptes (convention et garde-fous) — décidé le 2026-06-10
+
+**Convention de référence** : le CA/EBE rapporté au prix est celui du **dernier exercice
+clos avant la date de cession** — c'est sur ces comptes que le prix a été négocié, et
+c'est avec la même convention que le barème sera appliqué à une cible (cohérence
+échantillon ↔ usage). Un décalage de 6-18 mois est donc normal et ne dégrade pas la
+fiabilité. Exiger « la même année » est méthodologiquement faux (exercice non clos au
+moment du deal) et viderait l'échantillon.
+
+**Le problème à traiter est le décalage excessif** (2-3 ans), causé par : le délai légal
+de dépôt (~7 mois après clôture, incompressible), le retard de publication du dataset
+ratios INPI/BCE (6-12 mois de plus), et le fallback silencieux de `pick_for_date` (faute
+d'exercice antérieur, il prend le plus récent sans le signaler). Garde-fous à implémenter :
+
+1. **Indicateur de fraîcheur par ligne** : écart en mois entre clôture de l'exercice et
+   date de cession, affiché dans le tableau (vert ≤ 18 mois, orange 18-30, rouge au-delà).
+2. **Filtre « écart maximum »** dans le formulaire (défaut ~24-30 mois) : les lignes
+   au-delà sortent des médianes mais restent visibles (l'analyste arbitre
+   fraîcheur/volume).
+3. **Signalement du fallback** : marquer explicitement les lignes dont l'exercice retenu
+   est postérieur à la cession ou très ancien.
+
+L'**accès API INPI/RNE (lot 3)** améliore directement la fraîcheur : les comptes déposés
+sont disponibles dès le dépôt, 6-12 mois avant leur apparition dans le dataset ratios
+(ex. exercice 2024 récupérable mi-2025 au lieu de se rabattre sur 2023/2022). Il ne
+contourne ni les comptes confidentiels ni le délai légal de dépôt — aucune source ne le
+permet légalement.
+
 ## 5. Extraction des comptes annuels INPI (cascade)
 
 Quand le CA/EBE manque dans le dataset ratios INPI/BCE, le worker récupère les comptes
@@ -99,7 +127,7 @@ pas l'API : prévoir une clé API dédiée avec petit budget.
 | **0 — Fiabilisation du moteur** | Bug Excel `_stats`, retry Yahoo + cache fondamentaux, parallélisation du lot, dédoublonnage BODACC, fix SIREN cédant, CI GitHub Actions, `.gitattributes` | **fait** (2026-06-10) |
 | **1 — Backend API** | FastAPI (`backend/`), auth cookie signé, endpoints des 2 modules (jobs + progression), stats de sélection sans re-fetch, runs + ré-export Excel. Lancement : `uvicorn backend.main:app` (1 worker, file en mémoire). | **fait** (2026-06-10) |
 | **2 — Frontend** | Next.js 15 + Tailwind 4 (`frontend/`) : login, comparables (sélection/exclusion sans re-fetch, stats vivantes), cessions FR (synthèse + barème par activité + liens de vérification), historique, exports .xlsx. Proxy `/api` vers FastAPI (même origine, cookies sans CORS). Design « registre de banque privée » (papier/encre verte/laiton, Newsreader + IBM Plex). | **fait** (2026-06-10) |
-| **3 — Extraction comptes INPI** | **Préparé sans credentials** (2026-06-10) : `comparables/fr/comptes/` — lecture de liasse 2052/2033-B (CA/EBE/EBIT recalculés, convention BdF), extraction PDF texte (pdfplumber, colonnes N/N-1), OCR Tesseract optionnel, extracteur Claude (inactif sans clé, Haiku par défaut), client API RNE, fallback branché dans `build_cessions` (inactif sans credentials). **Reste à faire une fois compte INPI + clé Claude fournis** : valider les schémas RNE réels, vérifier les codes 2033-B sur liasse réelle, cache définitif des extractions (un document = une extraction), Batch API. | partiel |
+| **3 — Extraction comptes INPI** | **Préparé sans credentials** (2026-06-10) : `comparables/fr/comptes/` — lecture de liasse 2052/2033-B (CA/EBE/EBIT recalculés, convention BdF), extraction PDF texte (pdfplumber, colonnes N/N-1), OCR Tesseract optionnel, extracteur Claude (inactif sans clé, Haiku par défaut), client API RNE, fallback branché dans `build_cessions` (inactif sans credentials). **Reste à faire une fois compte INPI + clé Claude fournis** : valider les schémas RNE réels, vérifier les codes 2033-B sur liasse réelle, cache définitif des extractions (un document = une extraction), Batch API. **+ Garde-fous fraîcheur (§4 bis)** : indicateur d'écart clôture/cession par ligne, filtre « écart maximum » (défaut 24-30 mois), signalement du fallback d'exercice. | partiel |
 | **4 — Déploiement VPS** | docker-compose complet, Caddy, backups, recette | à faire |
 
 Prérequis côté cabinet pour le lot 3 : compte INPI (data.inpi.fr, gratuit) + clé API
