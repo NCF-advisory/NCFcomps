@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     auth_cookie_key: str = "CHANGE_ME"             # cle de signature du cookie - A SURCHARGER via .env
     auth_cookie_expiry_days: float = 7.0
 
+    # Backend API (lot 1) - origines CORS du front (separees par des virgules)
+    cors_origins: str = "http://localhost:3000"
+
     # Cles optionnelles (sources a paliers gratuits) - non requises par defaut
     fmp_api_key: Optional[str] = None
     alphavantage_api_key: Optional[str] = None

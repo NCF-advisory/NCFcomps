@@ -96,8 +96,8 @@ pas l'API : prévoir une clé API dédiée avec petit budget.
 
 | Lot | Contenu | Statut |
 |---|---|---|
-| **0 — Fiabilisation du moteur** | Bug Excel `_stats`, retry Yahoo + cache fondamentaux, parallélisation du lot, dédoublonnage BODACC, fix SIREN cédant, CI GitHub Actions, `.gitattributes` | en cours |
-| **1 — Backend API** | FastAPI, auth, endpoints des 2 modules, file de tâches, runs | à faire |
+| **0 — Fiabilisation du moteur** | Bug Excel `_stats`, retry Yahoo + cache fondamentaux, parallélisation du lot, dédoublonnage BODACC, fix SIREN cédant, CI GitHub Actions, `.gitattributes` | **fait** (2026-06-10) |
+| **1 — Backend API** | FastAPI (`backend/`), auth cookie signé, endpoints des 2 modules (jobs + progression), stats de sélection sans re-fetch, runs + ré-export Excel. Lancement : `uvicorn backend.main:app` (1 worker, file en mémoire). | **fait** (2026-06-10) |
 | **2 — Frontend** | Next.js : login, module comparables, module cessions, historique, exports | à faire |
 | **3 — Extraction comptes INPI** | Client API RNE, cascade XBRL → PDF texte → Tesseract → Claude (Batch), cache définitif | à faire |
 | **4 — Déploiement VPS** | docker-compose complet, Caddy, backups, recette | à faire |

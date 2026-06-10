@@ -48,9 +48,14 @@ comparables/
   pipeline.py          # orchestration fetch -> calcul -> CompanyRecord
   export/excel.py      # export Excel formaté (bytes)
 app/
-  streamlit_app.py     # interface
+  streamlit_app.py     # interface Streamlit (héritée, retirée à terme)
   pages/               # pages multipage
-tests/                 # tests du cœur financier
+backend/               # API FastAPI (lot 1 du cahier des charges)
+  main.py              # create_app() ; uvicorn backend.main:app --port 8000 ; docs /api/docs
+  security.py          # cookie de session signé (itsdangerous) + dépendance current_user
+  jobs.py              # file de tâches en mémoire (1 worker uvicorn) avec progression
+  routers/             # auth, comparables (jobs/stats/resolve/export), cessions, runs
+tests/                 # tests du cœur financier + backend (TestClient, offline)
 ```
 
 ### Flux
