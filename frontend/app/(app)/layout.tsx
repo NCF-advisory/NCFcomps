@@ -35,7 +35,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen">
-      <aside className="ledger-panel fixed inset-y-0 left-0 flex w-60 flex-col p-6 text-paper">
+      <aside className="ledger-panel sticky top-0 flex h-screen w-60 shrink-0 flex-col overflow-y-auto p-6 text-paper">
         <Link href="/comparables" className="block">
           <span className="font-display text-3xl" style={{ fontFamily: "var(--font-display)" }}>
             NCF
@@ -82,7 +82,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      <main className="ml-60 flex-1 px-12 py-10">{children}</main>
+      <main className="min-w-0 flex-1 px-12 py-10">{children}</main>
     </div>
   );
 }
