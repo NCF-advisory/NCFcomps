@@ -11,7 +11,8 @@ import { api, ApiError } from "@/lib/api";
 const NAV = [
   { href: "/comparables", label: "Comparables boursiers", num: "I" },
   { href: "/cessions", label: "Cessions FR", num: "II" },
-  { href: "/historique", label: "Historique", num: "III" },
+  { href: "/secteurs", label: "Base sectorielle", num: "III" },
+  { href: "/historique", label: "Historique", num: "IV" },
 ];
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {

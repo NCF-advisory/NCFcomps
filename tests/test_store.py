@@ -57,3 +57,64 @@ def test_delete_run(tmp_path):
 def test_load_unknown_run_is_empty(tmp_path):
     db = str(tmp_path / "history.sqlite")
     assert store.load_run(999, db_path=db) == []
+
+
+# --- Base sectorielle ---
+
+def _sector_records() -> list[CompanyRecord]:
+    return [
+        CompanyRecord(ticker="AAPL", name="Apple", sector="Technology", country="US",
+                      beta_unlevered=1.0, ev_ebitda=20.0),
+        CompanyRecord(ticker="MSFT", name="Microsoft", sector="Technology", country="US",
+                      beta_unlevered=1.2, ev_ebitda=24.0),
+        CompanyRecord(ticker="OR.PA", name="L'Oreal", sector="Consumer Defensive",
+                      country="FR", beta_unlevered=0.8, ev_ebitda=18.0),
+        CompanyRecord(ticker="NOSEC", name="Sans secteur", ev_ebitda=10.0),   # ignoré
+    ]
+
+
+def test_sector_aggregates(tmp_path):
+    db = str(tmp_path / "h.sqlite")
+    store.save_run(_sector_records(), db_path=db)
+    aggs = store.sector_aggregates(db_path=db)
+
+    assert [a["sector"] for a in aggs] == ["Consumer Defensive", "Technology"]  # trié, sans vide
+    tech = next(a for a in aggs if a["sector"] == "Technology")
+    assert tech["n_companies"] == 2 and tech["n_records"] == 2
+    assert tech["metrics"]["beta_unlevered"]["median"] == 1.1     # median(1.0, 1.2)
+    assert tech["metrics"]["ev_ebitda"]["median"] == 22.0         # median(20, 24)
+    assert tech["metrics"]["beta_unlevered"]["n"] == 2
+
+
+def test_sector_aggregates_compte_les_occurrences(tmp_path):
+    """Même société dans 2 runs = 2 points, mais 1 société distincte."""
+    db = str(tmp_path / "h.sqlite")
+    store.save_run([CompanyRecord(ticker="AAPL", sector="Technology", beta_unlevered=1.0)], db_path=db)
+    store.save_run([CompanyRecord(ticker="AAPL", sector="Technology", beta_unlevered=1.4)], db_path=db)
+    tech = next(a for a in store.sector_aggregates(db_path=db) if a["sector"] == "Technology")
+    assert tech["n_records"] == 2
+    assert tech["n_companies"] == 1
+    assert tech["metrics"]["beta_unlevered"]["median"] == 1.2     # median(1.0, 1.4)
+
+
+def test_sector_metric_absent_si_aucune_valeur(tmp_path):
+    db = str(tmp_path / "h.sqlite")
+    store.save_run([CompanyRecord(ticker="X", sector="Energy", ev_ebitda=9.0)], db_path=db)
+    energy = next(a for a in store.sector_aggregates(db_path=db) if a["sector"] == "Energy")
+    assert "ev_ebitda" in energy["metrics"]
+    assert "beta_unlevered" not in energy["metrics"]              # aucune valeur -> absente
+
+
+def test_sector_records_detail(tmp_path):
+    db = str(tmp_path / "h.sqlite")
+    store.save_run(_sector_records(), label="Lux", db_path=db)
+    recs = store.sector_records("technology", db_path=db)         # casse ignorée
+    assert {r["ticker"] for r in recs} == {"AAPL", "MSFT"}
+    assert all(r["label"] == "Lux" for r in recs)
+    assert recs[0]["beta_unlevered"] is not None
+
+
+def test_sector_aggregates_vide(tmp_path):
+    db = str(tmp_path / "h.sqlite")
+    assert store.sector_aggregates(db_path=db) == []
+    assert store.sector_records("Technology", db_path=db) == []

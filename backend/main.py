@@ -11,7 +11,7 @@ from __future__ import annotations
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.routers import auth, cessions, comparables, runs
+from backend.routers import auth, cessions, comparables, runs, sectors
 from comparables.config import settings
 
 
@@ -24,7 +24,7 @@ def create_app() -> FastAPI:
         app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True,
                            allow_methods=["*"], allow_headers=["*"])
 
-    for r in (auth.router, comparables.router, cessions.router, runs.router):
+    for r in (auth.router, comparables.router, cessions.router, runs.router, sectors.router):
         app.include_router(r, prefix="/api")
 
     @app.get("/api/health")

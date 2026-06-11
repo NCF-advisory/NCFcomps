@@ -104,6 +104,41 @@ export type RunSummary = {
   n_records: number;
 };
 
+export type MetricStat = {
+  median: number;
+  q1: number;
+  q3: number;
+  min: number;
+  max: number;
+  n: number;
+};
+
+/** Métriques agrégées d'un secteur : clé = nom du champ CompanyRecord. */
+export type SectorAggregate = {
+  sector: string;
+  n_records: number;
+  n_companies: number;
+  last_used: string | null;
+  metrics: Record<string, MetricStat>;
+};
+
+export type SectorRecord = {
+  run_id: number;
+  created_at: string;
+  label: string | null;
+  ticker: string | null;
+  name: string | null;
+  country: string | null;
+  beta_unlevered: number | null;
+  beta_regression: number | null;
+  ev_sales: number | null;
+  ev_ebitda: number | null;
+  ev_ebit: number | null;
+  pe_trailing: number | null;
+  pe_forward: number | null;
+  pb: number | null;
+};
+
 export class ApiError extends Error {
   status: number;
   constructor(status: number, message: string) {
@@ -179,6 +214,13 @@ export const api = {
     }),
   getRun: (id: number) => request<{ id: number; records: CompanyRecord[] }>(`/api/runs/${id}`),
   deleteRun: (id: number) => request<void>(`/api/runs/${id}`, { method: "DELETE" }),
+
+  // Base sectorielle (bêtas + multiples agrégés depuis l'historique enregistré)
+  listSectors: () => request<{ sectors: SectorAggregate[] }>("/api/sectors"),
+  sectorDetail: (sector: string) =>
+    request<{ sector: string; records: SectorRecord[] }>(
+      `/api/sectors/${encodeURIComponent(sector)}`,
+    ),
 };
 
 /** Télécharge un .xlsx produit par l'API (POST records ou GET run). */
