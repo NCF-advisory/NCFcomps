@@ -2,8 +2,9 @@
 from __future__ import annotations
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
+from comparables.fr.models import Cession
 from comparables.models import CompanyRecord
 
 
@@ -36,9 +37,22 @@ class RecordsPayload(BaseModel):
 
 
 class SaveRunRequest(BaseModel):
-    records: list[CompanyRecord]
+    """Sauvegarde d'une analyse : comparables (`records`) OU cessions FR (`cessions`)."""
+    records: list[CompanyRecord] = Field(default_factory=list)
+    cessions: list[Cession] = Field(default_factory=list)
     label: Optional[str] = None
     params: Optional[dict] = None
+
+    @model_validator(mode="after")
+    def _un_seul_type(self) -> "SaveRunRequest":
+        if bool(self.records) == bool(self.cessions):    # ni l'un ni l'autre, ou les deux
+            raise ValueError("Fournir soit `records` (comparables), soit `cessions` (FR).")
+        return self
+
+
+class CessionsPayload(BaseModel):
+    """Sous-ensemble de cessions (sélection côté client : stats / export, sans re-fetch)."""
+    cessions: list[Cession] = Field(min_length=1)
 
 
 class CessionsJobRequest(BaseModel):

@@ -1,7 +1,8 @@
 """Persistance des analyses generees (SQLite) pour tracabilite / historisation.
 
-Une "analyse" (run) = un echantillon de CompanyRecord produit a un instant donne, avec ses
-parametres (taux d'IS, periode/frequence du beta, tickers) et l'utilisateur a l'origine.
+Une "analyse" (run) = un echantillon produit a un instant donne avec ses parametres et
+l'utilisateur a l'origine. Deux types (`kind`) : 'comparables' (CompanyRecord) et
+'cessions' (Cession FR) ; les lignes sont stockees en JSON dans run_records.
 
 Module sans I/O reseau ni Streamlit ; couvert par des tests. Le chemin de la base est
 configurable (settings.history_db_path) et surchargable par argument (tests).
@@ -15,6 +16,7 @@ from pathlib import Path
 from typing import Optional
 
 from comparables.config import settings
+from comparables.fr.models import Cession
 from comparables.models import CompanyRecord
 
 # Bêtas et multiples agrégés par secteur (base sectorielle = mémoire des valeurs déjà utilisées).
@@ -55,25 +57,31 @@ def _init(conn: sqlite3.Connection) -> None:
         );
         """
     )
+    # Migration : colonne `kind` ajoutee apres coup (bases existantes = comparables).
+    try:
+        conn.execute("ALTER TABLE runs ADD COLUMN kind TEXT NOT NULL DEFAULT 'comparables'")
+    except sqlite3.OperationalError:
+        pass                            # colonne deja presente
     conn.commit()
 
 
-def save_run(records: list[CompanyRecord], username: Optional[str] = None,
-             label: Optional[str] = None, params: Optional[dict] = None,
-             db_path: Optional[str] = None) -> int:
-    """Enregistre une analyse et renvoie son identifiant."""
+def _insert_run(kind: str, lines: list[tuple[Optional[str], str]],
+                username: Optional[str], label: Optional[str], params: Optional[dict],
+                db_path: Optional[str]) -> int:
+    """Insère un run générique : lines = [(clé d'identité, payload JSON), ...]."""
     created_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
     conn = _connect(db_path)
     try:
         cur = conn.execute(
-            "INSERT INTO runs (created_at, username, label, params, n_records) "
-            "VALUES (?, ?, ?, ?, ?)",
-            (created_at, username, label, json.dumps(params or {}, default=str), len(records)),
+            "INSERT INTO runs (created_at, username, label, params, n_records, kind) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            (created_at, username, label, json.dumps(params or {}, default=str),
+             len(lines), kind),
         )
         run_id = int(cur.lastrowid)
         conn.executemany(
             "INSERT INTO run_records (run_id, idx, ticker, payload) VALUES (?, ?, ?, ?)",
-            [(run_id, i, r.ticker, r.model_dump_json()) for i, r in enumerate(records)],
+            [(run_id, i, key, payload) for i, (key, payload) in enumerate(lines)],
         )
         conn.commit()
         return run_id
@@ -81,25 +89,52 @@ def save_run(records: list[CompanyRecord], username: Optional[str] = None,
         conn.close()
 
 
+def save_run(records: list[CompanyRecord], username: Optional[str] = None,
+             label: Optional[str] = None, params: Optional[dict] = None,
+             db_path: Optional[str] = None) -> int:
+    """Enregistre une analyse de comparables et renvoie son identifiant."""
+    return _insert_run("comparables",
+                       [(r.ticker, r.model_dump_json()) for r in records],
+                       username, label, params, db_path)
+
+
+def save_cessions_run(cessions: list[Cession], username: Optional[str] = None,
+                      label: Optional[str] = None, params: Optional[dict] = None,
+                      db_path: Optional[str] = None) -> int:
+    """Enregistre une recherche de cessions FR et renvoie son identifiant."""
+    return _insert_run("cessions",
+                       [(c.siren, c.model_dump_json()) for c in cessions],
+                       username, label, params, db_path)
+
+
 def list_runs(db_path: Optional[str] = None) -> list[dict]:
     """Liste les analyses enregistrees, de la plus recente a la plus ancienne."""
     conn = _connect(db_path)
     try:
         rows = conn.execute(
-            "SELECT id, created_at, username, label, params, n_records "
+            "SELECT id, created_at, username, label, params, n_records, kind "
             "FROM runs ORDER BY id DESC"
         ).fetchall()
     finally:
         conn.close()
     return [
         {"id": r[0], "created_at": r[1], "username": r[2], "label": r[3],
-         "params": json.loads(r[4]) if r[4] else {}, "n_records": r[5]}
+         "params": json.loads(r[4]) if r[4] else {}, "n_records": r[5], "kind": r[6]}
         for r in rows
     ]
 
 
-def load_run(run_id: int, db_path: Optional[str] = None) -> list[CompanyRecord]:
-    """Recharge les CompanyRecord d'une analyse (ordre d'origine)."""
+def run_kind(run_id: int, db_path: Optional[str] = None) -> Optional[str]:
+    """Type d'une analyse ('comparables' | 'cessions'), None si inconnue."""
+    conn = _connect(db_path)
+    try:
+        row = conn.execute("SELECT kind FROM runs WHERE id = ?", (run_id,)).fetchone()
+    finally:
+        conn.close()
+    return row[0] if row else None
+
+
+def _load_payloads(run_id: int, db_path: Optional[str]) -> list[str]:
     conn = _connect(db_path)
     try:
         rows = conn.execute(
@@ -107,7 +142,17 @@ def load_run(run_id: int, db_path: Optional[str] = None) -> list[CompanyRecord]:
         ).fetchall()
     finally:
         conn.close()
-    return [CompanyRecord.model_validate_json(row[0]) for row in rows]
+    return [row[0] for row in rows]
+
+
+def load_run(run_id: int, db_path: Optional[str] = None) -> list[CompanyRecord]:
+    """Recharge les CompanyRecord d'une analyse comparables (ordre d'origine)."""
+    return [CompanyRecord.model_validate_json(p) for p in _load_payloads(run_id, db_path)]
+
+
+def load_cessions_run(run_id: int, db_path: Optional[str] = None) -> list[Cession]:
+    """Recharge les Cession d'une recherche FR enregistrée (ordre d'origine)."""
+    return [Cession.model_validate_json(p) for p in _load_payloads(run_id, db_path)]
 
 
 def delete_run(run_id: int, db_path: Optional[str] = None) -> None:
@@ -149,7 +194,7 @@ def sector_aggregates(db_path: Optional[str] = None) -> list[dict]:
     try:
         rows = conn.execute(
             "SELECT r.created_at, rr.payload FROM run_records rr "
-            "JOIN runs r ON r.id = rr.run_id"
+            "JOIN runs r ON r.id = rr.run_id WHERE r.kind = 'comparables'"
         ).fetchall()
     finally:
         conn.close()
@@ -190,7 +235,8 @@ def sector_records(sector: str, db_path: Optional[str] = None) -> list[dict]:
     try:
         rows = conn.execute(
             "SELECT r.id, r.created_at, r.label, rr.payload FROM run_records rr "
-            "JOIN runs r ON r.id = rr.run_id ORDER BY r.id DESC, rr.idx"
+            "JOIN runs r ON r.id = rr.run_id WHERE r.kind = 'comparables' "
+            "ORDER BY r.id DESC, rr.idx"
         ).fetchall()
     finally:
         conn.close()
