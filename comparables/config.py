@@ -39,6 +39,10 @@ class Settings(BaseSettings):
     inpi_password: Optional[str] = None
     anthropic_api_key: Optional[str] = None  # cle API Claude (etape LLM de la cascade)
     claude_model: str = "claude-haiku-4-5"   # decision cout 2026-06-10 (~0,5 ct/document)
+    # Garde-fou de debit RNE (le serveur refuse les connexions en cas de rafale IP)
+    inpi_min_interval_seconds: float = 0.5   # cadence mini entre deux appels RNE
+    inpi_max_attempts: int = 2               # 1 retry sur refus de connexion / 429
+    inpi_backoff_seconds: float = 3.0        # attente avant retry (x numero de tentative)
 
     # Cles optionnelles (sources a paliers gratuits) - non requises par defaut
     fmp_api_key: Optional[str] = None

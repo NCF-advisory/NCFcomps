@@ -22,8 +22,8 @@ from typing import Optional
 
 # --- Régime réel normal : 2052 (compte de résultat) ---
 # Produits pris dans l'EBE / charges déduites de l'EBE.
-N_CA = "FL"                                            # chiffre d'affaires net total
-N_PRODUITS_EBE = ("FL", "FM", "FN", "FO")              # CA, prod. stockée, prod. immobilisée, subventions
+N_CA = ("FL", "FJ")     # CA net : « FL » (total, liasses PDF) ou « FJ » (ligne CA des comptes saisis INPI)
+N_PRODUITS_EXTRA = ("FM", "FN", "FO")                  # prod. stockée, prod. immobilisée, subventions (hors CA)
 N_CHARGES_EBE = ("FS", "FT", "FU", "FV", "FW", "FX", "FY", "FZ")
 #                achats march., var. stock, achats matières, var. stock, autres achats
 #                et charges externes, impôts et taxes, salaires, charges sociales
@@ -70,7 +70,7 @@ def parse_amount(raw: str) -> Optional[float]:
 
 def detect_regime(codes: dict[str, float]) -> Optional[str]:
     """Régime d'après les codes présents : alphabétiques 2052 vs numériques 2033-B."""
-    if any(c in codes for c in (N_CA, N_EBIT, "FR", "FS")):
+    if any(c in codes for c in (*N_CA, N_EBIT, "FR", "FS")):
         return "normal"
     if any(c in codes for c in S_CA + (S_EBIT, "232")):
         return "simplifie"
@@ -98,8 +98,9 @@ def compute(codes: dict[str, float]) -> LiasseResult:
 
     missing: list[str] = []
     if regime == "normal":
-        ca = codes.get(N_CA)
-        produits = _somme(codes, N_PRODUITS_EBE, missing)
+        ca_parts = [codes[c] for c in N_CA if c in codes]
+        ca = ca_parts[0] if ca_parts else None          # FL prioritaire, sinon FJ (jamais les deux)
+        produits = (ca or 0.0) + _somme(codes, N_PRODUITS_EXTRA, missing)
         charges = _somme(codes, N_CHARGES_EBE, missing)
         ebit = codes.get(N_EBIT)
         ebe_ok = ca is not None and any(c in codes for c in N_EBE_REQUIRED_ANY)

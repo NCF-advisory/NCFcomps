@@ -4,6 +4,8 @@ Aucun réseau, aucune dépendance OCR/LLM requise : tout est pur ou mocké.
 """
 from __future__ import annotations
 
+import requests
+
 from comparables.config import settings
 from comparables.fr.comptes import cascade, inpi_client, liasse, llm, pdftext
 from comparables.fr.comptes.liasse import LiasseResult
@@ -46,6 +48,16 @@ def test_compute_2052():
     assert r.ebe == 195_000.0
     assert r.ebit == 120_000.0
     assert "FN" in r.missing_codes and "FT" in r.missing_codes   # absents tracés
+
+
+def test_compute_2052_ca_sous_code_fj():
+    """Comptes saisis INPI : la ligne CA est codée FJ (et non FL) ; CA/EBE identiques."""
+    codes = dict(_codes_2052())
+    codes["FJ"] = codes.pop("FL")          # même montant, sous le code structuré
+    r = liasse.compute(codes)
+    assert r.regime == "normal"
+    assert r.ca == 1_000_000.0
+    assert r.ebe == 195_000.0
 
 
 def test_compute_2052_sans_charges_structurantes_pas_d_ebe():
@@ -195,6 +207,7 @@ class _FakeSession:
 def _with_credentials(monkeypatch):
     monkeypatch.setattr(settings, "inpi_username", "user@cabinet.fr")
     monkeypatch.setattr(settings, "inpi_password", "secret")
+    monkeypatch.setattr(settings, "inpi_min_interval_seconds", 0)   # pas de pause en test
 
 
 def test_inpi_non_configure(monkeypatch):
@@ -232,3 +245,29 @@ def test_inpi_fetch_echec_reseau_renvoie_none(monkeypatch):
 
     client = inpi_client.InpiClient(session=_BrokenSession())
     assert inpi_client.fetch_comptes_pdf("123456789", client=client) is None
+
+
+def test_inpi_retry_sur_refus_de_connexion(monkeypatch):
+    """Un refus de connexion (rafale RNE) est retenté une fois avant d'échouer."""
+    _with_credentials(monkeypatch)
+    monkeypatch.setattr(settings, "inpi_max_attempts", 2)
+    monkeypatch.setattr(settings, "inpi_backoff_seconds", 0)     # pas d'attente en test
+
+    class _FlakySession:
+        def __init__(self):
+            self.post_calls = 0
+
+        def post(self, url, **kwargs):
+            self.post_calls += 1
+            if self.post_calls == 1:                            # 1er essai : refus
+                raise requests.exceptions.ConnectionError("rafale")
+            return _FakeResponse({"token": "jeton-ok"})         # 2e essai : OK
+
+        def get(self, url, headers=None, **kwargs):
+            return _FakeResponse({"bilans": [{"id": "b1", "dateCloture": "2023-12-31"}]})
+
+    session = _FlakySession()
+    client = inpi_client.InpiClient(session=session)
+    out = inpi_client.fetch_comptes_pdf("123456789", client=client)
+    assert session.post_calls == 2                              # a bien réessayé
+    assert out is not None and out[0]["id"] == "b1"

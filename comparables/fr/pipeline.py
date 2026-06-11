@@ -8,7 +8,7 @@ from typing import Optional
 import pandas as pd
 
 from comparables.fr import bodacc, entreprises, finances_inpi
-from comparables.fr.comptes import cascade, inpi_client
+from comparables.fr.comptes import bilan_saisi, cascade, inpi_client
 from comparables.fr.models import Cession
 from comparables.fr.parsing import compute_pct_ca, compute_mult_ebe, summarize_by_activity
 
@@ -45,6 +45,9 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
     out: list[Cession] = []
     fin_cache: dict[str, list] = {}
     id_cache: dict[str, Optional[dict]] = {}
+    # Un seul client INPI authentifié pour tout le lot : on se connecte une fois et on
+    # réutilise le jeton (sinon une connexion par SIREN -> blocage par le RNE).
+    inpi = inpi_client.InpiClient() if inpi_client.configured() else None
     for c in pool:
         # 1) Finances (CA/EBE) de l'exercice calé sur la date de cession
         if c.siren:
@@ -63,18 +66,30 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
                 c.ca_annee = int(cloture[:4]) if cloture[:4].isdigit() else None
                 c.pct_ca = compute_pct_ca(c.prix, c.ca)
                 c.mult_ebe = compute_mult_ebe(c.prix, c.ebe)
-        # 1bis) Comptes déposés INPI (cascade PDF/OCR/LLM) quand le dataset ratios n'a
-        #        rien donné — inactif sans credentials INPI (lot 3 du cahier des charges).
+        # 1bis) Comptes déposés INPI quand le dataset ratios n'a rien donné — inactif sans
+        #        credentials INPI (lot 3). On privilégie le compte STRUCTURÉ (bilanSaisi,
+        #        gratuit et déterministe) ; à défaut seulement, la cascade PDF/OCR/LLM.
         if c.siren and c.ca is None and inpi_client.configured():
+            extraction = None
+            meta: Optional[dict] = None
             try:
-                fetched = inpi_client.fetch_comptes_pdf(c.siren, before_date=c.date)
-                extraction = cascade.extract_comptes(fetched[1]) if fetched else None
+                saisi = inpi_client.fetch_comptes_saisi(c.siren, before_date=c.date, client=inpi)
+                if saisi:
+                    res = bilan_saisi.extract(saisi[1])
+                    if res and res.ca is not None:
+                        extraction, meta = res, saisi[0]
+                if extraction is None:                  # filet : PDF déposé
+                    fetched = inpi_client.fetch_comptes_pdf(c.siren, before_date=c.date, client=inpi)
+                    if fetched:
+                        res = cascade.extract_comptes(fetched[1])
+                        if res and res.ca is not None:
+                            extraction, meta = res, fetched[0]
             except Exception as exc:
                 logger.warning("Echec comptes déposés SIREN %s : %s", c.siren, exc)
-                fetched, extraction = None, None
-            if fetched and extraction:
+                extraction, meta = None, None
+            if extraction and meta:
                 c.ca, c.ebe, c.ebit = extraction.ca, extraction.ebe, extraction.ebit
-                cloture = fetched[0].get("dateCloture") or ""
+                cloture = meta.get("dateCloture") or ""
                 c.ca_annee = int(cloture[:4]) if cloture[:4].isdigit() else None
                 c.pct_ca = compute_pct_ca(c.prix, c.ca)
                 c.mult_ebe = compute_mult_ebe(c.prix, c.ebe)
