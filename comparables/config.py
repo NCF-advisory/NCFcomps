@@ -25,6 +25,9 @@ class Settings(BaseSettings):
     yahoo_backoff_seconds: float = 1.0     # attente avant nouvelle tentative (doublee a chaque essai)
     pipeline_max_workers: int = 4          # parallelisme du lot (borne pour menager les quotas)
     history_db_path: str = "data/history.sqlite"   # base SQLite d'historisation des analyses
+    # Referentiels open data repliques en local (cessions FR : lookups instantanes, zero quota).
+    # Rafraichissement : python -m comparables.fr.referentiels refresh
+    referentiels_db_path: str = "data/referentiels.sqlite"
 
     # Authentification interne (Step 5) - secrets via .env, jamais en dur
     auth_enabled: bool = True

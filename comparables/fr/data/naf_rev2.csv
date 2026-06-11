@@ -1,0 +1,1708 @@
+niveau;code;libelle
+2;01;Culture et production animale, chasse et services annexes
+2;02;Sylviculture et exploitation forestière
+2;03;Pêche et aquaculture
+2;05;Extraction de houille et de lignite
+2;06;Extraction d'hydrocarbures
+2;07;Extraction de minerais métalliques
+2;08;Autres industries extractives
+2;09;Services de soutien aux industries extractives
+2;10;Industries alimentaires
+2;11;Fabrication de boissons
+2;12;Fabrication de produits à base de tabac
+2;13;Fabrication de textiles
+2;14;Industrie de l'habillement
+2;15;Industrie du cuir et de la chaussure
+2;16;"Travail du bois et fabrication d'articles en bois et en liège, à l'exception des meubles ; fabrication d'articles en vannerie et sparterie"
+2;17;Industrie du papier et du carton
+2;18;Imprimerie et reproduction d'enregistrements
+2;19;Cokéfaction et raffinage
+2;20;Industrie chimique
+2;21;Industrie pharmaceutique
+2;22;Fabrication de produits en caoutchouc et en plastique
+2;23;Fabrication d'autres produits minéraux non métalliques
+2;24;Métallurgie
+2;25;Fabrication de produits métalliques, à l'exception des machines et des équipements
+2;26;Fabrication de produits informatiques, électroniques et optiques
+2;27;Fabrication d'équipements électriques
+2;28;Fabrication de machines et équipements n.c.a.
+2;29;Industrie automobile
+2;30;Fabrication d'autres matériels de transport
+2;31;Fabrication de meubles
+2;32;Autres industries manufacturières
+2;33;Réparation et installation de machines et d'équipements
+2;35;Production et distribution d'électricité, de gaz, de vapeur et d'air conditionné
+2;36;Captage, traitement et distribution d'eau
+2;37;Collecte et traitement des eaux usées
+2;38;"Collecte, traitement et élimination des déchets ; récupération"
+2;39;Dépollution et autres services de gestion des déchets
+2;41;Construction de bâtiments
+2;42;Génie civil
+2;43;Travaux de construction spécialisés
+2;45;Commerce et réparation d'automobiles et de motocycles
+2;46;Commerce de gros, à l'exception des automobiles et des motocycles
+2;47;Commerce de détail, à l'exception des automobiles et des motocycles
+2;49;Transports terrestres et transport par conduites
+2;50;Transports par eau
+2;51;Transports aériens
+2;52;Entreposage et services auxiliaires des transports
+2;53;Activités de poste et de courrier
+2;55;Hébergement
+2;56;Restauration
+2;58;Édition
+2;59;"Production de films cinématographiques, de vidéo et de programmes de télévision ; enregistrement sonore et édition musicale"
+2;60;Programmation et diffusion
+2;61;Télécommunications
+2;62;Programmation, conseil et autres activités informatiques
+2;63;Services d'information
+2;64;Activités des services financiers, hors assurance et caisses de retraite
+2;65;Assurance
+2;66;Activités auxiliaires de services financiers et d'assurance
+2;68;Activités immobilières
+2;69;Activités juridiques et comptables
+2;70;"Activités des sièges sociaux ; conseil de gestion"
+2;71;"Activités d'architecture et d'ingénierie ; activités de contrôle et analyses techniques"
+2;72;Recherche-développement scientifique
+2;73;Publicité et études de marché
+2;74;Autres activités spécialisées, scientifiques et techniques
+2;75;Activités vétérinaires
+2;77;Activités de location et location-bail
+2;78;Activités liées à l'emploi
+2;79;Activités des agences de voyage, voyagistes, services de réservation et activités connexes
+2;80;Enquêtes et sécurité
+2;81;Services relatifs aux bâtiments et aménagement paysager
+2;82;Activités administratives et autres activités de soutien aux entreprises
+2;84;"Administration publique et défense ; sécurité sociale obligatoire"
+2;85;Enseignement
+2;86;Activités pour la santé humaine
+2;87;Hébergement médico-social et social
+2;88;Action sociale sans hébergement
+2;90;Activités créatives, artistiques et de spectacle
+2;91;Bibliothèques, archives, musées et autres activités culturelles
+2;92;Organisation de jeux de hasard et d'argent
+2;93;Activités sportives, récréatives et de loisirs
+2;94;Activités des organisations associatives
+2;95;Réparation d'ordinateurs et de biens personnels et domestiques
+2;96;Autres services personnels
+2;97;Activités des ménages en tant qu'employeurs de personnel domestique
+2;98;Activités indifférenciées des ménages en tant que producteurs de biens et services pour usage propre
+2;99;Activités des organisations et organismes extraterritoriaux
+3;01.1;Cultures non permanentes
+3;01.2;Cultures permanentes
+3;01.3;Reproduction de plantes
+3;01.4;Production animale
+3;01.5;Culture et élevage associés
+3;01.6;Activités de soutien à l'agriculture et traitement primaire des récoltes
+3;01.7;Chasse, piégeage et services annexes
+3;02.1;Sylviculture et autres activités forestières
+3;02.2;Exploitation forestière
+3;02.3;Récolte de produits forestiers non ligneux poussant à l'état sauvage
+3;02.4;Services de soutien à l'exploitation forestière
+3;03.1;Pêche
+3;03.2;Aquaculture
+3;05.1;Extraction de houille
+3;05.2;Extraction de lignite
+3;06.1;Extraction de pétrole brut
+3;06.2;Extraction de gaz naturel
+3;07.1;Extraction de minerais de fer
+3;07.2;Extraction de minerais de métaux non ferreux
+3;08.1;Extraction de pierres, de sables et d'argiles
+3;08.9;Activités extractives n.c.a.
+3;09.1;Activités de soutien à l'extraction d'hydrocarbures
+3;09.9;Activités de soutien aux autres industries extractives
+3;10.1;Transformation et conservation de la viande et préparation de produits à base de viande
+3;10.2;Transformation et conservation de poisson, de crustacés et de mollusques
+3;10.3;Transformation et conservation de fruits et légumes
+3;10.4;Fabrication d'huiles et graisses végétales et animales
+3;10.5;Fabrication de produits laitiers
+3;10.6;"Travail des grains ; fabrication de produits amylacés"
+3;10.7;Fabrication de produits de boulangerie-pâtisserie et de pâtes alimentaires
+3;10.8;Fabrication d'autres produits alimentaires
+3;10.9;Fabrication d'aliments pour animaux
+3;11.0;Fabrication de boissons
+3;12.0;Fabrication de produits à base de tabac
+3;13.1;Préparation de fibres textiles et filature
+3;13.2;Tissage
+3;13.3;Ennoblissement textile
+3;13.9;Fabrication d'autres textiles
+3;14.1;Fabrication de vêtements, autres qu'en fourrure
+3;14.2;Fabrication d'articles en fourrure
+3;14.3;Fabrication d'articles à mailles
+3;15.1;"Apprêt et tannage des cuirs ; préparation et teinture des fourrures ; fabrication d'articles de voyage, de maroquinerie et de sellerie"
+3;15.2;Fabrication de chaussures
+3;16.1;Sciage et rabotage du bois
+3;16.2;Fabrication d'articles en bois, liège, vannerie et sparterie
+3;17.1;Fabrication de pâte à papier, de papier et de carton
+3;17.2;Fabrication d'articles en papier ou en carton
+3;18.1;Imprimerie et services annexes
+3;18.2;Reproduction d'enregistrements
+3;19.1;Cokéfaction
+3;19.2;Raffinage du pétrole
+3;20.1;Fabrication de produits chimiques de base, de produits azotés et d'engrais, de matières plastiques de base et de caoutchouc synthétique
+3;20.2;Fabrication de pesticides et d'autres produits agrochimiques
+3;20.3;Fabrication de peintures, vernis, encres et mastics
+3;20.4;Fabrication de savons, de produits d'entretien et de parfums
+3;20.5;Fabrication d'autres produits chimiques
+3;20.6;Fabrication de fibres artificielles ou synthétiques
+3;21.1;Fabrication de produits pharmaceutiques de base
+3;21.2;Fabrication de préparations pharmaceutiques
+3;22.1;Fabrication de produits en caoutchouc
+3;22.2;Fabrication de produits en plastique
+3;23.1;Fabrication de verre et d'articles en verre
+3;23.2;Fabrication de produits réfractaires
+3;23.3;Fabrication de matériaux de construction en terre cuite
+3;23.4;Fabrication d'autres produits en céramique et en porcelaine
+3;23.5;Fabrication de ciment, chaux et plâtre
+3;23.6;Fabrication d'ouvrages en béton, en ciment ou en plâtre
+3;23.7;Taille, façonnage et finissage de pierres
+3;23.9;Fabrication de produits abrasifs et de produits minéraux non métalliques n.c.a.
+3;24.1;Sidérurgie
+3;24.2;Fabrication de tubes, tuyaux, profilés creux et accessoires correspondants en acier
+3;24.3;Fabrication d'autres produits de première transformation de l'acier
+3;24.4;Production de métaux précieux et d'autres métaux non ferreux
+3;24.5;Fonderie
+3;25.1;Fabrication d'éléments en métal pour la construction
+3;25.2;Fabrication de réservoirs, citernes et conteneurs métalliques
+3;25.3;Fabrication de générateurs de vapeur, à l'exception des chaudières pour le chauffage central
+3;25.4;Fabrication d'armes et de munitions
+3;25.5;"Forge, emboutissage, estampage ; métallurgie des poudres"
+3;25.6;"Traitement et revêtement des métaux ; usinage"
+3;25.7;Fabrication de coutellerie, d'outillage et de quincaillerie
+3;25.9;Fabrication d'autres ouvrages en métaux
+3;26.1;Fabrication de composants et cartes électroniques
+3;26.2;Fabrication d'ordinateurs et d'équipements périphériques
+3;26.3;Fabrication d'équipements de communication
+3;26.4;Fabrication de produits électroniques grand public
+3;26.5;"Fabrication d'instruments et d'appareils de mesure, d'essai et de navigation ; horlogerie"
+3;26.6;Fabrication d'équipements d'irradiation médicale, d'équipements électromédicaux et électrothérapeutiques
+3;26.7;Fabrication de matériels optique et photographique
+3;26.8;Fabrication de supports magnétiques et optiques
+3;27.1;Fabrication de moteurs, génératrices et transformateurs électriques et de matériel de distribution et de commande électrique
+3;27.2;Fabrication de piles et d'accumulateurs électriques
+3;27.3;Fabrication de fils et câbles et de matériel d'installation électrique
+3;27.4;Fabrication d'appareils d'éclairage électrique
+3;27.5;Fabrication d'appareils ménagers
+3;27.9;Fabrication d'autres matériels électriques
+3;28.1;Fabrication de machines d'usage général
+3;28.2;Fabrication d'autres machines d'usage général
+3;28.3;Fabrication de machines agricoles et forestières
+3;28.4;Fabrication de machines de formage des métaux et de machines-outils
+3;28.9;Fabrication d'autres machines d'usage spécifique
+3;29.1;Construction de véhicules automobiles
+3;29.2;Fabrication de carrosseries et remorques
+3;29.3;Fabrication d'équipements automobiles
+3;30.1;Construction navale
+3;30.2;Construction de locomotives et d'autre matériel ferroviaire roulant
+3;30.3;Construction aéronautique et spatiale
+3;30.4;Construction de véhicules militaires de combat
+3;30.9;Fabrication de matériels de transport n.c.a.
+3;31.0;Fabrication de meubles
+3;32.1;Fabrication d'articles de joaillerie, bijouterie et articles similaires
+3;32.2;Fabrication d'instruments de musique
+3;32.3;Fabrication d'articles de sport
+3;32.4;Fabrication de jeux et jouets
+3;32.5;Fabrication d'instruments et de fournitures à usage médical et dentaire
+3;32.9;Activités manufacturières n.c.a.
+3;33.1;Réparation d'ouvrages en métaux, de machines et d'équipements
+3;33.2;Installation de machines et d'équipements industriels
+3;35.1;Production, transport et distribution d'électricité
+3;35.2;Production et distribution de combustibles gazeux
+3;35.3;Production et distribution de vapeur et d'air conditionné
+3;36.0;Captage, traitement et distribution d'eau
+3;37.0;Collecte et traitement des eaux usées
+3;38.1;Collecte des déchets
+3;38.2;Traitement et élimination des déchets
+3;38.3;Récupération
+3;39.0;Dépollution et autres services de gestion des déchets
+3;41.1;Promotion immobilière
+3;41.2;Construction de bâtiments résidentiels et non résidentiels
+3;42.1;Construction de routes et de voies ferrées
+3;42.2;Construction de réseaux et de lignes
+3;42.9;Construction d'autres ouvrages de génie civil
+3;43.1;Démolition et préparation des sites
+3;43.2;Travaux d'installation électrique, plomberie et autres travaux d'installation
+3;43.3;Travaux de finition
+3;43.9;Autres travaux de construction spécialisés
+3;45.1;Commerce de véhicules automobiles
+3;45.2;Entretien et réparation de véhicules automobiles
+3;45.3;Commerce d'équipements automobiles
+3;45.4;Commerce et réparation de motocycles
+3;46.1;Intermédiaires du commerce de gros
+3;46.2;Commerce de gros de produits agricoles bruts et d'animaux vivants
+3;46.3;Commerce de gros de produits alimentaires, de boissons et de tabac
+3;46.4;Commerce de gros de biens domestiques
+3;46.5;Commerce de gros d'équipements de l'information et de la communication
+3;46.6;Commerce de gros d'autres équipements industriels
+3;46.7;Autres commerces de gros spécialisés
+3;46.9;Commerce de gros non spécialisé
+3;47.1;Commerce de détail en magasin non spécialisé
+3;47.2;Commerce de détail alimentaire en magasin spécialisé
+3;47.3;Commerce de détail de carburants en magasin spécialisé
+3;47.4;Commerce de détail d'équipements de l'information et de la communication en magasin spécialisé
+3;47.5;Commerce de détail d'autres équipements du foyer en magasin spécialisé
+3;47.6;Commerce de détail de biens culturels et de loisirs en magasin spécialisé
+3;47.7;Autres commerces de détail en magasin spécialisé
+3;47.8;Commerce de détail sur éventaires et marchés
+3;47.9;Commerce de détail hors magasin, éventaires ou marchés
+3;49.1;Transport ferroviaire interurbain de voyageurs
+3;49.2;Transports ferroviaires de fret
+3;49.3;Autres transports terrestres de voyageurs
+3;49.4;Transports routiers de fret et services de déménagement
+3;49.5;Transports par conduites
+3;50.1;Transports maritimes et côtiers de passagers
+3;50.2;Transports maritimes et côtiers de fret
+3;50.3;Transports fluviaux de passagers
+3;50.4;Transports fluviaux de fret
+3;51.1;Transports aériens de passagers
+3;51.2;Transports aériens de fret et transports spatiaux
+3;52.1;Entreposage et stockage
+3;52.2;Services auxiliaires des transports
+3;53.1;Activités de poste dans le cadre d'une obligation de service universel
+3;53.2;Autres activités de poste et de courrier
+3;55.1;Hôtels et hébergement similaire
+3;55.2;Hébergement touristique et autre hébergement de courte durée
+3;55.3;Terrains de camping et parcs pour caravanes ou véhicules de loisirs
+3;55.9;Autres hébergements
+3;56.1;Restaurants et services de restauration mobile
+3;56.2;Traiteurs et autres services de restauration
+3;56.3;Débits de boissons
+3;58.1;Édition de livres et périodiques et autres activités d'édition
+3;58.2;Édition de logiciels
+3;59.1;Activités cinématographiques, vidéo et de télévision
+3;59.2;Enregistrement sonore et édition musicale
+3;60.1;Édition et diffusion de programmes radio
+3;60.2;Programmation de télévision et télédiffusion
+3;61.1;Télécommunications filaires
+3;61.2;Télécommunications sans fil
+3;61.3;Télécommunications par satellite
+3;61.9;Autres activités de télécommunication
+3;62.0;Programmation, conseil et autres activités informatiques
+3;63.1;"Traitement de données, hébergement et activités connexes ; portails Internet"
+3;63.9;Autres services d'information
+3;64.1;Intermédiation monétaire
+3;64.2;Activités des sociétés holding
+3;64.3;Fonds de placement et entités financières similaires
+3;64.9;Autres activités des services financiers, hors assurance et caisses de retraite
+3;65.1;Assurance
+3;65.2;Réassurance
+3;65.3;Caisses de retraite
+3;66.1;Activités auxiliaires de services financiers, hors assurance et caisses de retraite
+3;66.2;Activités auxiliaires d'assurance et de caisses de retraite
+3;66.3;Gestion de fonds
+3;68.1;Activités des marchands de biens immobiliers
+3;68.2;Location et exploitation de biens immobiliers propres ou loués
+3;68.3;Activités immobilières pour compte de tiers
+3;69.1;Activités juridiques
+3;69.2;Activités comptables
+3;70.1;Activités des sièges sociaux
+3;70.2;Conseil de gestion
+3;71.1;Activités d'architecture et d'ingénierie
+3;71.2;Activités de contrôle et analyses techniques
+3;72.1;Recherche-développement en sciences physiques et naturelles
+3;72.2;Recherche-développement en sciences humaines et sociales
+3;73.1;Publicité
+3;73.2;Études de marché et sondages
+3;74.1;Activités spécialisées de design
+3;74.2;Activités photographiques
+3;74.3;Traduction et interprétation
+3;74.9;Autres activités spécialisées, scientifiques et techniques n.c.a.
+3;75.0;Activités vétérinaires
+3;77.1;Location et location-bail de véhicules automobiles
+3;77.2;Location et location-bail de biens personnels et domestiques
+3;77.3;Location et location-bail d'autres machines, équipements et biens
+3;77.4;Location-bail de propriété intellectuelle et de produits similaires, à l'exception des œuvres soumises à copyright
+3;78.1;Activités des agences de placement de main-d'œuvre
+3;78.2;Activités des agences de travail temporaire
+3;78.3;Autre mise à disposition de ressources humaines
+3;79.1;Activités des agences de voyage et voyagistes
+3;79.9;Autres services de réservation et activités connexes
+3;80.1;Activités de sécurité privée
+3;80.2;Activités liées aux systèmes de sécurité
+3;80.3;Activités d'enquête
+3;81.1;Activités combinées de soutien lié aux bâtiments
+3;81.2;Activités de nettoyage
+3;81.3;Services d'aménagement paysager
+3;82.1;Activités administratives
+3;82.2;Activités de centres d'appels
+3;82.3;Organisation de salons professionnels et congrès
+3;82.9;Activités de soutien aux entreprises n.c.a.
+3;84.1;Administration générale, économique et sociale
+3;84.2;Services de prérogative publique
+3;84.3;Sécurité sociale obligatoire
+3;85.1;Enseignement pré-primaire
+3;85.2;Enseignement primaire
+3;85.3;Enseignement secondaire
+3;85.4;Enseignement supérieur et post-secondaire non supérieur
+3;85.5;Autres activités d'enseignement
+3;85.6;Activités de soutien à l'enseignement
+3;86.1;Activités hospitalières
+3;86.2;Activité des médecins et des dentistes
+3;86.9;Autres activités pour la santé humaine
+3;87.1;Hébergement médicalisé
+3;87.2;Hébergement social pour personnes handicapées mentales, malades mentales et toxicomanes
+3;87.3;Hébergement social pour personnes âgées ou handicapées physiques
+3;87.9;Autres activités d'hébergement social
+3;88.1;Action sociale sans hébergement pour personnes âgées et pour personnes handicapées
+3;88.9;Autre action sociale sans hébergement
+3;90.0;Activités créatives, artistiques et de spectacle
+3;91.0;Bibliothèques, archives, musées et autres activités culturelles
+3;92.0;Organisation de jeux de hasard et d'argent
+3;93.1;Activités liées au sport
+3;93.2;Activités récréatives et de loisirs
+3;94.1;Activités des organisations économiques, patronales et professionnelles
+3;94.2;Activités des syndicats de salariés
+3;94.9;Activités des autres organisations associatives
+3;95.1;Réparation d'ordinateurs et d'équipements de communication
+3;95.2;Réparation de biens personnels et domestiques
+3;96.0;Autres services personnels
+3;97.0;Activités des ménages en tant qu'employeurs de personnel domestique
+3;98.1;Activités indifférenciées des ménages en tant que producteurs de biens pour usage propre
+3;98.2;Activités indifférenciées des ménages en tant que producteurs de services pour usage propre
+3;99.0;Activités des organisations et organismes extraterritoriaux
+4;01.11;Culture de céréales (à l'exception du riz), de légumineuses et de graines oléagineuses
+4;01.12;Culture du riz
+4;01.13;Culture de légumes, de melons, de racines et de tubercules
+4;01.14;Culture de la canne à sucre
+4;01.15;Culture du tabac
+4;01.16;Culture de plantes à fibres
+4;01.19;Autres cultures non permanentes
+4;01.21;Culture de la vigne
+4;01.22;Culture de fruits tropicaux et subtropicaux
+4;01.23;Culture d'agrumes
+4;01.24;Culture de fruits à pépins et à noyau
+4;01.25;Culture d'autres fruits d'arbres ou d'arbustes et de fruits à coque
+4;01.26;Culture de fruits oléagineux
+4;01.27;Culture de plantes à boissons
+4;01.28;Culture de plantes à épices, aromatiques, médicinales et pharmaceutiques
+4;01.29;Autres cultures permanentes
+4;01.30;Reproduction de plantes
+4;01.41;Élevage de vaches laitières
+4;01.42;Élevage d'autres bovins et de buffles
+4;01.43;Élevage de chevaux et d'autres équidés
+4;01.44;Élevage de chameaux et d'autres camélidés
+4;01.45;Élevage d'ovins et de caprins
+4;01.46;Élevage de porcins
+4;01.47;Élevage de volailles
+4;01.49;Élevage d'autres animaux
+4;01.50;Culture et élevage associés
+4;01.61;Activités de soutien aux cultures
+4;01.62;Activités de soutien à la production animale
+4;01.63;Traitement primaire des récoltes
+4;01.64;Traitement des semences
+4;01.70;Chasse, piégeage et services annexes
+4;02.10;Sylviculture et autres activités forestières
+4;02.20;Exploitation forestière
+4;02.30;Récolte de produits forestiers non ligneux poussant à l'état sauvage
+4;02.40;Services de soutien à l'exploitation forestière
+4;03.11;Pêche en mer
+4;03.12;Pêche en eau douce
+4;03.21;Aquaculture en mer
+4;03.22;Aquaculture en eau douce
+4;05.10;Extraction de houille
+4;05.20;Extraction de lignite
+4;06.10;Extraction de pétrole brut
+4;06.20;Extraction de gaz naturel
+4;07.10;Extraction de minerais de fer
+4;07.21;Extraction de minerais d'uranium et de thorium
+4;07.29;Extraction d'autres minerais de métaux non ferreux
+4;08.11;Extraction de pierres ornementales et de construction, de calcaire industriel, de gypse, de craie et d'ardoise
+4;08.12;Exploitation de gravières et sablières, extraction d'argiles et de kaolin
+4;08.91;Extraction des minéraux chimiques et d'engrais minéraux
+4;08.92;Extraction de tourbe
+4;08.93;Production de sel
+4;08.99;Autres activités extractives n.c.a.
+4;09.10;Activités de soutien à l'extraction d'hydrocarbures
+4;09.90;Activités de soutien aux autres industries extractives
+4;10.11;Transformation et conservation de la viande de boucherie
+4;10.12;Transformation et conservation de la viande de volaille
+4;10.13;Préparation de produits à base de viande
+4;10.20;Transformation et conservation de poisson, de crustacés et de mollusques
+4;10.31;Transformation et conservation de pommes de terre
+4;10.32;Préparation de jus de fruits et légumes
+4;10.39;Autre transformation et conservation de fruits et légumes
+4;10.41;Fabrication d'huiles et graisses
+4;10.42;Fabrication de margarine et graisses comestibles similaires
+4;10.51;Exploitation de laiteries et fabrication de fromage
+4;10.52;Fabrication de glaces et sorbets
+4;10.61;Travail des grains
+4;10.62;Fabrication de produits amylacés
+4;10.71;Fabrication de pain et de pâtisserie fraîche
+4;10.72;Fabrication de biscuits, biscottes et pâtisseries de conservation
+4;10.73;Fabrication de pâtes alimentaires
+4;10.81;Fabrication de sucre
+4;10.82;Fabrication de cacao, chocolat et de produits de confiserie
+4;10.83;Transformation du thé et du café
+4;10.84;Fabrication de condiments et assaisonnements
+4;10.85;Fabrication de plats préparés
+4;10.86;Fabrication d'aliments homogénéisés et diététiques
+4;10.89;Fabrication d'autres produits alimentaires n.c.a.
+4;10.91;Fabrication d'aliments pour animaux de ferme
+4;10.92;Fabrication d'aliments pour animaux de compagnie
+4;11.01;Production de boissons alcooliques distillées
+4;11.02;Production de vin (de raisin)
+4;11.03;Fabrication de cidre et de vins de fruits
+4;11.04;Production d'autres boissons fermentées non distillées
+4;11.05;Fabrication de bière
+4;11.06;Fabrication de malt
+4;11.07;Industrie des eaux minérales et autres eaux embouteillées et des boissons rafraîchissantes
+4;12.00;Fabrication de produits à base de tabac
+4;13.10;Préparation de fibres textiles et filature
+4;13.20;Tissage
+4;13.30;Ennoblissement textile
+4;13.91;Fabrication d'étoffes à mailles
+4;13.92;Fabrication d'articles textiles, sauf habillement
+4;13.93;Fabrication de tapis et moquettes
+4;13.94;Fabrication de ficelles, cordes et filets
+4;13.95;Fabrication de non-tissés, sauf habillement
+4;13.96;Fabrication d'autres textiles techniques et industriels
+4;13.99;Fabrication d'autres textiles n.c.a.
+4;14.11;Fabrication de vêtements en cuir
+4;14.12;Fabrication de vêtements de travail
+4;14.13;Fabrication de vêtements de dessus
+4;14.14;Fabrication de vêtements de dessous
+4;14.19;Fabrication d'autres vêtements et accessoires
+4;14.20;Fabrication d'articles en fourrure
+4;14.31;Fabrication d'articles chaussants à mailles
+4;14.39;Fabrication d'autres articles à mailles
+4;15.11;"Apprêt et tannage des cuirs ; préparation et teinture des fourrures"
+4;15.12;Fabrication d'articles de voyage, de maroquinerie et de sellerie
+4;15.20;Fabrication de chaussures
+4;16.10;Sciage et rabotage du bois
+4;16.21;Fabrication de placage et de panneaux de bois
+4;16.22;Fabrication de parquets assemblés
+4;16.23;Fabrication de charpentes et d'autres menuiseries
+4;16.24;Fabrication d'emballages en bois
+4;16.29;"Fabrication d'objets divers en bois ; fabrication d'objets en liège, vannerie et sparterie"
+4;17.11;Fabrication de pâte à papier
+4;17.12;Fabrication de papier et de carton
+4;17.21;Fabrication de papier et carton ondulés et d'emballages en papier ou en carton
+4;17.22;Fabrication d'articles en papier à usage sanitaire ou domestique
+4;17.23;Fabrication d'articles de papeterie
+4;17.24;Fabrication de papiers peints
+4;17.29;Fabrication d'autres articles en papier ou en carton
+4;18.11;Imprimerie de journaux
+4;18.12;Autre imprimerie (labeur)
+4;18.13;Activités de pré-presse
+4;18.14;Reliure et activités connexes
+4;18.20;Reproduction d'enregistrements
+4;19.10;Cokéfaction
+4;19.20;Raffinage du pétrole
+4;20.11;Fabrication de gaz industriels
+4;20.12;Fabrication de colorants et de pigments
+4;20.13;Fabrication d'autres produits chimiques inorganiques de base
+4;20.14;Fabrication d'autres produits chimiques organiques de base
+4;20.15;Fabrication de produits azotés et d'engrais
+4;20.16;Fabrication de matières plastiques de base
+4;20.17;Fabrication de caoutchouc synthétique
+4;20.20;Fabrication de pesticides et d'autres produits agrochimiques
+4;20.30;Fabrication de peintures, vernis, encres et mastics
+4;20.41;Fabrication de savons, détergents et produits d'entretien
+4;20.42;Fabrication de parfums et de produits pour la toilette
+4;20.51;Fabrication de produits explosifs
+4;20.52;Fabrication de colles
+4;20.53;Fabrication d'huiles essentielles
+4;20.59;Fabrication d'autres produits chimiques n.c.a.
+4;20.60;Fabrication de fibres artificielles ou synthétiques
+4;21.10;Fabrication de produits pharmaceutiques de base
+4;21.20;Fabrication de préparations pharmaceutiques
+4;22.11;Fabrication et rechapage de pneumatiques
+4;22.19;Fabrication d'autres articles en caoutchouc
+4;22.21;Fabrication de plaques, feuilles, tubes et profilés en matières plastiques
+4;22.22;Fabrication d'emballages en matières plastiques
+4;22.23;Fabrication d'éléments en matières plastiques pour la construction
+4;22.29;Fabrication d'autres articles en matières plastiques
+4;23.11;Fabrication de verre plat
+4;23.12;Façonnage et transformation du verre plat
+4;23.13;Fabrication de verre creux
+4;23.14;Fabrication de fibres de verre
+4;23.19;Fabrication et façonnage d'autres articles en verre, y compris verre technique
+4;23.20;Fabrication de produits réfractaires
+4;23.31;Fabrication de carreaux en céramique
+4;23.32;Fabrication de briques, tuiles et produits de construction, en terre cuite
+4;23.41;Fabrication d'articles céramiques à usage domestique ou ornemental
+4;23.42;Fabrication d'appareils sanitaires en céramique
+4;23.43;Fabrication d'isolateurs et pièces isolantes en céramique
+4;23.44;Fabrication d'autres produits céramiques à usage technique
+4;23.49;Fabrication d'autres produits céramiques
+4;23.51;Fabrication de ciment
+4;23.52;Fabrication de chaux et plâtre
+4;23.61;Fabrication d'éléments en béton pour la construction
+4;23.62;Fabrication d'éléments en plâtre pour la construction
+4;23.63;Fabrication de béton prêt à l'emploi
+4;23.64;Fabrication de mortiers et bétons secs
+4;23.65;Fabrication d'ouvrages en fibre-ciment
+4;23.69;Fabrication d'autres ouvrages en béton, en ciment ou en plâtre
+4;23.70;Taille, façonnage et finissage de pierres
+4;23.91;Fabrication de produits abrasifs
+4;23.99;Fabrication d'autres produits minéraux non métalliques n.c.a.
+4;24.10;Sidérurgie
+4;24.20;Fabrication de tubes, tuyaux, profilés creux et accessoires correspondants en acier
+4;24.31;Étirage à froid de barres
+4;24.32;Laminage à froid de feuillards
+4;24.33;Profilage à froid par formage ou pliage
+4;24.34;Tréfilage à froid
+4;24.41;Production de métaux précieux
+4;24.42;Métallurgie de l'aluminium
+4;24.43;Métallurgie du plomb, du zinc ou de l'étain
+4;24.44;Métallurgie du cuivre
+4;24.45;Métallurgie des autres métaux non ferreux
+4;24.46;Élaboration et transformation de matières nucléaires
+4;24.51;Fonderie de fonte
+4;24.52;Fonderie d'acier
+4;24.53;Fonderie de métaux légers
+4;24.54;Fonderie d'autres métaux non ferreux
+4;25.11;Fabrication de structures métalliques et de parties de structures
+4;25.12;Fabrication de portes et fenêtres en métal
+4;25.21;Fabrication de radiateurs et de chaudières pour le chauffage central
+4;25.29;Fabrication d'autres réservoirs, citernes et conteneurs métalliques
+4;25.30;Fabrication de générateurs de vapeur, à l'exception des chaudières pour le chauffage central
+4;25.40;Fabrication d'armes et de munitions
+4;25.50;"Forge, emboutissage, estampage ; métallurgie des poudres"
+4;25.61;Traitement et revêtement des métaux
+4;25.62;Usinage
+4;25.71;Fabrication de coutellerie
+4;25.72;Fabrication de serrures et de ferrures
+4;25.73;Fabrication d'outillage
+4;25.91;Fabrication de fûts et emballages métalliques similaires
+4;25.92;Fabrication d'emballages métalliques légers
+4;25.93;Fabrication d'articles en fils métalliques, de chaînes et de ressorts
+4;25.94;Fabrication de vis et de boulons
+4;25.99;Fabrication d'autres produits métalliques n.c.a.
+4;26.11;Fabrication de composants électroniques
+4;26.12;Fabrication de cartes électroniques assemblées
+4;26.20;Fabrication d'ordinateurs et d'équipements périphériques
+4;26.30;Fabrication d'équipements de communication
+4;26.40;Fabrication de produits électroniques grand public
+4;26.51;Fabrication d'instruments et d'appareils de mesure, d'essai et de navigation
+4;26.52;Horlogerie
+4;26.60;Fabrication d'équipements d'irradiation médicale, d'équipements électromédicaux et électrothérapeutiques
+4;26.70;Fabrication de matériels optique et photographique
+4;26.80;Fabrication de supports magnétiques et optiques
+4;27.11;Fabrication de moteurs, génératrices et transformateurs électriques
+4;27.12;Fabrication de matériel de distribution et de commande électrique
+4;27.20;Fabrication de piles et d'accumulateurs électriques
+4;27.31;Fabrication de câbles de fibres optiques
+4;27.32;Fabrication d'autres fils et câbles électroniques ou électriques
+4;27.33;Fabrication de matériel d'installation électrique
+4;27.40;Fabrication d'appareils d'éclairage électrique
+4;27.51;Fabrication d'appareils électroménagers
+4;27.52;Fabrication d'appareils ménagers non électriques
+4;27.90;Fabrication d'autres matériels électriques
+4;28.11;Fabrication de moteurs et turbines, à l'exception des moteurs d'avions et de véhicules
+4;28.12;Fabrication d'équipements hydrauliques et pneumatiques
+4;28.13;Fabrication d'autres pompes et compresseurs
+4;28.14;Fabrication d'autres articles de robinetterie
+4;28.15;Fabrication d'engrenages et d'organes mécaniques de transmission
+4;28.21;Fabrication de fours et brûleurs
+4;28.22;Fabrication de matériel de levage et de manutention
+4;28.23;Fabrication de machines et d'équipements de bureau (à l'exception des ordinateurs et équipements périphériques)
+4;28.24;Fabrication d'outillage portatif à moteur incorporé
+4;28.25;Fabrication d'équipements aérauliques et frigorifiques industriels
+4;28.29;Fabrication de machines diverses d'usage général
+4;28.30;Fabrication de machines agricoles et forestières
+4;28.41;Fabrication de machines de formage des métaux
+4;28.49;Fabrication d'autres machines-outils
+4;28.91;Fabrication de machines pour la métallurgie
+4;28.92;Fabrication de machines pour l'extraction ou la construction
+4;28.93;Fabrication de machines pour l'industrie agro-alimentaire
+4;28.94;Fabrication de machines pour les industries textiles
+4;28.95;Fabrication de machines pour les industries du papier et du carton
+4;28.96;Fabrication de machines pour le travail du caoutchouc ou des plastiques
+4;28.99;Fabrication d'autres machines d'usage spécifique n.c.a.
+4;29.10;Construction de véhicules automobiles
+4;29.20;Fabrication de carrosseries et remorques
+4;29.31;Fabrication d'équipements électriques et électroniques automobiles
+4;29.32;Fabrication d'autres équipements automobiles
+4;30.11;Construction de navires et de structures flottantes
+4;30.12;Construction de bateaux de plaisance
+4;30.20;Construction de locomotives et d'autre matériel ferroviaire roulant
+4;30.30;Construction aéronautique et spatiale
+4;30.40;Construction de véhicules militaires de combat
+4;30.91;Fabrication de motocycles
+4;30.92;Fabrication de bicyclettes et de véhicules pour invalides
+4;30.99;Fabrication d'autres équipements de transport n.c.a.
+4;31.01;Fabrication de meubles de bureau et de magasin
+4;31.02;Fabrication de meubles de cuisine
+4;31.03;Fabrication de matelas
+4;31.09;Fabrication d'autres meubles
+4;32.11;Frappe de monnaie
+4;32.12;Fabrication d'articles de joaillerie et bijouterie
+4;32.13;Fabrication d'articles de bijouterie fantaisie et articles similaires
+4;32.20;Fabrication d'instruments de musique
+4;32.30;Fabrication d'articles de sport
+4;32.40;Fabrication de jeux et jouets
+4;32.50;Fabrication d'instruments et de fournitures à usage médical et dentaire
+4;32.91;Fabrication d'articles de brosserie
+4;32.99;Autres activités manufacturières n.c.a.
+4;33.11;Réparation d'ouvrages en métaux
+4;33.12;Réparation de machines et équipements mécaniques
+4;33.13;Réparation de matériels électroniques et optiques
+4;33.14;Réparation d'équipements électriques
+4;33.15;Réparation et maintenance navale
+4;33.16;Réparation et maintenance d'aéronefs et d'engins spatiaux
+4;33.17;Réparation et maintenance d'autres équipements de transport
+4;33.19;Réparation d'autres équipements
+4;33.20;Installation de machines et d'équipements industriels
+4;35.11;Production d'électricité
+4;35.12;Transport d'électricité
+4;35.13;Distribution d'électricité
+4;35.14;Commerce d'électricité
+4;35.21;Production de combustibles gazeux
+4;35.22;Distribution de combustibles gazeux par conduites
+4;35.23;Commerce de combustibles gazeux par conduites
+4;35.30;Production et distribution de vapeur et d'air conditionné
+4;36.00;Captage, traitement et distribution d'eau
+4;37.00;Collecte et traitement des eaux usées
+4;38.11;Collecte des déchets non dangereux
+4;38.12;Collecte des déchets dangereux
+4;38.21;Traitement et élimination des déchets non dangereux
+4;38.22;Traitement et élimination des déchets dangereux
+4;38.31;Démantèlement d'épaves
+4;38.32;Récupération de déchets triés
+4;39.00;Dépollution et autres services de gestion des déchets
+4;41.10;Promotion immobilière
+4;41.20;Construction de bâtiments résidentiels et non résidentiels
+4;42.11;Construction de routes et autoroutes
+4;42.12;Construction de voies ferrées de surface et souterraines
+4;42.13;Construction de ponts et tunnels
+4;42.21;Construction de réseaux pour fluides
+4;42.22;Construction de réseaux électriques et de télécommunications
+4;42.91;Construction d'ouvrages maritimes et fluviaux
+4;42.99;Construction d'autres ouvrages de génie civil n.c.a.
+4;43.11;Travaux de démolition
+4;43.12;Travaux de préparation des sites
+4;43.13;Forages et sondages
+4;43.21;Installation électrique
+4;43.22;Travaux de plomberie et installation de chauffage et de conditionnement d'air
+4;43.29;Autres travaux d'installation
+4;43.31;Travaux de plâtrerie
+4;43.32;Travaux de menuiserie
+4;43.33;Travaux de revêtement des sols et des murs
+4;43.34;Travaux de peinture et vitrerie
+4;43.39;Autres travaux de finition
+4;43.91;Travaux de couverture
+4;43.99;Autres travaux de construction spécialisés n.c.a.
+4;45.11;Commerce de voitures et de véhicules automobiles légers
+4;45.19;Commerce d'autres véhicules automobiles
+4;45.20;Entretien et réparation de véhicules automobiles
+4;45.31;Commerce de gros d'équipements automobiles
+4;45.32;Commerce de détail d'équipements automobiles
+4;45.40;Commerce et réparation de motocycles
+4;46.11;Intermédiaires du commerce en matières premières agricoles, animaux vivants, matières premières textiles et produits semi-finis
+4;46.12;Intermédiaires du commerce en combustibles, métaux, minéraux et produits chimiques
+4;46.13;Intermédiaires du commerce en bois et matériaux de construction
+4;46.14;Intermédiaires du commerce en machines, équipements industriels, navires et avions
+4;46.15;Intermédiaires du commerce en meubles, articles de ménage et quincaillerie
+4;46.16;Intermédiaires du commerce en textiles, habillement, fourrures, chaussures et articles en cuir
+4;46.17;Intermédiaires du commerce en denrées, boissons et tabac
+4;46.18;Intermédiaires spécialisés dans le commerce d'autres produits spécifiques
+4;46.19;Intermédiaires du commerce en produits divers
+4;46.21;Commerce de gros de céréales, de tabac non manufacturé, de semences et d'aliments pour le bétail
+4;46.22;Commerce de gros de fleurs et plantes
+4;46.23;Commerce de gros d'animaux vivants
+4;46.24;Commerce de gros de cuirs et peaux
+4;46.31;Commerce de gros de fruits et légumes
+4;46.32;Commerce de gros de viandes et de produits à base de viande
+4;46.33;Commerce de gros de produits laitiers, œufs, huiles et matières grasses comestibles
+4;46.34;Commerce de gros de boissons
+4;46.35;Commerce de gros de produits à base de tabac
+4;46.36;Commerce de gros de sucre, chocolat et confiserie
+4;46.37;Commerce de gros de café, thé, cacao et épices
+4;46.38;Commerce de gros d'autres produits alimentaires, y compris poissons, crustacés et mollusques
+4;46.39;Commerce de gros non spécialisé de denrées, boissons et tabac
+4;46.41;Commerce de gros de textiles
+4;46.42;Commerce de gros d'habillement et de chaussures
+4;46.43;Commerce de gros d'appareils électroménagers
+4;46.44;Commerce de gros de vaisselle, verrerie et produits d'entretien
+4;46.45;Commerce de gros de parfumerie et de produits de beauté
+4;46.46;Commerce de gros de produits pharmaceutiques
+4;46.47;Commerce de gros de meubles, de tapis et d'appareils d'éclairage
+4;46.48;Commerce de gros d'articles d'horlogerie et de bijouterie
+4;46.49;Commerce de gros d'autres biens domestiques
+4;46.51;Commerce de gros d'ordinateurs, d'équipements informatiques périphériques et de logiciels
+4;46.52;Commerce de gros de composants et d'équipements électroniques et de télécommunication
+4;46.61;Commerce de gros de matériel agricole
+4;46.62;Commerce de gros de machines-outils
+4;46.63;Commerce de gros de machines pour l'extraction, la construction et le génie civil
+4;46.64;Commerce de gros de machines pour l'industrie textile et l'habillement
+4;46.65;Commerce de gros de mobilier de bureau
+4;46.66;Commerce de gros d'autres machines et équipements de bureau
+4;46.69;Commerce de gros d'autres machines et équipements
+4;46.71;Commerce de gros de combustibles et de produits annexes
+4;46.72;Commerce de gros de minerais et métaux
+4;46.73;Commerce de gros de bois, de matériaux de construction et d'appareils sanitaires
+4;46.74;Commerce de gros de quincaillerie et fournitures pour plomberie et chauffage
+4;46.75;Commerce de gros de produits chimiques
+4;46.76;Commerce de gros d'autres produits intermédiaires
+4;46.77;Commerce de gros de déchets et débris
+4;46.90;Commerce de gros non spécialisé
+4;47.11;Commerce de détail en magasin non spécialisé à prédominance alimentaire
+4;47.19;Autre commerce de détail en magasin non spécialisé
+4;47.21;Commerce de détail de fruits et légumes en magasin spécialisé
+4;47.22;Commerce de détail de viandes et de produits à base de viande en magasin spécialisé
+4;47.23;Commerce de détail de poissons, crustacés et mollusques en magasin spécialisé
+4;47.24;Commerce de détail de pain, pâtisserie et confiserie en magasin spécialisé
+4;47.25;Commerce de détail de boissons en magasin spécialisé
+4;47.26;Commerce de détail de produits à base de tabac en magasin spécialisé
+4;47.29;Autres commerces de détail alimentaires en magasin spécialisé
+4;47.30;Commerce de détail de carburants en magasin spécialisé
+4;47.41;Commerce de détail d'ordinateurs, d'unités périphériques et de logiciels en magasin spécialisé
+4;47.42;Commerce de détail de matériels de télécommunication en magasin spécialisé
+4;47.43;Commerce de détail de matériels audio/vidéo en magasin spécialisé
+4;47.51;Commerce de détail de textiles en magasin spécialisé
+4;47.52;Commerce de détail de quincaillerie, peintures et verres en magasin spécialisé
+4;47.53;Commerce de détail de tapis, moquettes et revêtements de murs et de sols en magasin spécialisé
+4;47.54;Commerce de détail d'appareils électroménagers en magasin spécialisé
+4;47.59;Commerce de détail de meubles, appareils d'éclairage et autres articles de ménage en magasin spécialisé
+4;47.61;Commerce de détail de livres en magasin spécialisé
+4;47.62;Commerce de détail de journaux et papeterie en magasin spécialisé
+4;47.63;Commerce de détail d'enregistrements musicaux et vidéo en magasin spécialisé
+4;47.64;Commerce de détail d'articles de sport en magasin spécialisé
+4;47.65;Commerce de détail de jeux et jouets en magasin spécialisé
+4;47.71;Commerce de détail d'habillement en magasin spécialisé
+4;47.72;Commerce de détail de chaussures et d'articles en cuir en magasin spécialisé
+4;47.73;Commerce de détail de produits pharmaceutiques en magasin spécialisé
+4;47.74;Commerce de détail d'articles médicaux et orthopédiques en magasin spécialisé
+4;47.75;Commerce de détail de parfumerie et de produits de beauté en magasin spécialisé
+4;47.76;Commerce de détail de fleurs, plantes, graines, engrais, animaux de compagnie et aliments pour ces animaux en magasin spécialisé
+4;47.77;Commerce de détail d'articles d'horlogerie et de bijouterie en magasin spécialisé
+4;47.78;Autre commerce de détail de biens neufs en magasin spécialisé
+4;47.79;Commerce de détail de biens d'occasion en magasin
+4;47.81;Commerce de détail alimentaire sur éventaires et marchés
+4;47.82;Commerce de détail de textiles, d'habillement et de chaussures sur éventaires et marchés
+4;47.89;Autres commerces de détail sur éventaires et marchés
+4;47.91;Vente à distance
+4;47.99;Autres commerces de détail hors magasin, éventaires ou marchés
+4;49.10;Transport ferroviaire interurbain de voyageurs
+4;49.20;Transports ferroviaires de fret
+4;49.31;Transports urbains et suburbains de voyageurs
+4;49.32;Transports de voyageurs par taxis
+4;49.39;Autres transports terrestres de voyageurs n.c.a.
+4;49.41;Transports routiers de fret
+4;49.42;Services de déménagement
+4;49.50;Transports par conduites
+4;50.10;Transports maritimes et côtiers de passagers
+4;50.20;Transports maritimes et côtiers de fret
+4;50.30;Transports fluviaux de passagers
+4;50.40;Transports fluviaux de fret
+4;51.10;Transports aériens de passagers
+4;51.21;Transports aériens de fret
+4;51.22;Transports spatiaux
+4;52.10;Entreposage et stockage
+4;52.21;Services auxiliaires des transports terrestres
+4;52.22;Services auxiliaires des transports par eau
+4;52.23;Services auxiliaires des transports aériens
+4;52.24;Manutention
+4;52.29;Autres services auxiliaires des transports
+4;53.10;Activités de poste dans le cadre d'une obligation de service universel
+4;53.20;Autres activités de poste et de courrier
+4;55.10;Hôtels et hébergement similaire
+4;55.20;Hébergement touristique et autre hébergement de courte durée
+4;55.30;Terrains de camping et parcs pour caravanes ou véhicules de loisirs
+4;55.90;Autres hébergements
+4;56.10;Restaurants et services de restauration mobile
+4;56.21;Services des traiteurs
+4;56.29;Autres services de restauration
+4;56.30;Débits de boissons
+4;58.11;Édition de livres
+4;58.12;Édition de répertoires et de fichiers d'adresses
+4;58.13;Édition de journaux
+4;58.14;Édition de revues et périodiques
+4;58.19;Autres activités d'édition
+4;58.21;Édition de jeux électroniques
+4;58.29;Édition d'autres logiciels
+4;59.11;Production de films cinématographiques, de vidéo et de programmes de télévision
+4;59.12;Post-production de films cinématographiques, de vidéo et de programmes de télévision
+4;59.13;Distribution de films cinématographiques, de vidéo et de programmes de télévision
+4;59.14;Projection de films cinématographiques
+4;59.20;Enregistrement sonore et édition musicale
+4;60.10;Édition et diffusion de programmes radio
+4;60.20;Programmation de télévision et télédiffusion
+4;61.10;Télécommunications filaires
+4;61.20;Télécommunications sans fil
+4;61.30;Télécommunications par satellite
+4;61.90;Autres activités de télécommunication
+4;62.01;Programmation informatique
+4;62.02;Conseil informatique
+4;62.03;Gestion d'installations informatiques
+4;62.09;Autres activités informatiques
+4;63.11;Traitement de données, hébergement et activités connexes
+4;63.12;Portails Internet
+4;63.91;Activités des agences de presse
+4;63.99;Autres services d'information n.c.a.
+4;64.11;Activités de banque centrale
+4;64.19;Autres intermédiations monétaires
+4;64.20;Activités des sociétés holding
+4;64.30;Fonds de placement et entités financières similaires
+4;64.91;Crédit-bail
+4;64.92;Autre distribution de crédit
+4;64.99;Autres activités des services financiers, hors assurance et caisses de retraite, n.c.a.
+4;65.11;Assurance vie
+4;65.12;Autres assurances
+4;65.20;Réassurance
+4;65.30;Caisses de retraite
+4;66.11;Administration de marchés financiers
+4;66.12;Courtage de valeurs mobilières et de marchandises
+4;66.19;Autres activités auxiliaires de services financiers, hors assurance et caisses de retraite
+4;66.21;Évaluation des risques et dommages
+4;66.22;Activités des agents et courtiers d'assurances
+4;66.29;Autres activités auxiliaires d'assurance et de caisses de retraite
+4;66.30;Gestion de fonds
+4;68.10;Activités des marchands de biens immobiliers
+4;68.20;Location et exploitation de biens immobiliers propres ou loués
+4;68.31;Agences immobilières
+4;68.32;Administration de biens immobiliers
+4;69.10;Activités juridiques
+4;69.20;Activités comptables
+4;70.10;Activités des sièges sociaux
+4;70.21;Conseil en relations publiques et communication
+4;70.22;Conseil pour les affaires et autres conseils de gestion
+4;71.11;Activités d'architecture
+4;71.12;Activités d'ingénierie
+4;71.20;Activités de contrôle et analyses techniques
+4;72.11;Recherche-développement en biotechnologie
+4;72.19;Recherche-développement en autres sciences physiques et naturelles
+4;72.20;Recherche-développement en sciences humaines et sociales
+4;73.11;Activités des agences de publicité
+4;73.12;Régie publicitaire de médias
+4;73.20;Études de marché et sondages
+4;74.10;Activités spécialisées de design
+4;74.20;Activités photographiques
+4;74.30;Traduction et interprétation
+4;74.90;Autres activités spécialisées, scientifiques et techniques n.c.a.
+4;75.00;Activités vétérinaires
+4;77.11;Location et location-bail de voitures et de véhicules automobiles légers
+4;77.12;Location et location-bail de camions
+4;77.21;Location et location-bail d'articles de loisirs et de sport
+4;77.22;Location de vidéocassettes et disques vidéo
+4;77.29;Location et location-bail d'autres biens personnels et domestiques
+4;77.31;Location et location-bail de machines et équipements agricoles
+4;77.32;Location et location-bail de machines et équipements pour la construction
+4;77.33;Location et location-bail de machines de bureau et de matériel informatique
+4;77.34;Location et location-bail de matériels de transport par eau
+4;77.35;Location et location-bail de matériels de transport aérien
+4;77.39;Location et location-bail d'autres machines, équipements et biens matériels n.c.a.
+4;77.40;Location-bail de propriété intellectuelle et de produits similaires, à l'exception des œuvres soumises à copyright
+4;78.10;Activités des agences de placement de main-d'œuvre
+4;78.20;Activités des agences de travail temporaire
+4;78.30;Autre mise à disposition de ressources humaines
+4;79.11;Activités des agences de voyage
+4;79.12;Activités des voyagistes
+4;79.90;Autres services de réservation et activités connexes
+4;80.10;Activités de sécurité privée
+4;80.20;Activités liées aux systèmes de sécurité
+4;80.30;Activités d'enquête
+4;81.10;Activités combinées de soutien lié aux bâtiments
+4;81.21;Nettoyage courant des bâtiments
+4;81.22;Autres activités de nettoyage des bâtiments et nettoyage industriel
+4;81.29;Autres activités de nettoyage
+4;81.30;Services d'aménagement paysager
+4;82.11;Services administratifs combinés de bureau
+4;82.19;Photocopie, préparation de documents et autres activités spécialisées de soutien de bureau
+4;82.20;Activités de centres d'appels
+4;82.30;Organisation de salons professionnels et congrès
+4;82.91;Activités des agences de recouvrement de factures et des sociétés d'information financière sur la clientèle
+4;82.92;Activités de conditionnement
+4;82.99;Autres activités de soutien aux entreprises n.c.a.
+4;84.11;Administration publique générale
+4;84.12;Administration publique (tutelle) de la santé, de la formation, de la culture et des services sociaux, autre que sécurité sociale
+4;84.13;Administration publique (tutelle) des activités économiques
+4;84.21;Affaires étrangères
+4;84.22;Défense
+4;84.23;Justice
+4;84.24;Activités d'ordre public et de sécurité
+4;84.25;Services du feu et de secours
+4;84.30;Sécurité sociale obligatoire
+4;85.10;Enseignement pré-primaire
+4;85.20;Enseignement primaire
+4;85.31;Enseignement secondaire général
+4;85.32;Enseignement secondaire technique ou professionnel
+4;85.41;Enseignement post-secondaire non supérieur
+4;85.42;Enseignement supérieur
+4;85.51;Enseignement de disciplines sportives et d'activités de loisirs
+4;85.52;Enseignement culturel
+4;85.53;Enseignement de la conduite
+4;85.59;Enseignements divers
+4;85.60;Activités de soutien à l'enseignement
+4;86.10;Activités hospitalières
+4;86.21;Activité des médecins généralistes
+4;86.22;Activité des médecins spécialistes
+4;86.23;Pratique dentaire
+4;86.90;Autres activités pour la santé humaine
+4;87.10;Hébergement médicalisé
+4;87.20;Hébergement social pour personnes handicapées mentales, malades mentales et toxicomanes
+4;87.30;Hébergement social pour personnes âgées ou handicapées physiques
+4;87.90;Autres activités d'hébergement social
+4;88.10;Action sociale sans hébergement pour personnes âgées et pour personnes handicapées
+4;88.91;Action sociale sans hébergement pour jeunes enfants
+4;88.99;Autre action sociale sans hébergement n.c.a.
+4;90.01;Arts du spectacle vivant
+4;90.02;Activités de soutien au spectacle vivant
+4;90.03;Création artistique
+4;90.04;Gestion de salles de spectacles
+4;91.01;Gestion des bibliothèques et des archives
+4;91.02;Gestion des musées
+4;91.03;Gestion des sites et monuments historiques et des attractions touristiques similaires
+4;91.04;Gestion des jardins botaniques et zoologiques et des réserves naturelles
+4;92.00;Organisation de jeux de hasard et d'argent
+4;93.11;Gestion d'installations sportives
+4;93.12;Activités de clubs de sports
+4;93.13;Activités des centres de culture physique
+4;93.19;Autres activités liées au sport
+4;93.21;Activités des parcs d'attractions et parcs à thèmes
+4;93.29;Autres activités récréatives et de loisirs
+4;94.11;Activités des organisations patronales et consulaires
+4;94.12;Activités des organisations professionnelles
+4;94.20;Activités des syndicats de salariés
+4;94.91;Activités des organisations religieuses
+4;94.92;Activités des organisations politiques
+4;94.99;Activités des organisations associatives n.c.a.
+4;95.11;Réparation d'ordinateurs et d'équipements périphériques
+4;95.12;Réparation d'équipements de communication
+4;95.21;Réparation de produits électroniques grand public
+4;95.22;Réparation d'appareils électroménagers et d'équipements pour la maison et le jardin
+4;95.23;Réparation de chaussures et d'articles en cuir
+4;95.24;Réparation de meubles et d'équipements du foyer
+4;95.25;Réparation d'articles d'horlogerie et de bijouterie
+4;95.29;Réparation d'autres biens personnels et domestiques
+4;96.01;Blanchisserie-teinturerie
+4;96.02;Coiffure et soins de beauté
+4;96.03;Services funéraires
+4;96.04;Entretien corporel
+4;96.09;Autres services personnels n.c.a.
+4;97.00;Activités des ménages en tant qu'employeurs de personnel domestique
+4;98.10;Activités indifférenciées des ménages en tant que producteurs de biens pour usage propre
+4;98.20;Activités indifférenciées des ménages en tant que producteurs de services pour usage propre
+4;99.00;Activités des organisations et organismes extraterritoriaux
+5;01.11Z;Culture de céréales (à l'exception du riz), de légumineuses et de graines oléagineuses
+5;01.12Z;Culture du riz
+5;01.13Z;Culture de légumes, de melons, de racines et de tubercules
+5;01.14Z;Culture de la canne à sucre
+5;01.15Z;Culture du tabac
+5;01.16Z;Culture de plantes à fibres
+5;01.19Z;Autres cultures non permanentes
+5;01.21Z;Culture de la vigne
+5;01.22Z;Culture de fruits tropicaux et subtropicaux
+5;01.23Z;Culture d'agrumes
+5;01.24Z;Culture de fruits à pépins et à noyau
+5;01.25Z;Culture d'autres fruits d'arbres ou d'arbustes et de fruits à coque
+5;01.26Z;Culture de fruits oléagineux
+5;01.27Z;Culture de plantes à boissons
+5;01.28Z;Culture de plantes à épices, aromatiques, médicinales et pharmaceutiques
+5;01.29Z;Autres cultures permanentes
+5;01.30Z;Reproduction de plantes
+5;01.41Z;Élevage de vaches laitières
+5;01.42Z;Élevage d'autres bovins et de buffles
+5;01.43Z;Élevage de chevaux et d'autres équidés
+5;01.44Z;Élevage de chameaux et d'autres camélidés
+5;01.45Z;Élevage d'ovins et de caprins
+5;01.46Z;Élevage de porcins
+5;01.47Z;Élevage de volailles
+5;01.49Z;Élevage d'autres animaux
+5;01.50Z;Culture et élevage associés
+5;01.61Z;Activités de soutien aux cultures
+5;01.62Z;Activités de soutien à la production animale
+5;01.63Z;Traitement primaire des récoltes
+5;01.64Z;Traitement des semences
+5;01.70Z;Chasse, piégeage et services annexes
+5;02.10Z;Sylviculture et autres activités forestières
+5;02.20Z;Exploitation forestière
+5;02.30Z;Récolte de produits forestiers non ligneux poussant à l'état sauvage
+5;02.40Z;Services de soutien à l'exploitation forestière
+5;03.11Z;Pêche en mer
+5;03.12Z;Pêche en eau douce
+5;03.21Z;Aquaculture en mer
+5;03.22Z;Aquaculture en eau douce
+5;05.10Z;Extraction de houille
+5;05.20Z;Extraction de lignite
+5;06.10Z;Extraction de pétrole brut
+5;06.20Z;Extraction de gaz naturel
+5;07.10Z;Extraction de minerais de fer
+5;07.21Z;Extraction de minerais d'uranium et de thorium
+5;07.29Z;Extraction d'autres minerais de métaux non ferreux
+5;08.11Z;Extraction de pierres ornementales et de construction, de calcaire industriel, de gypse, de craie et d'ardoise
+5;08.12Z;Exploitation de gravières et sablières, extraction d'argiles et de kaolin
+5;08.91Z;Extraction des minéraux chimiques et d'engrais minéraux
+5;08.92Z;Extraction de tourbe
+5;08.93Z;Production de sel
+5;08.99Z;Autres activités extractives n.c.a.
+5;09.10Z;Activités de soutien à l'extraction d'hydrocarbures
+5;09.90Z;Activités de soutien aux autres industries extractives
+5;10.11Z;Transformation et conservation de la viande de boucherie
+5;10.12Z;Transformation et conservation de la viande de volaille
+5;10.13A;Préparation industrielle de produits à base de viande
+5;10.13B;Charcuterie
+5;10.20Z;Transformation et conservation de poisson, de crustacés et de mollusques
+5;10.31Z;Transformation et conservation de pommes de terre
+5;10.32Z;Préparation de jus de fruits et légumes
+5;10.39A;Autre transformation et conservation de légumes
+5;10.39B;Transformation et conservation de fruits
+5;10.41A;Fabrication d'huiles et graisses brutes
+5;10.41B;Fabrication d'huiles et graisses raffinées
+5;10.42Z;Fabrication de margarine et graisses comestibles similaires
+5;10.51A;Fabrication de lait liquide et de produits frais
+5;10.51B;Fabrication de beurre
+5;10.51C;Fabrication de fromage
+5;10.51D;Fabrication d'autres produits laitiers
+5;10.52Z;Fabrication de glaces et sorbets
+5;10.61A;Meunerie
+5;10.61B;Autres activités du travail des grains
+5;10.62Z;Fabrication de produits amylacés
+5;10.71A;Fabrication industrielle de pain et de pâtisserie fraîche
+5;10.71B;Cuisson de produits de boulangerie
+5;10.71C;Boulangerie et boulangerie-pâtisserie
+5;10.71D;Pâtisserie
+5;10.72Z;Fabrication de biscuits, biscottes et pâtisseries de conservation
+5;10.73Z;Fabrication de pâtes alimentaires
+5;10.81Z;Fabrication de sucre
+5;10.82Z;Fabrication de cacao, chocolat et de produits de confiserie
+5;10.83Z;Transformation du thé et du café
+5;10.84Z;Fabrication de condiments et assaisonnements
+5;10.85Z;Fabrication de plats préparés
+5;10.86Z;Fabrication d'aliments homogénéisés et diététiques
+5;10.89Z;Fabrication d'autres produits alimentaires n.c.a.
+5;10.91Z;Fabrication d'aliments pour animaux de ferme
+5;10.92Z;Fabrication d'aliments pour animaux de compagnie
+5;11.01Z;Production de boissons alcooliques distillées
+5;11.02A;Fabrication de vins effervescents
+5;11.02B;Vinification
+5;11.03Z;Fabrication de cidre et de vins de fruits
+5;11.04Z;Production d'autres boissons fermentées non distillées
+5;11.05Z;Fabrication de bière
+5;11.06Z;Fabrication de malt
+5;11.07A;Industrie des eaux de table
+5;11.07B;Production de boissons rafraîchissantes
+5;12.00Z;Fabrication de produits à base de tabac
+5;13.10Z;Préparation de fibres textiles et filature
+5;13.20Z;Tissage
+5;13.30Z;Ennoblissement textile
+5;13.91Z;Fabrication d'étoffes à mailles
+5;13.92Z;Fabrication d'articles textiles, sauf habillement
+5;13.93Z;Fabrication de tapis et moquettes
+5;13.94Z;Fabrication de ficelles, cordes et filets
+5;13.95Z;Fabrication de non-tissés, sauf habillement
+5;13.96Z;Fabrication d'autres textiles techniques et industriels
+5;13.99Z;Fabrication d'autres textiles n.c.a.
+5;14.11Z;Fabrication de vêtements en cuir
+5;14.12Z;Fabrication de vêtements de travail
+5;14.13Z;Fabrication de vêtements de dessus
+5;14.14Z;Fabrication de vêtements de dessous
+5;14.19Z;Fabrication d'autres vêtements et accessoires
+5;14.20Z;Fabrication d'articles en fourrure
+5;14.31Z;Fabrication d'articles chaussants à mailles
+5;14.39Z;Fabrication d'autres articles à mailles
+5;15.11Z;"Apprêt et tannage des cuirs ; préparation et teinture des fourrures"
+5;15.12Z;Fabrication d'articles de voyage, de maroquinerie et de sellerie
+5;15.20Z;Fabrication de chaussures
+5;16.10A;Sciage et rabotage du bois, hors imprégnation
+5;16.10B;Imprégnation du bois
+5;16.21Z;Fabrication de placage et de panneaux de bois
+5;16.22Z;Fabrication de parquets assemblés
+5;16.23Z;Fabrication de charpentes et d'autres menuiseries
+5;16.24Z;Fabrication d'emballages en bois
+5;16.29Z;"Fabrication d'objets divers en bois ; fabrication d'objets en liège, vannerie et sparterie"
+5;17.11Z;Fabrication de pâte à papier
+5;17.12Z;Fabrication de papier et de carton
+5;17.21A;Fabrication de carton ondulé
+5;17.21B;Fabrication de cartonnages
+5;17.21C;Fabrication d'emballages en papier
+5;17.22Z;Fabrication d'articles en papier à usage sanitaire ou domestique
+5;17.23Z;Fabrication d'articles de papeterie
+5;17.24Z;Fabrication de papiers peints
+5;17.29Z;Fabrication d'autres articles en papier ou en carton
+5;18.11Z;Imprimerie de journaux
+5;18.12Z;Autre imprimerie (labeur)
+5;18.13Z;Activités de pré-presse
+5;18.14Z;Reliure et activités connexes
+5;18.20Z;Reproduction d'enregistrements
+5;19.10Z;Cokéfaction
+5;19.20Z;Raffinage du pétrole
+5;20.11Z;Fabrication de gaz industriels
+5;20.12Z;Fabrication de colorants et de pigments
+5;20.13A;Enrichissement et retraitement de matières nucléaires
+5;20.13B;Fabrication d'autres produits chimiques inorganiques de base n.c.a.
+5;20.14Z;Fabrication d'autres produits chimiques organiques de base
+5;20.15Z;Fabrication de produits azotés et d'engrais
+5;20.16Z;Fabrication de matières plastiques de base
+5;20.17Z;Fabrication de caoutchouc synthétique
+5;20.20Z;Fabrication de pesticides et d'autres produits agrochimiques
+5;20.30Z;Fabrication de peintures, vernis, encres et mastics
+5;20.41Z;Fabrication de savons, détergents et produits d'entretien
+5;20.42Z;Fabrication de parfums et de produits pour la toilette
+5;20.51Z;Fabrication de produits explosifs
+5;20.52Z;Fabrication de colles
+5;20.53Z;Fabrication d'huiles essentielles
+5;20.59Z;Fabrication d'autres produits chimiques n.c.a.
+5;20.60Z;Fabrication de fibres artificielles ou synthétiques
+5;21.10Z;Fabrication de produits pharmaceutiques de base
+5;21.20Z;Fabrication de préparations pharmaceutiques
+5;22.11Z;Fabrication et rechapage de pneumatiques
+5;22.19Z;Fabrication d'autres articles en caoutchouc
+5;22.21Z;Fabrication de plaques, feuilles, tubes et profilés en matières plastiques
+5;22.22Z;Fabrication d'emballages en matières plastiques
+5;22.23Z;Fabrication d'éléments en matières plastiques pour la construction
+5;22.29A;Fabrication de pièces techniques à base de matières plastiques
+5;22.29B;Fabrication de produits de consommation courante en matières plastiques
+5;23.11Z;Fabrication de verre plat
+5;23.12Z;Façonnage et transformation du verre plat
+5;23.13Z;Fabrication de verre creux
+5;23.14Z;Fabrication de fibres de verre
+5;23.19Z;Fabrication et façonnage d'autres articles en verre, y compris verre technique
+5;23.20Z;Fabrication de produits réfractaires
+5;23.31Z;Fabrication de carreaux en céramique
+5;23.32Z;Fabrication de briques, tuiles et produits de construction, en terre cuite
+5;23.41Z;Fabrication d'articles céramiques à usage domestique ou ornemental
+5;23.42Z;Fabrication d'appareils sanitaires en céramique
+5;23.43Z;Fabrication d'isolateurs et pièces isolantes en céramique
+5;23.44Z;Fabrication d'autres produits céramiques à usage technique
+5;23.49Z;Fabrication d'autres produits céramiques
+5;23.51Z;Fabrication de ciment
+5;23.52Z;Fabrication de chaux et plâtre
+5;23.61Z;Fabrication d'éléments en béton pour la construction
+5;23.62Z;Fabrication d'éléments en plâtre pour la construction
+5;23.63Z;Fabrication de béton prêt à l'emploi
+5;23.64Z;Fabrication de mortiers et bétons secs
+5;23.65Z;Fabrication d'ouvrages en fibre-ciment
+5;23.69Z;Fabrication d'autres ouvrages en béton, en ciment ou en plâtre
+5;23.70Z;Taille, façonnage et finissage de pierres
+5;23.91Z;Fabrication de produits abrasifs
+5;23.99Z;Fabrication d'autres produits minéraux non métalliques n.c.a.
+5;24.10Z;Sidérurgie
+5;24.20Z;Fabrication de tubes, tuyaux, profilés creux et accessoires correspondants en acier
+5;24.31Z;Étirage à froid de barres
+5;24.32Z;Laminage à froid de feuillards
+5;24.33Z;Profilage à froid par formage ou pliage
+5;24.34Z;Tréfilage à froid
+5;24.41Z;Production de métaux précieux
+5;24.42Z;Métallurgie de l'aluminium
+5;24.43Z;Métallurgie du plomb, du zinc ou de l'étain
+5;24.44Z;Métallurgie du cuivre
+5;24.45Z;Métallurgie des autres métaux non ferreux
+5;24.46Z;Élaboration et transformation de matières nucléaires
+5;24.51Z;Fonderie de fonte
+5;24.52Z;Fonderie d'acier
+5;24.53Z;Fonderie de métaux légers
+5;24.54Z;Fonderie d'autres métaux non ferreux
+5;25.11Z;Fabrication de structures métalliques et de parties de structures
+5;25.12Z;Fabrication de portes et fenêtres en métal
+5;25.21Z;Fabrication de radiateurs et de chaudières pour le chauffage central
+5;25.29Z;Fabrication d'autres réservoirs, citernes et conteneurs métalliques
+5;25.30Z;Fabrication de générateurs de vapeur, à l'exception des chaudières pour le chauffage central
+5;25.40Z;Fabrication d'armes et de munitions
+5;25.50A;"Forge, estampage, matriçage ; métallurgie des poudres"
+5;25.50B;Découpage, emboutissage
+5;25.61Z;Traitement et revêtement des métaux
+5;25.62A;Décolletage
+5;25.62B;Mécanique industrielle
+5;25.71Z;Fabrication de coutellerie
+5;25.72Z;Fabrication de serrures et de ferrures
+5;25.73A;Fabrication de moules et modèles
+5;25.73B;Fabrication d'autres outillages
+5;25.91Z;Fabrication de fûts et emballages métalliques similaires
+5;25.92Z;Fabrication d'emballages métalliques légers
+5;25.93Z;Fabrication d'articles en fils métalliques, de chaînes et de ressorts
+5;25.94Z;Fabrication de vis et de boulons
+5;25.99A;Fabrication d'articles métalliques ménagers
+5;25.99B;Fabrication d'autres articles métalliques
+5;26.11Z;Fabrication de composants électroniques
+5;26.12Z;Fabrication de cartes électroniques assemblées
+5;26.20Z;Fabrication d'ordinateurs et d'équipements périphériques
+5;26.30Z;Fabrication d'équipements de communication
+5;26.40Z;Fabrication de produits électroniques grand public
+5;26.51A;Fabrication d'équipements d'aide à la navigation
+5;26.51B;Fabrication d'instrumentation scientifique et technique
+5;26.52Z;Horlogerie
+5;26.60Z;Fabrication d'équipements d'irradiation médicale, d'équipements électromédicaux et électrothérapeutiques
+5;26.70Z;Fabrication de matériels optique et photographique
+5;26.80Z;Fabrication de supports magnétiques et optiques
+5;27.11Z;Fabrication de moteurs, génératrices et transformateurs électriques
+5;27.12Z;Fabrication de matériel de distribution et de commande électrique
+5;27.20Z;Fabrication de piles et d'accumulateurs électriques
+5;27.31Z;Fabrication de câbles de fibres optiques
+5;27.32Z;Fabrication d'autres fils et câbles électroniques ou électriques
+5;27.33Z;Fabrication de matériel d'installation électrique
+5;27.40Z;Fabrication d'appareils d'éclairage électrique
+5;27.51Z;Fabrication d'appareils électroménagers
+5;27.52Z;Fabrication d'appareils ménagers non électriques
+5;27.90Z;Fabrication d'autres matériels électriques
+5;28.11Z;Fabrication de moteurs et turbines, à l'exception des moteurs d'avions et de véhicules
+5;28.12Z;Fabrication d'équipements hydrauliques et pneumatiques
+5;28.13Z;Fabrication d'autres pompes et compresseurs
+5;28.14Z;Fabrication d'autres articles de robinetterie
+5;28.15Z;Fabrication d'engrenages et d'organes mécaniques de transmission
+5;28.21Z;Fabrication de fours et brûleurs
+5;28.22Z;Fabrication de matériel de levage et de manutention
+5;28.23Z;Fabrication de machines et d'équipements de bureau (à l'exception des ordinateurs et équipements périphériques)
+5;28.24Z;Fabrication d'outillage portatif à moteur incorporé
+5;28.25Z;Fabrication d'équipements aérauliques et frigorifiques industriels
+5;28.29A;Fabrication d'équipements d'emballage, de conditionnement et de pesage
+5;28.29B;Fabrication d'autres machines d'usage général
+5;28.30Z;Fabrication de machines agricoles et forestières
+5;28.41Z;Fabrication de machines-outils pour le travail des métaux
+5;28.49Z;Fabrication d'autres machines-outils
+5;28.91Z;Fabrication de machines pour la métallurgie
+5;28.92Z;Fabrication de machines pour l'extraction ou la construction
+5;28.93Z;Fabrication de machines pour l'industrie agro-alimentaire
+5;28.94Z;Fabrication de machines pour les industries textiles
+5;28.95Z;Fabrication de machines pour les industries du papier et du carton
+5;28.96Z;Fabrication de machines pour le travail du caoutchouc ou des plastiques
+5;28.99A;Fabrication de machines d'imprimerie
+5;28.99B;Fabrication d'autres machines spécialisées
+5;29.10Z;Construction de véhicules automobiles
+5;29.20Z;Fabrication de carrosseries et remorques
+5;29.31Z;Fabrication d'équipements électriques et électroniques automobiles
+5;29.32Z;Fabrication d'autres équipements automobiles
+5;30.11Z;Construction de navires et de structures flottantes
+5;30.12Z;Construction de bateaux de plaisance
+5;30.20Z;Construction de locomotives et d'autre matériel ferroviaire roulant
+5;30.30Z;Construction aéronautique et spatiale
+5;30.40Z;Construction de véhicules militaires de combat
+5;30.91Z;Fabrication de motocycles
+5;30.92Z;Fabrication de bicyclettes et de véhicules pour invalides
+5;30.99Z;Fabrication d'autres équipements de transport n.c.a.
+5;31.01Z;Fabrication de meubles de bureau et de magasin
+5;31.02Z;Fabrication de meubles de cuisine
+5;31.03Z;Fabrication de matelas
+5;31.09A;Fabrication de sièges d'ameublement d'intérieur
+5;31.09B;Fabrication d'autres meubles et industries connexes de l'ameublement
+5;32.11Z;Frappe de monnaie
+5;32.12Z;Fabrication d'articles de joaillerie et bijouterie
+5;32.13Z;Fabrication d'articles de bijouterie fantaisie et articles similaires
+5;32.20Z;Fabrication d'instruments de musique
+5;32.30Z;Fabrication d'articles de sport
+5;32.40Z;Fabrication de jeux et jouets
+5;32.50A;Fabrication de matériel médico-chirurgical et dentaire
+5;32.50B;Fabrication de lunettes
+5;32.91Z;Fabrication d'articles de brosserie
+5;32.99Z;Autres activités manufacturières n.c.a.
+5;33.11Z;Réparation d'ouvrages en métaux
+5;33.12Z;Réparation de machines et équipements mécaniques
+5;33.13Z;Réparation de matériels électroniques et optiques
+5;33.14Z;Réparation d'équipements électriques
+5;33.15Z;Réparation et maintenance navale
+5;33.16Z;Réparation et maintenance d'aéronefs et d'engins spatiaux
+5;33.17Z;Réparation et maintenance d'autres équipements de transport
+5;33.19Z;Réparation d'autres équipements
+5;33.20A;Installation de structures métalliques, chaudronnées et de tuyauterie
+5;33.20B;Installation de machines et équipements mécaniques
+5;33.20C;Conception d'ensemble et assemblage sur site industriel d'équipements de contrôle des processus industriels
+5;33.20D;Installation d'équipements électriques, de matériels électroniques et optiques ou d'autres matériels
+5;35.11Z;Production d'électricité
+5;35.12Z;Transport d'électricité
+5;35.13Z;Distribution d'électricité
+5;35.14Z;Commerce d'électricité
+5;35.21Z;Production de combustibles gazeux
+5;35.22Z;Distribution de combustibles gazeux par conduites
+5;35.23Z;Commerce de combustibles gazeux par conduites
+5;35.30Z;Production et distribution de vapeur et d'air conditionné
+5;36.00Z;Captage, traitement et distribution d'eau
+5;37.00Z;Collecte et traitement des eaux usées
+5;38.11Z;Collecte des déchets non dangereux
+5;38.12Z;Collecte des déchets dangereux
+5;38.21Z;Traitement et élimination des déchets non dangereux
+5;38.22Z;Traitement et élimination des déchets dangereux
+5;38.31Z;Démantèlement d'épaves
+5;38.32Z;Récupération de déchets triés
+5;39.00Z;Dépollution et autres services de gestion des déchets
+5;41.10A;Promotion immobilière de logements
+5;41.10B;Promotion immobilière de bureaux
+5;41.10C;Promotion immobilière d'autres bâtiments
+5;41.10D;Supports juridiques de programmes
+5;41.20A;Construction de maisons individuelles
+5;41.20B;Construction d'autres bâtiments
+5;42.11Z;Construction de routes et autoroutes
+5;42.12Z;Construction de voies ferrées de surface et souterraines
+5;42.13A;Construction d'ouvrages d'art
+5;42.13B;Construction et entretien de tunnels
+5;42.21Z;Construction de réseaux pour fluides
+5;42.22Z;Construction de réseaux électriques et de télécommunications
+5;42.91Z;Construction d'ouvrages maritimes et fluviaux
+5;42.99Z;Construction d'autres ouvrages de génie civil n.c.a.
+5;43.11Z;Travaux de démolition
+5;43.12A;Travaux de terrassement courants et travaux préparatoires
+5;43.12B;Travaux de terrassement spécialisés ou de grande masse
+5;43.13Z;Forages et sondages
+5;43.21A;Travaux d'installation électrique dans tous locaux
+5;43.21B;Travaux d'installation électrique sur la voie publique
+5;43.22A;Travaux d'installation d'eau et de gaz en tous locaux
+5;43.22B;Travaux d'installation d'équipements thermiques et de climatisation
+5;43.29A;Travaux d'isolation
+5;43.29B;Autres travaux d'installation n.c.a.
+5;43.31Z;Travaux de plâtrerie
+5;43.32A;Travaux de menuiserie bois et PVC
+5;43.32B;Travaux de menuiserie métallique et serrurerie
+5;43.32C;Agencement de lieux de vente
+5;43.33Z;Travaux de revêtement des sols et des murs
+5;43.34Z;Travaux de peinture et vitrerie
+5;43.39Z;Autres travaux de finition
+5;43.91A;Travaux de charpente
+5;43.91B;Travaux de couverture par éléments
+5;43.99A;Travaux d'étanchéification
+5;43.99B;Travaux de montage de structures métalliques
+5;43.99C;Travaux de maçonnerie générale et gros œuvre de bâtiment
+5;43.99D;Autres travaux spécialisés de construction
+5;43.99E;Location avec opérateur de matériel de construction
+5;45.11Z;Commerce de voitures et de véhicules automobiles légers
+5;45.19Z;Commerce d'autres véhicules automobiles
+5;45.20A;Entretien et réparation de véhicules automobiles légers
+5;45.20B;Entretien et réparation d'autres véhicules automobiles
+5;45.31Z;Commerce de gros d'équipements automobiles
+5;45.32Z;Commerce de détail d'équipements automobiles
+5;45.40Z;Commerce et réparation de motocycles
+5;46.11Z;Intermédiaires du commerce en matières premières agricoles, animaux vivants, matières premières textiles et produits semi-finis
+5;46.12A;Centrales d'achat de carburant
+5;46.12B;Autres intermédiaires du commerce en combustibles, métaux, minéraux et produits chimiques
+5;46.13Z;Intermédiaires du commerce en bois et matériaux de construction
+5;46.14Z;Intermédiaires du commerce en machines, équipements industriels, navires et avions
+5;46.15Z;Intermédiaires du commerce en meubles, articles de ménage et quincaillerie
+5;46.16Z;Intermédiaires du commerce en textiles, habillement, fourrures, chaussures et articles en cuir
+5;46.17A;Centrales d'achat alimentaires
+5;46.17B;Autres intermédiaires du commerce en denrées, boissons et tabac
+5;46.18Z;Intermédiaires spécialisés dans le commerce d'autres produits spécifiques
+5;46.19A;Centrales d'achat non alimentaires
+5;46.19B;Autres intermédiaires du commerce en produits divers
+5;46.21Z;Commerce de gros (commerce interentreprises) de céréales, de tabac non manufacturé, de semences et d'aliments pour le bétail
+5;46.22Z;Commerce de gros (commerce interentreprises) de fleurs et plantes
+5;46.23Z;Commerce de gros (commerce interentreprises) d'animaux vivants
+5;46.24Z;Commerce de gros (commerce interentreprises) de cuirs et peaux
+5;46.31Z;Commerce de gros (commerce interentreprises) de fruits et légumes
+5;46.32A;Commerce de gros (commerce interentreprises) de viandes de boucherie
+5;46.32B;Commerce de gros (commerce interentreprises) de produits à base de viande
+5;46.32C;Commerce de gros (commerce interentreprises) de volailles et gibier
+5;46.33Z;Commerce de gros (commerce interentreprises) de produits laitiers, œufs, huiles et matières grasses comestibles
+5;46.34Z;Commerce de gros (commerce interentreprises) de boissons
+5;46.35Z;Commerce de gros (commerce interentreprises) de produits à base de tabac
+5;46.36Z;Commerce de gros (commerce interentreprises) de sucre, chocolat et confiserie
+5;46.37Z;Commerce de gros (commerce interentreprises) de café, thé, cacao et épices
+5;46.38A;Commerce de gros (commerce interentreprises) de poissons, crustacés et mollusques
+5;46.38B;Commerce de gros (commerce interentreprises) alimentaire spécialisé divers
+5;46.39A;Commerce de gros (commerce interentreprises) de produits surgelés
+5;46.39B;Commerce de gros (commerce interentreprises) alimentaire non spécialisé
+5;46.41Z;Commerce de gros (commerce interentreprises) de textiles
+5;46.42Z;Commerce de gros (commerce interentreprises) d'habillement et de chaussures
+5;46.43Z;Commerce de gros (commerce interentreprises) d'appareils électroménagers
+5;46.44Z;Commerce de gros (commerce interentreprises) de vaisselle, verrerie et produits d'entretien
+5;46.45Z;Commerce de gros (commerce interentreprises) de parfumerie et de produits de beauté
+5;46.46Z;Commerce de gros (commerce interentreprises) de produits pharmaceutiques
+5;46.47Z;Commerce de gros (commerce interentreprises) de meubles, de tapis et d'appareils d'éclairage
+5;46.48Z;Commerce de gros (commerce interentreprises) d'articles d'horlogerie et de bijouterie
+5;46.49Z;Commerce de gros (commerce interentreprises) d'autres biens domestiques
+5;46.51Z;Commerce de gros (commerce interentreprises) d'ordinateurs, d'équipements informatiques périphériques et de logiciels
+5;46.52Z;Commerce de gros (commerce interentreprises) de composants et d'équipements électroniques et de télécommunication
+5;46.61Z;Commerce de gros (commerce interentreprises) de matériel agricole
+5;46.62Z;Commerce de gros (commerce interentreprises) de machines-outils
+5;46.63Z;Commerce de gros (commerce interentreprises) de machines pour l'extraction, la construction et le génie civil
+5;46.64Z;Commerce de gros (commerce interentreprises) de machines pour l'industrie textile et l'habillement
+5;46.65Z;Commerce de gros (commerce interentreprises) de mobilier de bureau
+5;46.66Z;Commerce de gros (commerce interentreprises) d'autres machines et équipements de bureau
+5;46.69A;Commerce de gros (commerce interentreprises) de matériel électrique
+5;46.69B;Commerce de gros (commerce interentreprises) de fournitures et équipements industriels divers
+5;46.69C;Commerce de gros (commerce interentreprises) de fournitures et équipements divers pour le commerce et les services
+5;46.71Z;Commerce de gros (commerce interentreprises) de combustibles et de produits annexes
+5;46.72Z;Commerce de gros (commerce interentreprises) de minerais et métaux
+5;46.73A;Commerce de gros (commerce interentreprises) de bois et de matériaux de construction
+5;46.73B;Commerce de gros (commerce interentreprises) d'appareils sanitaires et de produits de décoration
+5;46.74A;Commerce de gros (commerce interentreprises) de quincaillerie
+5;46.74B;Commerce de gros (commerce interentreprises) de fournitures pour la plomberie et le chauffage
+5;46.75Z;Commerce de gros (commerce interentreprises) de produits chimiques
+5;46.76Z;Commerce de gros (commerce interentreprises) d'autres produits intermédiaires
+5;46.77Z;Commerce de gros (commerce interentreprises) de déchets et débris
+5;46.90Z;Commerce de gros (commerce interentreprises) non spécialisé
+5;47.11A;Commerce de détail de produits surgelés
+5;47.11B;Commerce d'alimentation générale
+5;47.11C;Supérettes
+5;47.11D;Supermarchés
+5;47.11E;Magasins multi-commerces
+5;47.11F;Hypermarchés
+5;47.19A;Grands magasins
+5;47.19B;Autres commerces de détail en magasin non spécialisé
+5;47.21Z;Commerce de détail de fruits et légumes en magasin spécialisé
+5;47.22Z;Commerce de détail de viandes et de produits à base de viande en magasin spécialisé
+5;47.23Z;Commerce de détail de poissons, crustacés et mollusques en magasin spécialisé
+5;47.24Z;Commerce de détail de pain, pâtisserie et confiserie en magasin spécialisé
+5;47.25Z;Commerce de détail de boissons en magasin spécialisé
+5;47.26Z;Commerce de détail de produits à base de tabac en magasin spécialisé
+5;47.29Z;Autres commerces de détail alimentaires en magasin spécialisé
+5;47.30Z;Commerce de détail de carburants en magasin spécialisé
+5;47.41Z;Commerce de détail d'ordinateurs, d'unités périphériques et de logiciels en magasin spécialisé
+5;47.42Z;Commerce de détail de matériels de télécommunication en magasin spécialisé
+5;47.43Z;Commerce de détail de matériels audio et vidéo en magasin spécialisé
+5;47.51Z;Commerce de détail de textiles en magasin spécialisé
+5;47.52A;Commerce de détail de quincaillerie, peintures et verres en petites surfaces (moins de 400 m²)
+5;47.52B;Commerce de détail de quincaillerie, peintures et verres en grandes surfaces (400 m² et plus)
+5;47.53Z;Commerce de détail de tapis, moquettes et revêtements de murs et de sols en magasin spécialisé
+5;47.54Z;Commerce de détail d'appareils électroménagers en magasin spécialisé
+5;47.59A;Commerce de détail de meubles
+5;47.59B;Commerce de détail d'autres équipements du foyer
+5;47.61Z;Commerce de détail de livres en magasin spécialisé
+5;47.62Z;Commerce de détail de journaux et papeterie en magasin spécialisé
+5;47.63Z;Commerce de détail d'enregistrements musicaux et vidéo en magasin spécialisé
+5;47.64Z;Commerce de détail d'articles de sport en magasin spécialisé
+5;47.65Z;Commerce de détail de jeux et jouets en magasin spécialisé
+5;47.71Z;Commerce de détail d'habillement en magasin spécialisé
+5;47.72A;Commerce de détail de la chaussure
+5;47.72B;Commerce de détail de maroquinerie et d'articles de voyage
+5;47.73Z;Commerce de détail de produits pharmaceutiques en magasin spécialisé
+5;47.74Z;Commerce de détail d'articles médicaux et orthopédiques en magasin spécialisé
+5;47.75Z;Commerce de détail de parfumerie et de produits de beauté en magasin spécialisé
+5;47.76Z;Commerce de détail de fleurs, plantes, graines, engrais, animaux de compagnie et aliments pour ces animaux en magasin spécialisé
+5;47.77Z;Commerce de détail d'articles d'horlogerie et de bijouterie en magasin spécialisé
+5;47.78A;Commerces de détail d'optique
+5;47.78B;Commerces de détail de charbons et combustibles
+5;47.78C;Autres commerces de détail spécialisés divers
+5;47.79Z;Commerce de détail de biens d'occasion en magasin
+5;47.81Z;Commerce de détail alimentaire sur éventaires et marchés
+5;47.82Z;Commerce de détail de textiles, d'habillement et de chaussures sur éventaires et marchés
+5;47.89Z;Autres commerces de détail sur éventaires et marchés
+5;47.91A;Vente à distance sur catalogue général
+5;47.91B;Vente à distance sur catalogue spécialisé
+5;47.99A;Vente à domicile
+5;47.99B;Vente par automates et autres commerces de détail hors magasin, éventaires ou marchés n.c.a.
+5;49.10Z;Transport ferroviaire interurbain de voyageurs
+5;49.20Z;Transports ferroviaires de fret
+5;49.31Z;Transports urbains et suburbains de voyageurs
+5;49.32Z;Transports de voyageurs par taxis
+5;49.39A;Transports routiers réguliers de voyageurs
+5;49.39B;Autres transports routiers de voyageurs
+5;49.39C;Téléphériques et remontées mécaniques
+5;49.41A;Transports routiers de fret interurbains
+5;49.41B;Transports routiers de fret de proximité
+5;49.41C;Location de camions avec chauffeur
+5;49.42Z;Services de déménagement
+5;49.50Z;Transports par conduites
+5;50.10Z;Transports maritimes et côtiers de passagers
+5;50.20Z;Transports maritimes et côtiers de fret
+5;50.30Z;Transports fluviaux de passagers
+5;50.40Z;Transports fluviaux de fret
+5;51.10Z;Transports aériens de passagers
+5;51.21Z;Transports aériens de fret
+5;51.22Z;Transports spatiaux
+5;52.10A;Entreposage et stockage frigorifique
+5;52.10B;Entreposage et stockage non frigorifique
+5;52.21Z;Services auxiliaires des transports terrestres
+5;52.22Z;Services auxiliaires des transports par eau
+5;52.23Z;Services auxiliaires des transports aériens
+5;52.24A;Manutention portuaire
+5;52.24B;Manutention non portuaire
+5;52.29A;Messagerie, fret express
+5;52.29B;Affrètement et organisation des transports
+5;53.10Z;Activités de poste dans le cadre d'une obligation de service universel
+5;53.20Z;Autres activités de poste et de courrier
+5;55.10Z;Hôtels et hébergement similaire
+5;55.20Z;Hébergement touristique et autre hébergement de courte durée
+5;55.30Z;Terrains de camping et parcs pour caravanes ou véhicules de loisirs
+5;55.90Z;Autres hébergements
+5;56.10A;Restauration traditionnelle
+5;56.10B;Cafétérias et autres libres-services
+5;56.10C;Restauration de type rapide
+5;56.21Z;Services des traiteurs
+5;56.29A;Restauration collective sous contrat
+5;56.29B;Autres services de restauration n.c.a.
+5;56.30Z;Débits de boissons
+5;58.11Z;Édition de livres
+5;58.12Z;Édition de répertoires et de fichiers d'adresses
+5;58.13Z;Édition de journaux
+5;58.14Z;Édition de revues et périodiques
+5;58.19Z;Autres activités d'édition
+5;58.21Z;Édition de jeux électroniques
+5;58.29A;Édition de logiciels système et de réseau
+5;58.29B;Édition de logiciels outils de développement et de langages
+5;58.29C;Édition de logiciels applicatifs
+5;59.11A;Production de films et de programmes pour la télévision
+5;59.11B;Production de films institutionnels et publicitaires
+5;59.11C;Production de films pour le cinéma
+5;59.12Z;Post-production de films cinématographiques, de vidéo et de programmes de télévision
+5;59.13A;Distribution de films cinématographiques
+5;59.13B;Édition et distribution vidéo
+5;59.14Z;Projection de films cinématographiques
+5;59.20Z;Enregistrement sonore et édition musicale
+5;60.10Z;Édition et diffusion de programmes radio
+5;60.20A;Édition de chaînes généralistes
+5;60.20B;Édition de chaînes thématiques
+5;61.10Z;Télécommunications filaires
+5;61.20Z;Télécommunications sans fil
+5;61.30Z;Télécommunications par satellite
+5;61.90Z;Autres activités de télécommunication
+5;62.01Z;Programmation informatique
+5;62.02A;Conseil en systèmes et logiciels informatiques
+5;62.02B;Tierce maintenance de systèmes et d'applications informatiques
+5;62.03Z;Gestion d'installations informatiques
+5;62.09Z;Autres activités informatiques
+5;63.11Z;Traitement de données, hébergement et activités connexes
+5;63.12Z;Portails Internet
+5;63.91Z;Activités des agences de presse
+5;63.99Z;Autres services d'information n.c.a.
+5;64.11Z;Activités de banque centrale
+5;64.19Z;Autres intermédiations monétaires
+5;64.20Z;Activités des sociétés holding
+5;64.30Z;Fonds de placement et entités financières similaires
+5;64.91Z;Crédit-bail
+5;64.92Z;Autre distribution de crédit
+5;64.99Z;Autres activités des services financiers, hors assurance et caisses de retraite, n.c.a.
+5;65.11Z;Assurance vie
+5;65.12Z;Autres assurances
+5;65.20Z;Réassurance
+5;65.30Z;Caisses de retraite
+5;66.11Z;Administration de marchés financiers
+5;66.12Z;Courtage de valeurs mobilières et de marchandises
+5;66.19A;Supports juridiques de gestion de patrimoine mobilier
+5;66.19B;Autres activités auxiliaires de services financiers, hors assurance et caisses de retraite, n.c.a.
+5;66.21Z;Évaluation des risques et dommages
+5;66.22Z;Activités des agents et courtiers d'assurances
+5;66.29Z;Autres activités auxiliaires d'assurance et de caisses de retraite
+5;66.30Z;Gestion de fonds
+5;68.10Z;Activités des marchands de biens immobiliers
+5;68.20A;Location de logements
+5;68.20B;Location de terrains et d'autres biens immobiliers
+5;68.31Z;Agences immobilières
+5;68.32A;Administration d'immeubles et autres biens immobiliers
+5;68.32B;Supports juridiques de gestion de patrimoine immobilier
+5;69.10Z;Activités juridiques
+5;69.20Z;Activités comptables
+5;70.10Z;Activités des sièges sociaux
+5;70.21Z;Conseil en relations publiques et communication
+5;70.22Z;Conseil pour les affaires et autres conseils de gestion
+5;71.11Z;Activités d'architecture
+5;71.12A;Activité des géomètres
+5;71.12B;Ingénierie, études techniques
+5;71.20A;Contrôle technique automobile
+5;71.20B;Analyses, essais et inspections techniques
+5;72.11Z;Recherche-développement en biotechnologie
+5;72.19Z;Recherche-développement en autres sciences physiques et naturelles
+5;72.20Z;Recherche-développement en sciences humaines et sociales
+5;73.11Z;Activités des agences de publicité
+5;73.12Z;Régie publicitaire de médias
+5;73.20Z;Études de marché et sondages
+5;74.10Z;Activités spécialisées de design
+5;74.20Z;Activités photographiques
+5;74.30Z;Traduction et interprétation
+5;74.90A;Activité des économistes de la construction
+5;74.90B;Activités spécialisées, scientifiques et techniques diverses
+5;75.00Z;Activités vétérinaires
+5;77.11A;Location de courte durée de voitures et de véhicules automobiles légers
+5;77.11B;Location de longue durée de voitures et de véhicules automobiles légers
+5;77.12Z;Location et location-bail de camions
+5;77.21Z;Location et location-bail d'articles de loisirs et de sport
+5;77.22Z;Location de vidéocassettes et disques vidéo
+5;77.29Z;Location et location-bail d'autres biens personnels et domestiques
+5;77.31Z;Location et location-bail de machines et équipements agricoles
+5;77.32Z;Location et location-bail de machines et équipements pour la construction
+5;77.33Z;Location et location-bail de machines de bureau et de matériel informatique
+5;77.34Z;Location et location-bail de matériels de transport par eau
+5;77.35Z;Location et location-bail de matériels de transport aérien
+5;77.39Z;Location et location-bail d'autres machines, équipements et biens matériels n.c.a.
+5;77.40Z;Location-bail de propriété intellectuelle et de produits similaires, à l'exception des œuvres soumises à copyright
+5;78.10Z;Activités des agences de placement de main-d'œuvre
+5;78.20Z;Activités des agences de travail temporaire
+5;78.30Z;Autre mise à disposition de ressources humaines
+5;79.11Z;Activités des agences de voyage
+5;79.12Z;Activités des voyagistes
+5;79.90Z;Autres services de réservation et activités connexes
+5;80.10Z;Activités de sécurité privée
+5;80.20Z;Activités liées aux systèmes de sécurité
+5;80.30Z;Activités d'enquête
+5;81.10Z;Activités combinées de soutien lié aux bâtiments
+5;81.21Z;Nettoyage courant des bâtiments
+5;81.22Z;Autres activités de nettoyage des bâtiments et nettoyage industriel
+5;81.29A;Désinfection, désinsectisation, dératisation
+5;81.29B;Autres activités de nettoyage n.c.a.
+5;81.30Z;Services d'aménagement paysager
+5;82.11Z;Services administratifs combinés de bureau
+5;82.19Z;Photocopie, préparation de documents et autres activités spécialisées de soutien de bureau
+5;82.20Z;Activités de centres d'appels
+5;82.30Z;Organisation de foires, salons professionnels et congrès
+5;82.91Z;Activités des agences de recouvrement de factures et des sociétés d'information financière sur la clientèle
+5;82.92Z;Activités de conditionnement
+5;82.99Z;Autres activités de soutien aux entreprises n.c.a.
+5;84.11Z;Administration publique générale
+5;84.12Z;Administration publique (tutelle) de la santé, de la formation, de la culture et des services sociaux, autre que sécurité sociale
+5;84.13Z;Administration publique (tutelle) des activités économiques
+5;84.21Z;Affaires étrangères
+5;84.22Z;Défense
+5;84.23Z;Justice
+5;84.24Z;Activités d'ordre public et de sécurité
+5;84.25Z;Services du feu et de secours
+5;84.30A;Activités générales de sécurité sociale
+5;84.30B;Gestion des retraites complémentaires
+5;84.30C;Distribution sociale de revenus
+5;85.10Z;Enseignement pré-primaire
+5;85.20Z;Enseignement primaire
+5;85.31Z;Enseignement secondaire général
+5;85.32Z;Enseignement secondaire technique ou professionnel
+5;85.41Z;Enseignement post-secondaire non supérieur
+5;85.42Z;Enseignement supérieur
+5;85.51Z;Enseignement de disciplines sportives et d'activités de loisirs
+5;85.52Z;Enseignement culturel
+5;85.53Z;Enseignement de la conduite
+5;85.59A;Formation continue d'adultes
+5;85.59B;Autres enseignements
+5;85.60Z;Activités de soutien à l'enseignement
+5;86.10Z;Activités hospitalières
+5;86.21Z;Activité des médecins généralistes
+5;86.22A;Activités de radiodiagnostic et de radiothérapie
+5;86.22B;Activités chirurgicales
+5;86.22C;Autres activités des médecins spécialistes
+5;86.23Z;Pratique dentaire
+5;86.90A;Ambulances
+5;86.90B;Laboratoires d'analyses médicales
+5;86.90C;Centres de collecte et banques d'organes
+5;86.90D;Activités des infirmiers et des sages-femmes
+5;86.90E;Activités des professionnels de la rééducation, de l'appareillage et des pédicures-podologues
+5;86.90F;Activités de santé humaine non classées ailleurs
+5;87.10A;Hébergement médicalisé pour personnes âgées
+5;87.10B;Hébergement médicalisé pour enfants handicapés
+5;87.10C;Hébergement médicalisé pour adultes handicapés et autre hébergement médicalisé
+5;87.20A;Hébergement social pour handicapés mentaux et malades mentaux
+5;87.20B;Hébergement social pour toxicomanes
+5;87.30A;Hébergement social pour personnes âgées
+5;87.30B;Hébergement social pour handicapés physiques
+5;87.90A;Hébergement social pour enfants en difficultés
+5;87.90B;Hébergement social pour adultes et familles en difficultés et autre hébergement social
+5;88.10A;Aide à domicile
+5;88.10B;Accueil ou accompagnement sans hébergement d'adultes handicapés ou de personnes âgées
+5;88.10C;Aide par le travail
+5;88.91A;Accueil de jeunes enfants
+5;88.91B;Accueil ou accompagnement sans hébergement d'enfants handicapés
+5;88.99A;Autre accueil ou accompagnement sans hébergement d'enfants et d'adolescents
+5;88.99B;Action sociale sans hébergement n.c.a.
+5;90.01Z;Arts du spectacle vivant
+5;90.02Z;Activités de soutien au spectacle vivant
+5;90.03A;Création artistique relevant des arts plastiques
+5;90.03B;Autre création artistique
+5;90.04Z;Gestion de salles de spectacles
+5;91.01Z;Gestion des bibliothèques et des archives
+5;91.02Z;Gestion des musées
+5;91.03Z;Gestion des sites et monuments historiques et des attractions touristiques similaires
+5;91.04Z;Gestion des jardins botaniques et zoologiques et des réserves naturelles
+5;92.00Z;Organisation de jeux de hasard et d'argent
+5;93.11Z;Gestion d'installations sportives
+5;93.12Z;Activités de clubs de sports
+5;93.13Z;Activités des centres de culture physique
+5;93.19Z;Autres activités liées au sport
+5;93.21Z;Activités des parcs d'attractions et parcs à thèmes
+5;93.29Z;Autres activités récréatives et de loisirs
+5;94.11Z;Activités des organisations patronales et consulaires
+5;94.12Z;Activités des organisations professionnelles
+5;94.20Z;Activités des syndicats de salariés
+5;94.91Z;Activités des organisations religieuses
+5;94.92Z;Activités des organisations politiques
+5;94.99Z;Autres organisations fonctionnant par adhésion volontaire
+5;95.11Z;Réparation d'ordinateurs et d'équipements périphériques
+5;95.12Z;Réparation d'équipements de communication
+5;95.21Z;Réparation de produits électroniques grand public
+5;95.22Z;Réparation d'appareils électroménagers et d'équipements pour la maison et le jardin
+5;95.23Z;Réparation de chaussures et d'articles en cuir
+5;95.24Z;Réparation de meubles et d'équipements du foyer
+5;95.25Z;Réparation d'articles d'horlogerie et de bijouterie
+5;95.29Z;Réparation d'autres biens personnels et domestiques
+5;96.01A;Blanchisserie-teinturerie de gros
+5;96.01B;Blanchisserie-teinturerie de détail
+5;96.02A;Coiffure
+5;96.02B;Soins de beauté
+5;96.03Z;Services funéraires
+5;96.04Z;Entretien corporel
+5;96.09Z;Autres services personnels n.c.a.
+5;97.00Z;Activités des ménages en tant qu'employeurs de personnel domestique
+5;98.10Z;Activités indifférenciées des ménages en tant que producteurs de biens pour usage propre
+5;98.20Z;Activités indifférenciées des ménages en tant que producteurs de services pour usage propre
+5;99.00Z;Activités des organisations et organismes extraterritoriaux

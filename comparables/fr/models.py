@@ -1,8 +1,8 @@
-"""Modèle d'une cession de fonds de commerce (une ligne du tableau PME FR)."""
+"""Modèles cessions FR : une cession (ligne du tableau) + le lot avec ses compteurs."""
 from __future__ import annotations
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Cession(BaseModel):
@@ -32,3 +32,19 @@ class Cession(BaseModel):
     # Tracabilite
     descriptif: Optional[str] = None
     url: Optional[str] = None
+
+
+class CessionsBatch(BaseModel):
+    """Résultat d'une recherche de cessions + entonnoir de filtrage.
+
+    Les compteurs rendent un « 0 résultat » explicable : aucune annonce trouvée,
+    activité hors cible (NAF), ou CA indisponible (comptes confidentiels). Ils portent
+    sur les annonces effectivement balayées (le scan s'arrête à `limit` atteint).
+    """
+    cessions: list[Cession] = Field(default_factory=list)
+    n_annonces: int = 0                 # annonces BODACC avec prix balayées
+    n_naf_exclues: int = 0              # écartées par le filtre d'activité (NAF/nom)
+    n_sans_ca: int = 0                  # écartées faute de CA disponible (require_ca)
+    keywords: list[str] = Field(default_factory=list)   # requête élargie exécutée (OU)
+    naf_codes: list[str] = Field(default_factory=list)  # codes NAF ciblés
+    naf_labels: list[str] = Field(default_factory=list)  # libellés correspondants

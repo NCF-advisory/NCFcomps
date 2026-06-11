@@ -27,8 +27,10 @@ st.caption("Prix de cession en % du CA et en multiple d'EBE. BODACC (prix) + Rat
 
 with st.sidebar:
     st.header("Filtres")
-    activite = st.text_input("Activité (terme libre)", "boulangerie",
-                             help="Recherche plein-texte dans l'annonce (ex : restaurant, coiffure, pharmacie). Vide = toutes.")
+    activite = st.text_input("Activité (texte libre)", "boulangerie",
+                             help="Domaine, libellé ou code NAF (ex : conseil en informatique, "
+                                  "restaurant, 62.02A) — traduit en mots-clés élargis + codes "
+                                  "NAF cibles. Vide = toutes.")
     departement = st.text_input("Département (optionnel)", "", help="Code, ex : 75, 33…")
     annees = st.slider("Fenêtre (années)", 1, 10, 10)
     limit = st.slider("Nombre de cessions à retenir", 10, 80, 30, step=10)
@@ -40,11 +42,12 @@ if run:
     since = pipeline.default_since(annees)
     msg = "Récupération et croisement avec les comptes (peut prendre un moment)…"
     with st.spinner(msg):
-        cessions = pipeline.build_cessions(
+        batch = pipeline.build_cessions(
             departement=departement.strip() or None,
             contains=activite.strip() or None,
             since=since, limit=limit, require_ca=not inclure_sans_ca)
-    st.session_state["fr_cessions"] = cessions
+    st.session_state["fr_cessions"] = batch.cessions
+    st.session_state["fr_batch"] = batch
     st.session_state.pop("cess_editor", None)      # repart d'une sélection par défaut
 
 if "fr_cessions" not in st.session_state:
@@ -52,9 +55,34 @@ if "fr_cessions" not in st.session_state:
     st.stop()
 
 cessions = st.session_state["fr_cessions"]
+batch = st.session_state.get("fr_batch")
+if batch is not None and (batch.keywords or batch.n_annonces):
+    parts = []
+    if batch.keywords:
+        parts.append("recherche élargie : " + " ou ".join(batch.keywords))
+    if batch.naf_labels:
+        extra = f" (+{len(batch.naf_codes) - 3})" if len(batch.naf_codes) > 3 else ""
+        parts.append("NAF ciblés : " + " ; ".join(batch.naf_labels[:3]) + extra)
+    parts.append(f"{batch.n_annonces} annonces avec prix balayées")
+    if batch.n_naf_exclues:
+        parts.append(f"{batch.n_naf_exclues} hors activité")
+    if batch.n_sans_ca:
+        parts.append(f"{batch.n_sans_ca} sans CA exploitable")
+    parts.append(f"{len(cessions)} retenue(s)")
+    st.caption("🔎 " + " · ".join(parts))
 if not cessions:
-    st.warning("Aucune cession avec prix trouvée pour ces critères. Élargissez l'activité, "
-               "le département ou la fenêtre.")
+    if batch is not None and batch.n_annonces == 0:
+        st.warning("Aucune annonce BODACC ne correspond à ces mots-clés sur la période. "
+                   "Le BODACC ne publie que les ventes de fonds de commerce : certaines "
+                   "activités (services B2B…) se vendent surtout par cession de titres, hors "
+                   "de ce périmètre. Élargissez le terme, le département ou la fenêtre.")
+    elif batch is not None and batch.n_sans_ca:
+        st.warning(f"{batch.n_annonces} annonce(s) trouvée(s) mais aucune exploitable : "
+                   f"{batch.n_sans_ca} sans CA disponible (comptes confidentiels). Cochez "
+                   "« Inclure les sociétés sans CA » ou élargissez la fenêtre.")
+    else:
+        st.warning("Aucune cession avec prix trouvée pour ces critères. Élargissez l'activité, "
+                   "le département ou la fenêtre.")
     st.stop()
 
 # Sélection par défaut = ensemble « règle d'or » (bornes + non-outlier MAD) sur prix/CA ou × EBE.

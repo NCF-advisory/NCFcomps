@@ -40,15 +40,17 @@ class _FakeResponse:
 
 
 class _FakeSession:
-    """Renvoie une page de résultats, puis des pages vides."""
+    """Renvoie une page de résultats, puis des pages vides. Mémorise les `params` reçus."""
 
     def __init__(self, records):
         self._pages = [{"records": records}, {"records": []}]
         self.calls = 0
+        self.params: list[dict] = []
 
     def get(self, url, params=None, headers=None, timeout=None):
         page = self._pages[min(self.calls, len(self._pages) - 1)]
         self.calls += 1
+        self.params.append(params or {})
         return _FakeResponse(page)
 
 
@@ -73,6 +75,35 @@ def test_fetch_cessions_dedoublonne_meme_acte(monkeypatch):
     out = bodacc.fetch_cessions(limit=10)
     assert len(out) == 2
     assert {c.siren for c in out} == {"111222333", "444555666"}
+
+
+def test_fetch_cessions_keywords_en_ou(monkeypatch):
+    """Plusieurs mots-clés -> OU de search() sur l'acte ET le nom du commerçant."""
+    session = _FakeSession([_record("111222333", "150 000,00")])
+    monkeypatch.setattr(bodacc.cache, "get_session", lambda: session)
+    bodacc.fetch_cessions(keywords=["informatique", "logiciel"], limit=10)
+    where = session.params[0]["where"]
+    assert ("(search(acte, 'informatique') or search(commercant, 'informatique') "
+            "or search(acte, 'logiciel') or search(commercant, 'logiciel'))") in where
+
+
+def test_fetch_cessions_search_in_commercant_seul(monkeypatch):
+    """search_in=('commercant',) : passe haute précision, l'acte n'est pas interrogé."""
+    session = _FakeSession([_record("111222333", "150 000,00")])
+    monkeypatch.setattr(bodacc.cache, "get_session", lambda: session)
+    bodacc.fetch_cessions(keywords=["informatique"], search_in=("commercant",), limit=10)
+    where = session.params[0]["where"]
+    assert "search(commercant, 'informatique')" in where
+    assert "search(acte, 'informatique')" not in where
+
+
+def test_fetch_cessions_contains_reste_supporte(monkeypatch):
+    """Sans keywords, `contains` garde le comportement historique (un seul terme)."""
+    session = _FakeSession([_record("111222333", "150 000,00")])
+    monkeypatch.setattr(bodacc.cache, "get_session", lambda: session)
+    bodacc.fetch_cessions(contains="boulangerie", limit=10)
+    where = session.params[0]["where"]
+    assert "(search(acte, 'boulangerie') or search(commercant, 'boulangerie'))" in where
 
 
 def test_fetch_cessions_ignore_rectificatifs_et_annulations(monkeypatch):

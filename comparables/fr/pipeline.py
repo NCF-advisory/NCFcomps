@@ -1,15 +1,16 @@
-"""Orchestration cessions FR : BODACC (prix + SIREN) -> finances INPI (CA/EBE, exercice
-calé sur la cession) + identité (NAF) -> prix/CA et prix/EBE."""
+"""Orchestration cessions FR : activité interprétée (mots-clés + NAF) -> BODACC (prix +
+SIREN) -> filtre NAF -> finances INPI (CA/EBE, exercice calé sur la cession) + identité
+-> prix/CA et prix/EBE, avec compteurs d'entonnoir (traçabilité du « 0 résultat »)."""
 from __future__ import annotations
 import logging
 from datetime import date
-from typing import Optional
+from typing import Callable, Optional
 
 import pandas as pd
 
-from comparables.fr import bodacc, entreprises, finances_inpi
+from comparables.fr import activites, bodacc, entreprises, finances_inpi, referentiels
 from comparables.fr.comptes import bilan_saisi, cascade, inpi_client
-from comparables.fr.models import Cession
+from comparables.fr.models import Cession, CessionsBatch
 from comparables.fr.parsing import compute_pct_ca, compute_mult_ebe, summarize_by_activity
 
 logger = logging.getLogger(__name__)
@@ -23,37 +24,127 @@ def default_since(years: int = 10) -> str:
     return today.replace(year=today.year - years).isoformat()
 
 
+def _apply_identity(c: Cession, id_cache: dict[str, Optional[dict]],
+                    local: bool = False) -> None:
+    """Complète nom / NAF / activité : référentiel Sirene local si chargé (instantané,
+    sans quota), sinon API Recherche d'entreprises. Échec isolé, résultat caché."""
+    if not c.siren:
+        return
+    if c.siren not in id_cache:
+        info = None
+        try:
+            if local:
+                info = referentiels.lookup_company(c.siren)
+            if info is None:                    # base locale absente ou SIREN inconnu
+                info = entreprises.fetch_company(c.siren)
+        except Exception as exc:
+            logger.warning("Echec identité SIREN %s : %s", c.siren, exc)
+        id_cache[c.siren] = info
+    info = id_cache[c.siren]
+    if info:
+        c.nom = info.get("nom") or c.nom
+        c.naf = info.get("naf")
+        c.activite = info.get("naf")
+
+
 def build_cessions(departement: Optional[str] = None, contains: Optional[str] = None,
                    since: Optional[str] = None, limit: int = 50, enrich: bool = True,
-                   require_ca: bool = True, max_scan: Optional[int] = None) -> list[Cession]:
+                   require_ca: bool = True, max_scan: Optional[int] = None,
+                   progress: Optional[Callable[[int, int], None]] = None) -> CessionsBatch:
     """Récupère des cessions (prix) et calcule prix/CA et prix/EBE quand disponibles.
 
-    Couvre TOUTES les entreprises françaises (aucun filtre de taille) ; en pratique le
-    BODACC ne publie que des cessions de fonds de commerce (commerces/TPE/PME).
+    `contains` est un texte libre (« conseil en informatique », « boulangerie », « 62.02A ») :
+    il est interprété en mots-clés combinés en OU pour le BODACC + codes NAF cibles
+    (cf. `activites.interpret`). Quand des NAF sont ciblés, l'identité de la cédante est
+    récupérée AVANT ses finances et l'annonce est écartée si l'activité ne correspond pas
+    (sauf si son nom porte un mot-clé de la recherche).
 
     require_ca=True : ne renvoie QUE les sociétés dont le CA est disponible (comptes publics),
-    en sur-balayant le BODACC (jusqu'à max_scan cessions) pour en réunir `limit`. L'identité
-    (NAF) n'est récupérée que pour les cessions retenues. L'échec d'une société n'arrête pas le lot.
+    en sur-balayant le BODACC (jusqu'à max_scan cessions) pour en réunir `limit`. L'échec
+    d'une société n'arrête pas le lot. Renvoie un `CessionsBatch` (cessions + compteurs).
+    `progress(traitées, balayées)` est appelé au fil de l'enrichissement (suivi de job).
     """
+    query = activites.interpret(contains) if contains and contains.strip() else None
+    naf_filter = bool(query and query.naf_codes and enrich)
     if max_scan is None:
-        max_scan = min(600, max(limit * 12, limit)) if require_ca else limit
-    pool = bodacc.fetch_cessions(departement=departement, contains=contains,
-                                 since=since or default_since(), limit=max_scan)
+        if naf_filter:
+            # Les mots-clés larges ramènent beaucoup d'annonces hors cible (« matériel
+            # informatique » dans un inventaire…) : la densité utile est faible, il faut
+            # sur-balayer bien plus que pour le seul filtre CA.
+            max_scan = min(1200, max(limit * 40, 200))
+        elif require_ca:
+            max_scan = min(600, max(limit * 12, limit))
+        else:
+            max_scan = limit
+    if naf_filter:
+        # Deux passes BODACC : le NOM du commerçant d'abord (haute précision — « DUPONT
+        # INFORMATIQUE » exerce vraiment dans le domaine), puis le texte de l'acte (haut
+        # rappel mais bruité : « matériel informatique » dans un inventaire de café…).
+        pool = bodacc.fetch_cessions(departement=departement, keywords=query.keywords,
+                                     since=since or default_since(), limit=max_scan,
+                                     search_in=("commercant",))
+        deja = {(c.siren, c.prix) for c in pool}
+        reste = max_scan - len(pool)
+        if reste > 0:
+            for c in bodacc.fetch_cessions(departement=departement, keywords=query.keywords,
+                                           since=since or default_since(), limit=reste,
+                                           search_in=("acte",)):
+                if (c.siren, c.prix) not in deja and len(pool) < max_scan:
+                    pool.append(c)
+    else:
+        pool = bodacc.fetch_cessions(departement=departement,
+                                     keywords=query.keywords if query else None,
+                                     since=since or default_since(), limit=max_scan)
+    batch = CessionsBatch(n_annonces=len(pool),
+                          keywords=query.keywords if query else [],
+                          naf_codes=query.naf_codes if query else [],
+                          naf_labels=query.naf_labels if query else [])
     if not enrich:
-        return pool[:limit]
+        batch.cessions = pool[:limit]
+        return batch
 
     out: list[Cession] = []
     fin_cache: dict[str, list] = {}
     id_cache: dict[str, Optional[dict]] = {}
+    # Référentiels locaux (Sirene / ratios BCE) : lookups instantanés quand chargés,
+    # repli automatique sur les API unitaires sinon (cf. fr/referentiels.py).
+    local_id = referentiels.available("unites_legales")
+    local_fin = referentiels.available("ratios")
+    total = len(pool)
+    done = 0
+    if progress:
+        progress(0, total)
+
+    def _tick() -> None:
+        nonlocal done
+        done += 1
+        if progress:
+            progress(done, total)
+
     # Un seul client INPI authentifié pour tout le lot : on se connecte une fois et on
     # réutilise le jeton (sinon une connexion par SIREN -> blocage par le RNE).
     inpi = inpi_client.InpiClient() if inpi_client.configured() else None
     for c in pool:
+        # 0) Filtre d'activité : identité (NAF) AVANT les finances — précision du ciblage
+        #    et économie d'appels INPI (on n'interroge que les annonces pertinentes).
+        #    Le repêchage par le nom ne se fonde QUE sur le nom officiel de la cédante :
+        #    le champ `commercant` BODACC mêle cédant et cessionnaire (un acheteur
+        #    « X INFORMATIQUE » ne rend pas la cible informatique).
+        if naf_filter:
+            _apply_identity(c, id_cache, local=local_id)
+            nom_cedant = c.nom if (c.siren and id_cache.get(c.siren)) else None
+            if not activites.keep_cession(c.naf, nom_cedant, query):
+                batch.n_naf_exclues += 1
+                _tick()
+                continue
         # 1) Finances (CA/EBE) de l'exercice calé sur la date de cession
         if c.siren:
             try:
                 if c.siren not in fin_cache:
-                    fin_cache[c.siren] = finances_inpi.fetch_financials(c.siren)
+                    rows = referentiels.lookup_financials(c.siren) if local_fin else None
+                    if rows is None:        # base locale indisponible -> API unitaire
+                        rows = finances_inpi.fetch_financials(c.siren)
+                    fin_cache[c.siren] = rows
                 fin = finances_inpi.pick_for_date(fin_cache[c.siren], c.date)
             except Exception as exc:
                 logger.warning("Echec finances SIREN %s : %s", c.siren, exc)
@@ -95,24 +186,19 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
                 c.mult_ebe = compute_mult_ebe(c.prix, c.ebe)
         # 2) Exclusion des sociétés sans CA disponible
         if require_ca and c.ca is None:
+            batch.n_sans_ca += 1
+            _tick()
             continue
-        # 3) Identité (NAF, nom) — uniquement pour les cessions retenues
-        if c.siren:
-            try:
-                if c.siren not in id_cache:
-                    id_cache[c.siren] = entreprises.fetch_company(c.siren)
-                info = id_cache[c.siren]
-            except Exception as exc:
-                logger.warning("Echec identité SIREN %s : %s", c.siren, exc)
-                info = None
-            if info:
-                c.nom = info.get("nom") or c.nom
-                c.naf = info.get("naf")
-                c.activite = info.get("naf")
+        # 3) Identité (NAF, nom) — uniquement pour les cessions retenues (déjà faite si
+        #    le filtre d'activité est actif)
+        if not naf_filter:
+            _apply_identity(c, id_cache, local=local_id)
         out.append(c)
+        _tick()
         if len(out) >= limit:
             break
-    return out
+    batch.cessions = out
+    return batch
 
 
 def to_dataframe(cessions: list[Cession]) -> pd.DataFrame:

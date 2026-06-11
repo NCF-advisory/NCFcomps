@@ -41,10 +41,15 @@ def _cedant_siren(fields: dict, descriptif: str) -> Optional[str]:
 
 
 def fetch_cessions(departement: Optional[str] = None, contains: Optional[str] = None,
-                   since: Optional[str] = None, limit: int = 50) -> list[Cession]:
+                   since: Optional[str] = None, limit: int = 50,
+                   keywords: Optional[list[str]] = None,
+                   search_in: tuple[str, ...] = ("acte", "commercant")) -> list[Cession]:
     """Récupère des cessions portant un prix, du plus récent au plus ancien.
 
     departement : code département (ex '75'). contains : terme libre (ex 'boulangerie').
+    keywords : variantes du terme (synonymes) combinées en OU — prime sur `contains`.
+    search_in : champs où chercher les termes. Le nom du commerçant seul
+    (('commercant',)) est bien plus précis que le texte de l'acte (inventaires…).
     since : date min de parution 'YYYY-MM-DD' (ex 10 ans en arrière).
     Ne renvoie que les annonces dont on a su extraire un prix.
     """
@@ -58,18 +63,25 @@ def fetch_cessions(departement: Optional[str] = None, contains: Optional[str] = 
         where.append(f"numerodepartement = '{departement}'")
     if since:
         where.append(f"dateparution >= date'{since}'")
-    if contains:
+    terms = [t.strip() for t in (keywords if keywords else [contains] if contains else [])
+             if t and t.strip()]
+    if terms:
         # L'activite figure souvent dans le NOM du commercant (ex. "PHARMACIE...") autant
-        # que dans le texte de l'acte -> chercher dans les deux champs (bien plus de resultats).
-        safe = contains.replace("'", " ")
-        where.append(f"(search(acte, '{safe}') or search(commercant, '{safe}'))")
+        # que dans le texte de l'acte -> par defaut, chercher dans les deux champs.
+        # NB : search() exige TOUS les mots d'un terme -> les variantes se combinent en OU.
+        ors = []
+        for t in terms:
+            safe = t.replace("'", " ")
+            for field in search_in:
+                ors.append(f"search({field}, '{safe}')")
+        where.append("(" + " or ".join(ors) + ")")
 
     session = cache.get_session()
     out: list[Cession] = []
     seen: set[tuple] = set()
     offset = 0
     page = min(100, max(limit, 10))
-    while len(out) < limit and offset < 3000:           # garde-fou (API plafonne à 10000)
+    while len(out) < limit and offset < 6000:           # garde-fou (API plafonne à 10000)
         params = {"where": " and ".join(where), "limit": page, "offset": offset,
                   "order_by": "dateparution desc"}
         resp = session.get(BODACC_URL, params=params, headers=_HEADERS, timeout=40)
