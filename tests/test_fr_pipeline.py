@@ -208,6 +208,58 @@ def test_build_cessions_deux_passes_bodacc(monkeypatch):
     assert [c.siren for c in batch.cessions] == ["111111111"]
 
 
+def test_build_cessions_passe_generique_avec_referentiel(monkeypatch):
+    """Référentiel Sirene chargé -> 3e passe BODACC SANS mots-clés : les actes qui ne
+    nomment pas l'activité sont rattrapés par le filtre NAF local."""
+    calls: list = []
+    generique = Cession(siren="888888888", nom="SARL DUPONT", prix=70000.0,
+                        date="2023-06-01")        # acte muet sur l'activité
+
+    def fake_fetch(**kwargs):
+        calls.append((kwargs.get("search_in"), kwargs.get("keywords")))
+        if kwargs.get("keywords") is None:        # passe générique
+            return [generique.model_copy()]
+        return []
+
+    monkeypatch.setattr(bodacc, "fetch_cessions", fake_fetch)
+    monkeypatch.setattr(inpi_client, "configured", lambda: False)
+    monkeypatch.setattr(referentiels, "available", lambda table, db_path=None: True)
+    monkeypatch.setattr(referentiels, "lookup_company",
+                        lambda siren, db_path=None: {"nom": "MENUISERIE DUPONT",
+                                                     "naf": "43.32A", "ca": None,
+                                                     "ca_annee": None})
+    monkeypatch.setattr(referentiels, "lookup_financials",
+                        lambda siren, db_path=None: [
+                            {"date_cloture_exercice": "2022-12-31",
+                             "chiffre_d_affaires": 350000.0, "ebe": 50000.0,
+                             "ebit": 40000.0}])
+
+    batch = pipeline.build_cessions(contains="menuiserie", limit=10, require_ca=True)
+    # 3 passes : commercant, acte, puis générique (keywords=None, par tranches d'un an)
+    kw = ["menuiserie", "ebenisterie", "agencement"]
+    assert calls[0] == (("commercant",), kw)
+    assert calls[1] == (("acte",), kw)
+    assert len(calls) > 2 and all(k is None for _, k in calls[2:])
+    # Le doublon renvoyé par chaque tranche n'est compté qu'une fois
+    assert [c.siren for c in batch.cessions] == ["888888888"]
+    assert batch.cessions[0].naf == "43.32A"
+
+
+def test_build_cessions_sans_referentiel_pas_de_passe_generique(monkeypatch):
+    """Sans base locale, le balayage générique (coûteux en API) n'est pas tenté."""
+    calls: list = []
+
+    def fake_fetch(**kwargs):
+        calls.append(kwargs.get("keywords"))
+        return []
+
+    monkeypatch.setattr(bodacc, "fetch_cessions", fake_fetch)
+    monkeypatch.setattr(inpi_client, "configured", lambda: False)
+    monkeypatch.setattr(referentiels, "available", lambda table, db_path=None: False)
+    pipeline.build_cessions(contains="menuiserie", limit=10, require_ca=True)
+    assert None not in calls and len(calls) == 2
+
+
 def test_to_dataframe(monkeypatch):
     _patch(monkeypatch)
     df = pipeline.to_dataframe(pipeline.build_cessions(limit=10, require_ca=False).cessions)
@@ -219,6 +271,15 @@ def test_to_dataframe(monkeypatch):
 def test_default_since_is_ten_years_iso():
     s = pipeline.default_since(10)
     assert len(s) == 10 and s[4] == "-"                 # format YYYY-MM-DD
+
+
+def test_fenetres_annuelles_contigues():
+    fenetres = pipeline._fenetres_annuelles(pipeline.default_since(5))
+    assert fenetres[0][1] is None                       # 1re tranche : pas de borne haute
+    assert fenetres[-1][0] == pipeline.default_since(5)  # remonte exactement à `since`
+    for (debut, _), (_, fin_suiv) in zip(fenetres, fenetres[1:]):
+        assert debut == fin_suiv                        # tranches contiguës sans trou
+    assert len(fenetres) == 5
 
 
 def test_build_cessions_fallback_comptes_deposes(monkeypatch):

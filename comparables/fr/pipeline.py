@@ -24,6 +24,26 @@ def default_since(years: int = 10) -> str:
     return today.replace(year=today.year - years).isoformat()
 
 
+def _recule_un_an(d: date) -> date:
+    try:
+        return d.replace(year=d.year - 1)
+    except ValueError:                      # 29 février
+        return d.replace(year=d.year - 1, day=28)
+
+
+def _fenetres_annuelles(since: str) -> list[tuple[str, Optional[str]]]:
+    """Tranches d'un an [(début, fin exclue), …] du plus récent au plus ancien,
+    de aujourd'hui jusqu'à `since`. La 1re tranche n'a pas de borne haute."""
+    out: list[tuple[str, Optional[str]]] = []
+    fin: Optional[date] = None
+    borne = date.today()
+    while borne.isoformat() > since:
+        debut = max(_recule_un_an(borne), date.fromisoformat(since))
+        out.append((debut.isoformat(), fin.isoformat() if fin else None))
+        fin = borne = debut
+    return out
+
+
 def _apply_identity(c: Cession, id_cache: dict[str, Optional[dict]],
                     local: bool = False) -> None:
     """Complète nom / NAF / activité : référentiel Sirene local si chargé (instantané,
@@ -66,8 +86,18 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
     """
     query = activites.interpret(contains) if contains and contains.strip() else None
     naf_filter = bool(query and query.naf_codes and enrich)
+    # Référentiels locaux (Sirene / ratios BCE) : lookups instantanés quand chargés,
+    # repli automatique sur les API unitaires sinon (cf. fr/referentiels.py).
+    local_id = referentiels.available("unites_legales") if enrich else False
+    local_fin = referentiels.available("ratios") if enrich else False
     if max_scan is None:
-        if naf_filter:
+        if naf_filter and local_id:
+            # Identité locale = filtrage NAF gratuit : on peut balayer très large
+            # (la plupart des actes ne décrivent pas l'activité de la cédante).
+            # La profondeur suit l'objectif : 50 visées -> 4 000 annonces (~1-2 min),
+            # 200 -> 16 000 (~5-8 min, quasi-exhaustif sur 5 ans).
+            max_scan = min(20000, max(limit * 80, 1000))
+        elif naf_filter:
             # Les mots-clés larges ramènent beaucoup d'annonces hors cible (« matériel
             # informatique » dans un inventaire…) : la densité utile est faible, il faut
             # sur-balayer bien plus que pour le seul filtre CA.
@@ -77,20 +107,38 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
         else:
             max_scan = limit
     if naf_filter:
-        # Deux passes BODACC : le NOM du commerçant d'abord (haute précision — « DUPONT
-        # INFORMATIQUE » exerce vraiment dans le domaine), puis le texte de l'acte (haut
-        # rappel mais bruité : « matériel informatique » dans un inventaire de café…).
+        # Jusqu'à trois passes BODACC, de la plus précise à la plus large :
+        # 1) le NOM du commerçant (« DUPONT INFORMATIQUE » exerce vraiment dans le
+        #    domaine) ; 2) le texte de l'acte (haut rappel mais bruité : « matériel
+        #    informatique » dans un inventaire de café…) ; 3) avec le référentiel
+        #    Sirene local seulement : balayage GÉNÉRIQUE sans mots-clés — la plupart
+        #    des actes ne nomment pas l'activité, seul le filtre NAF la voit.
         pool = bodacc.fetch_cessions(departement=departement, keywords=query.keywords,
                                      since=since or default_since(), limit=max_scan,
                                      search_in=("commercant",))
         deja = {(c.siren, c.prix) for c in pool}
-        reste = max_scan - len(pool)
-        if reste > 0:
-            for c in bodacc.fetch_cessions(departement=departement, keywords=query.keywords,
-                                           since=since or default_since(), limit=reste,
-                                           search_in=("acte",)):
+
+        def _complete(fetched: list[Cession]) -> None:
+            for c in fetched:
                 if (c.siren, c.prix) not in deja and len(pool) < max_scan:
+                    deja.add((c.siren, c.prix))
                     pool.append(c)
+
+        if len(pool) < max_scan:
+            _complete(bodacc.fetch_cessions(departement=departement,
+                                            keywords=query.keywords,
+                                            since=since or default_since(),
+                                            limit=max_scan - len(pool),
+                                            search_in=("acte",)))
+        if local_id and len(pool) < max_scan:
+            # Par tranches d'un an, du plus récent au plus ancien : chaque tranche
+            # repart à zéro dans la pagination BODACC (plafonnée à ~10 000 annonces
+            # par requête, bien moins que le gisement « ventes avec prix »).
+            for debut, fin in _fenetres_annuelles(since or default_since()):
+                if len(pool) >= max_scan:
+                    break
+                _complete(bodacc.fetch_cessions(departement=departement, since=debut,
+                                                until=fin, limit=max_scan - len(pool)))
     else:
         pool = bodacc.fetch_cessions(departement=departement,
                                      keywords=query.keywords if query else None,
@@ -106,10 +154,6 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
     out: list[Cession] = []
     fin_cache: dict[str, list] = {}
     id_cache: dict[str, Optional[dict]] = {}
-    # Référentiels locaux (Sirene / ratios BCE) : lookups instantanés quand chargés,
-    # repli automatique sur les API unitaires sinon (cf. fr/referentiels.py).
-    local_id = referentiels.available("unites_legales")
-    local_fin = referentiels.available("ratios")
     total = len(pool)
     done = 0
     if progress:

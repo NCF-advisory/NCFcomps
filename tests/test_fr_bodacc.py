@@ -97,6 +97,16 @@ def test_fetch_cessions_search_in_commercant_seul(monkeypatch):
     assert "search(acte, 'informatique')" not in where
 
 
+def test_fetch_cessions_borne_until(monkeypatch):
+    """`until` borne la parution (max exclue) : sert au balayage par tranches d'un an."""
+    session = _FakeSession([_record("111222333", "150 000,00")])
+    monkeypatch.setattr(bodacc.cache, "get_session", lambda: session)
+    bodacc.fetch_cessions(since="2024-01-01", until="2025-01-01", limit=10)
+    where = session.params[0]["where"]
+    assert "dateparution >= date'2024-01-01'" in where
+    assert "dateparution < date'2025-01-01'" in where
+
+
 def test_fetch_cessions_contains_reste_supporte(monkeypatch):
     """Sans keywords, `contains` garde le comportement historique (un seul terme)."""
     session = _FakeSession([_record("111222333", "150 000,00")])

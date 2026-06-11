@@ -43,14 +43,16 @@ def _cedant_siren(fields: dict, descriptif: str) -> Optional[str]:
 def fetch_cessions(departement: Optional[str] = None, contains: Optional[str] = None,
                    since: Optional[str] = None, limit: int = 50,
                    keywords: Optional[list[str]] = None,
-                   search_in: tuple[str, ...] = ("acte", "commercant")) -> list[Cession]:
+                   search_in: tuple[str, ...] = ("acte", "commercant"),
+                   until: Optional[str] = None) -> list[Cession]:
     """Récupère des cessions portant un prix, du plus récent au plus ancien.
 
     departement : code département (ex '75'). contains : terme libre (ex 'boulangerie').
     keywords : variantes du terme (synonymes) combinées en OU — prime sur `contains`.
     search_in : champs où chercher les termes. Le nom du commerçant seul
     (('commercant',)) est bien plus précis que le texte de l'acte (inventaires…).
-    since : date min de parution 'YYYY-MM-DD' (ex 10 ans en arrière).
+    since / until : bornes de parution 'YYYY-MM-DD' (min incluse, max exclue) — le
+    balayage par tranches contourne le plafond de pagination de l'API (~10 000).
     Ne renvoie que les annonces dont on a su extraire un prix.
     """
     # Cessions de fonds de commerce avec un prix : 'fonds' + ('prix' ou 'moyennant').
@@ -63,6 +65,8 @@ def fetch_cessions(departement: Optional[str] = None, contains: Optional[str] = 
         where.append(f"numerodepartement = '{departement}'")
     if since:
         where.append(f"dateparution >= date'{since}'")
+    if until:
+        where.append(f"dateparution < date'{until}'")
     terms = [t.strip() for t in (keywords if keywords else [contains] if contains else [])
              if t and t.strip()]
     if terms:
