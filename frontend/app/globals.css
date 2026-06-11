@@ -1,99 +1,294 @@
 @import "tailwindcss";
 
-/* ——— Registre de banque privée : papier chaud, encre vert bouteille, laiton ——— */
+/* ════════════════════════════════════════════════════════════════════════
+   Charte graphique « Institutionnel clair v2 » (cf. CHARTE-GRAPHIQUE.md)
+   Bloc :root recopié VERBATIM depuis la charte : source de vérité unique.
+   Toute couleur du site doit provenir de ces tokens, aucune couleur ad hoc.
+   ════════════════════════════════════════════════════════════════════════ */
+:root {
+  /* ── 1. Fondations (page surfaces) — 4 niveaux de hiérarchie ── */
+  --bg-base:       #EAF0F8;      /* fond principal — bleu pâle assumé */
+  --bg-deep:       #D6DFEC;      /* niveau bas (footer) */
+  --bg-elevated:   #F4F7FC;      /* sections "elevated" */
+  --bg-mid:        #FFFFFF;      /* cartes blanches */
+  --bg-high:       #FFFFFF;
+  --bg-higher:     #E0E8F3;      /* highlight surface */
+
+  /* Cartes — gradient top blanc / bottom légèrement bleuté */
+  --card-bg:       linear-gradient(160deg, #FFFFFF 0%, #ECF1F9 100%);
+  --card-bg-strong:linear-gradient(160deg, #FFFFFF 0%, #E2EAF5 100%);
+  --card-bg-soft:  linear-gradient(160deg, #FBFCFE 0%, #ECF1F9 100%);
+
+  /* Surfaces (overlays sombres sur clair) */
+  --surface-low:   rgba(15, 23, 42, 0.035);
+  --surface-mid:   rgba(15, 23, 42, 0.06);
+  --surface-high:  rgba(15, 23, 42, 0.09);
+  --surface-strong:rgba(15, 23, 42, 0.14);
+
+  /* Scrims — voiles sur images / overlays */
+  --scrim-1: rgba(10, 31, 61, 0.10);
+  --scrim-2: rgba(10, 31, 61, 0.18);
+  --scrim-3: rgba(10, 31, 61, 0.06);
+
+  /* ── 2. Bordures / séparateurs ── */
+  --line-1: rgba(15, 23, 42, 0.07);
+  --line-2: rgba(15, 23, 42, 0.13);
+  --line-3: rgba(15, 23, 42, 0.20);
+  --line-4: rgba(15, 23, 42, 0.28);
+  --line-5: rgba(15, 23, 42, 0.38);
+
+  /* ── 3. Texte — hiérarchie 4 niveaux, tous ≥ AA ── */
+  --text-strong:  #061838;       /* titres */
+  --text-1:       #182747;       /* paragraphes */
+  --text-2:       #3A4A6B;       /* secondaires */
+  --text-3:       #586A8A;       /* tertiaires / muted */
+  --text-on-accent: #FFFFFF;     /* texte sur surface accent (CTA) */
+
+  /* ── 4. Accent principal — Cyan azur ── */
+  --accent:        #0EA5E9;       /* CTA base */
+  --accent-bright: #38BDF8;       /* hover + eyebrows */
+  --accent-soft:   #BAE6FD;
+  --accent-deep:   #0284C7;
+  --accent-deeper: #0369A1;       /* texte/CTA accessibles : ≥4.5:1 sur blanc (WCAG AA) */
+  --accent-ink:    #075985;       /* état hover des CTA accessibles */
+
+  /* Alphas d'accent (glows / tints) */
+  --accent-a-04: rgba(14, 165, 233, 0.06);
+  --accent-a-06: rgba(14, 165, 233, 0.09);
+  --accent-a-08: rgba(14, 165, 233, 0.11);
+  --accent-a-10: rgba(14, 165, 233, 0.13);
+  --accent-a-12: rgba(14, 165, 233, 0.16);
+  --accent-a-15: rgba(14, 165, 233, 0.19);
+  --accent-a-18: rgba(14, 165, 233, 0.22);
+  --accent-a-22: rgba(14, 165, 233, 0.26);
+  --accent-a-25: rgba(14, 165, 233, 0.30);
+  --accent-a-30: rgba(14, 165, 233, 0.35);
+  --accent-a-35: rgba(14, 165, 233, 0.40);
+  --accent-a-40: rgba(14, 165, 233, 0.46);
+
+  /* ── 5. Brand secondaire (violet) ── */
+  --violet:       #532EFB;
+  --violet-soft:  rgba(83, 46, 251, 0.16);
+  --violet-tint:  rgba(83, 46, 251, 0.06);
+  --magenta: #EC4899;
+  --green:   #22C55E;
+
+  /* ── 6. Cas d'usage (hues distincts par offre) ── */
+  --c-succession: #F59E0B;
+  --c-litiges:    #532EFB;
+  --c-croissance: #10B981;
+
+  /* ── 7. Chrome (navbar, band, mob-menu, logo) ── */
+  --navbar-bg:        rgba(234, 240, 248, 0.85);
+  --navbar-bg-scroll: rgba(234, 240, 248, 0.96);
+  --band-bg:          rgba(6, 24, 56, 0.97);
+  --band-text:        rgba(255, 255, 255, 0.94);
+  --band-text-strong: #FFFFFF;
+  --band-text-dim:    rgba(255, 255, 255, 0.74);
+  --mob-menu-bg:      rgba(234, 240, 248, 0.98);
+  --logo-filter:      none;
+
+  /* Fonts — Inter unique (chargée via next/font, cf. app/layout.tsx) */
+  --font-sans: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Alias Tailwind (même esprit que les alias legacy de la charte) ─────────
+   Les classes utilitaires du code (text-ink, border-hairline, bg-paper…)
+   pointent sur les tokens de la charte. Valeurs dupliquées car @theme exige
+   des littéraux : toute évolution se fait dans le :root ci-dessus PUIS ici. */
 @theme {
-  --color-paper: #f5f2ea;
-  --color-paper-deep: #ede9dd;
-  --color-card: #fdfcf8;
-  --color-ink: #11241d;
-  --color-ink-soft: #1d3a30;
-  --color-ink-mut: #5d6b60;
-  --color-hairline: #ddd6c4;
-  --color-brass: #a8842c;
-  --color-brass-soft: #c9a84c;
-  --color-ok: #2e7d4f;
-  --color-warn: #b07818;
-  --color-alert: #a8362c;
+  --color-paper: #EAF0F8;        /* = --bg-base ; sert aussi de texte sur bande navy */
+  --color-paper-deep: #E0E8F3;   /* = --bg-higher : en-têtes de tableaux, hovers */
+  --color-card: #FFFFFF;         /* = --bg-mid : champs de formulaire */
+  --color-ink: #182747;          /* = --text-1 */
+  --color-ink-strong: #061838;   /* = --text-strong : titres */
+  --color-ink-soft: #3A4A6B;     /* = --text-2 */
+  --color-ink-mut: #3A4A6B;      /* = --text-2 : secondaires */
+  --color-hairline: rgba(15, 23, 42, 0.13);   /* = --line-2 */
+  --color-brass: #0369A1;        /* = --accent-deeper : accent texte/CTA (AA) */
+  --color-brass-soft: #38BDF8;   /* = --accent-bright : hovers, accents sur bande navy */
+  /* États fonctionnels : hexs tolérés par la charte (§8.5, avatars) */
+  --color-ok: #047857;
+  --color-warn: #B45309;
+  --color-alert: #BE185D;
 
-  --font-display: var(--font-newsreader), "Georgia", serif;
-  --font-sans: var(--font-plex), "Helvetica Neue", sans-serif;
-  --font-mono: var(--font-plex-mono), "Menlo", monospace;
+  --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
-html {
-  background: var(--color-paper);
-}
-
+/* ── Styles de base (charte §1.4) ── */
+html { scroll-behavior: smooth; background: var(--bg-base); }
 body {
-  color: var(--color-ink);
   font-family: var(--font-sans);
-  font-size: 0.9375rem;
+  background: var(--bg-base);
+  color: var(--text-1);
+  overflow-x: hidden;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-}
-
-/* Grain de papier très léger sur tout le fond */
-.paper-grain {
-  background-image:
-    radial-gradient(ellipse at 18% 6%, rgba(168, 132, 44, 0.05), transparent 55%),
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(17, 36, 29, 0.012) 3px);
-}
-
-/* Filigrane « registre » du panneau encre (login + sidebar) */
-.ledger-panel {
-  background-color: var(--color-ink);
-  background-image:
-    linear-gradient(160deg, rgba(201, 168, 76, 0.07), transparent 38%),
-    repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(245, 242, 234, 0.045) 32px),
-    repeating-linear-gradient(90deg, transparent, transparent 127px, rgba(245, 242, 234, 0.025) 128px);
-}
-
-/* Étiquettes petites capitales façon imprimé financier */
-.label-caps {
-  font-size: 0.6875rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-/* Chiffres tabulaires partout où l'on aligne des montants */
-.tabular {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
-}
-
-/* Apparition en cascade des blocs de résultats */
-@keyframes rise-in {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.rise-in {
-  animation: rise-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-/* Trait de plume sous les titres de page */
-.rule-brass {
+  -moz-osx-font-smoothing: grayscale;
   position: relative;
 }
-.rule-brass::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -10px;
-  width: 56px;
-  height: 2px;
-  background: linear-gradient(90deg, var(--color-brass), transparent);
+/* Double halo radial fixe : la profondeur signature du site */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 900px 700px at 15% 15%, var(--accent-a-06) 0%, transparent 55%),
+    radial-gradient(ellipse 700px 500px at 85% 85%, var(--violet-tint) 0%, transparent 55%);
+  z-index: 0; pointer-events: none;
+}
+body > * { position: relative; z-index: 1; }
+
+::-webkit-scrollbar       { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-base); }
+::-webkit-scrollbar-thumb { background: var(--surface-strong); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-a-35); }
+
+:target { scroll-margin-top: 80px; }
+
+/* Focus clavier visible (a11y) */
+a:focus-visible, button:focus-visible, summary:focus-visible, [tabindex]:focus-visible,
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent-deep);
+  outline-offset: 2px;
+  border-radius: 6px;
 }
 
-/* Barre de progression fine, laiton */
+@media (max-width: 640px) {
+  body { font-size: 15px; }
+  :target { scroll-margin-top: 72px; }
+}
+
+/* ── Bande navy (sidebar de l'app, panneau login) : tokens band de la charte ── */
+.band-panel {
+  background:
+    radial-gradient(600px 400px at 20% 0%, var(--accent-a-08) 0%, transparent 60%),
+    var(--band-bg);
+  color: var(--band-text);
+}
+
+/* ── Micro-textes UI (charte : uppercase + 700 + letter-spacing positif) ── */
+.label-caps {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* Chiffres tabulaires partout où l'on aligne des montants (charte §4.3) */
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* ── En-tête de page : eyebrow + titre + sous-titre (charte §8.2) ── */
+.section-eyebrow {
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent-deep);
+  display: flex; align-items: center; gap: 8px;
+}
+.section-eyebrow::before {
+  content: ''; width: 22px; height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  display: inline-block;
+}
+.section-title {
+  font-size: clamp(1.55rem, 2.6vw, 2.3rem);
+  font-weight: 700; line-height: 1.15; letter-spacing: -0.025em;
+  color: var(--text-strong);
+}
+.section-sub {
+  font-size: 0.95rem; color: var(--text-2); line-height: 1.75;
+  margin-top: 0.875rem; max-width: 560px;
+}
+@media (max-width: 640px) {
+  .section-title { font-size: clamp(1.35rem, 7vw, 1.9rem); }
+  .section-eyebrow { font-size: 0.66rem; letter-spacing: 0.14em; }
+}
+
+/* ── Card canonique (charte §5.6) : fond dégradé + bordure fine au repos ── */
+.card-surface {
+  background: var(--card-bg);
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+}
+
+/* ── Boutons (charte §4.1, blocs copiés puis adaptés au contexte appli) ── */
+.btn-base {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 22px;
+  font-size: 0.85rem; font-weight: 700; letter-spacing: 0.03em;
+  text-decoration: none; border-radius: 8px;
+  transition: background 0.2s, transform 0.15s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+  cursor: pointer; border: none; font-family: inherit; white-space: nowrap;
+}
+.btn-primary {
+  background: var(--accent-deeper); color: var(--text-on-accent);
+  box-shadow: 0 0 0 1px var(--accent-bright), 0 8px 28px -8px var(--accent-a-30);
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-ink);
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px var(--accent-bright), 0 12px 36px -8px var(--accent-a-30);
+}
+.btn-outline {
+  background: var(--surface-low);
+  color: var(--text-1);
+  border: 1px solid var(--line-2);
+}
+.btn-outline:hover:not(:disabled) {
+  background: var(--surface-mid);
+  border-color: var(--line-3);
+  color: var(--text-strong);
+}
+.btn-ghost { background: transparent; color: var(--text-1); padding: 10px 0; }
+.btn-ghost:hover:not(:disabled) { color: var(--accent-bright); }
+/* Variante état destructeur (adaptation appli, teinte tolérée charte §8.5) */
+.btn-danger {
+  background: transparent;
+  color: var(--color-alert);
+  border: 1px solid color-mix(in srgb, var(--color-alert) 40%, transparent);
+}
+.btn-danger:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-alert) 8%, transparent);
+}
+
+/* ── Champs de formulaire (charte §4.2) ── */
+.field-input {
+  width: 100%; padding: 10px 14px;
+  background: #FFFFFF;
+  border: 1px solid var(--line-3);
+  border-radius: 8px;
+  font-family: inherit; font-size: 0.875rem; color: var(--text-strong);
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.field-input::placeholder { color: var(--text-3); }
+.field-input:hover { border-color: var(--line-4); }
+.field-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-a-15);
+  background: #FFFFFF;
+}
+@media (max-width: 640px) {
+  .field-input { font-size: 16px; }   /* évite le zoom automatique iOS au focus */
+}
+
+/* ── Apparition des blocs de résultats (reveal charte : 20px / 0.7s ease) ── */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: none; }
+}
+.rise-in { animation: rise-in 0.7s ease both; }
+
+/* ── Barre de progression fine, accent ── */
 .progress-track {
   height: 3px;
-  background: var(--color-hairline);
+  background: var(--line-1);
+  border-radius: 3px;
   overflow: hidden;
 }
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-brass), var(--color-brass-soft));
-  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent-deep), var(--accent-bright));
+  box-shadow: 0 0 12px -2px var(--accent-a-30);
+  transition: width 0.6s cubic-bezier(.2,.8,.2,1);
 }
 .progress-indeterminate {
   width: 35% !important;
@@ -102,4 +297,12 @@ body {
 @keyframes slide {
   0% { transform: translateX(-110%); }
   100% { transform: translateX(320%); }
+}
+
+/* ── Opt-out animation : chaque animation a son prefers-reduced-motion ── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .rise-in { animation: none; opacity: 1; transform: none; }
+  .progress-indeterminate { animation: none; }
+  .progress-fill { transition: none; }
 }

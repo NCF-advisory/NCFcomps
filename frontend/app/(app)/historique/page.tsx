@@ -19,7 +19,7 @@ export default function HistoriquePage() {
     api
       .listRuns()
       .then((res) => setRuns(res.runs))
-      .catch(() => setError("Chargement impossible — le backend est-il démarré ?"));
+      .catch(() => setError("Chargement impossible : le backend est-il démarré ?"));
   }, []);
 
   useEffect(refresh, [refresh]);
@@ -55,7 +55,7 @@ export default function HistoriquePage() {
         kicker="Module IV"
         title="Historique des analyses"
         lede="Chaque analyse enregistrée fige l'échantillon et ses paramètres (IS, période,
-        fréquence) à la date du calcul — utile pour tracer une valorisation dans le temps.
+        fréquence) à la date du calcul, utile pour tracer une valorisation dans le temps.
         Ces analyses alimentent aussi la Base sectorielle."
       />
 
@@ -64,7 +64,7 @@ export default function HistoriquePage() {
       {runs === null && <p className="text-sm text-ink-mut">Chargement…</p>}
       {runs?.length === 0 && (
         <Card className="p-6 text-sm text-ink-mut">
-          Aucune analyse enregistrée pour l&apos;instant — lancer un calcul dans le module
+          Aucune analyse enregistrée pour l&apos;instant : lancer un calcul dans le module
           Comparables puis « Enregistrer ».
         </Card>
       )}
@@ -73,10 +73,7 @@ export default function HistoriquePage() {
         {runs?.map((run) => (
           <Card key={run.id} className="rise-in">
             <div className="flex flex-wrap items-center gap-4 p-4">
-              <span
-                className="font-display text-2xl text-brass"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
+              <span className="tabular text-2xl font-extrabold tracking-[-0.02em] text-brass">
                 {String(run.id).padStart(3, "0")}
               </span>
               <div className="min-w-48 flex-1">

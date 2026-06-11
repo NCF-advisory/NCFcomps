@@ -1,32 +1,24 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, IBM_Plex_Sans, Newsreader } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const newsreader = Newsreader({
+/* Charte « Institutionnel clair v2 » : Inter est l'unique famille typographique
+   (pas de serif, pas de seconde famille). Graisses chargées : 400 à 900. */
+const inter = Inter({
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  variable: "--font-newsreader",
-});
-const plex = IBM_Plex_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-plex",
-});
-const plexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-plex-mono",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
-  title: "NCF — Comparables & Évaluation",
+  title: "NCF · Comparables & Évaluation",
   description: "Outil interne d'évaluation : comparables boursiers et cessions de fonds de commerce.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${newsreader.variable} ${plex.variable} ${plexMono.variable}`}>
-      <body className="paper-grain min-h-screen">{children}</body>
+    <html lang="fr" className={inter.variable}>
+      <body className="min-h-screen">{children}</body>
     </html>
   );
 }

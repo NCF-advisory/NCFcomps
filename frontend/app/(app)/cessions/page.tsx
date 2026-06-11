@@ -53,7 +53,7 @@ export default function CessionsPage() {
       const finished = await pollJob(() => api.cessionsJob(created.id), setJob);
       if (finished.status === "error") setError(finished.error ?? "Échec de la recherche.");
     } catch {
-      setError("Échec du lancement — le backend est-il démarré ?");
+      setError("Échec du lancement : le backend est-il démarré ?");
     } finally {
       setRunning(false);
     }
@@ -66,7 +66,7 @@ export default function CessionsPage() {
     <div>
       <PageTitle
         kicker="Module II"
-        title="Cessions de fonds de commerce — France"
+        title="Cessions de fonds de commerce (France)"
         lede="Rechercher les cessions publiées au BODACC par activité ou département : l'outil
         rapproche chaque prix du CA et de l'EBITDA de la société cédante, puis en tire un barème
         par activité."
@@ -74,7 +74,7 @@ export default function CessionsPage() {
       <Disclosure summary="Méthode & sources">
         <p>
           <strong className="text-ink">Sources publiques gratuites</strong> : BODACC (prix de
-          cession), ratios INPI/Banque de France et comptes déposés à l&apos;INPI (CA, EBE) —
+          cession), ratios INPI/Banque de France et comptes déposés à l&apos;INPI (CA, EBE),
           exercice clos précédant la cession.
         </p>
         <p>
@@ -85,7 +85,7 @@ export default function CessionsPage() {
         <p>
           <strong className="text-ink">Couverture partielle</strong> : les sociétés aux comptes
           confidentiels (~45 % des dépôts, art. L232-25) n&apos;ont pas de CA/EBE exploitable.
-          Ordre de grandeur indicatif — chaque ligne est vérifiable (liens BODACC / Annuaire).
+          Ordre de grandeur indicatif : chaque ligne est vérifiable (liens BODACC / Annuaire).
         </p>
       </Disclosure>
 
@@ -161,7 +161,7 @@ export default function CessionsPage() {
         {done && (job.summary?.by_activite.length ?? 0) > 0 && (
           <Card className="rise-in overflow-x-auto">
             <h2 className="label-caps border-b border-hairline px-4 py-3 text-ink-mut">
-              Barème par activité (NAF) — médianes robustes
+              Barème par activité (NAF) : médianes robustes
             </h2>
             <table className="w-full text-sm">
               <thead>
@@ -208,7 +208,7 @@ export default function CessionsPage() {
                   <Th tip="Chiffre d'affaires du dernier exercice clos avant la cession">
                     CA (exercice)
                   </Th>
-                  <Th tip="EBE des comptes sociaux — proxy d'EBITDA">EBITDA</Th>
+                  <Th tip="EBE des comptes sociaux, proxy d'EBITDA">EBITDA</Th>
                   <Th tip="Prix de cession / CA">% CA</Th>
                   <Th tip="Prix de cession / EBITDA">× EBITDA</Th>
                   <Th left tip="Sources officielles pour contrôler la ligne">Vérifier</Th>
@@ -256,7 +256,7 @@ export default function CessionsPage() {
 
         {done && (job.cessions?.length ?? 0) === 0 && (
           <Card className="p-6 text-sm text-ink-mut">
-            Aucune cession exploitable trouvée sur ces critères — élargir la fenêtre, retirer le
+            Aucune cession exploitable trouvée sur ces critères : élargir la fenêtre, retirer le
             département, ou viser plus de cessions.
           </Card>
         )}
@@ -270,8 +270,7 @@ function StatCard({ label, value, note }: { label: string; value: string; note: 
     <Card className="p-5">
       <p className="label-caps text-ink-mut">{label}</p>
       <p
-        className="tabular mt-2 font-display text-4xl text-ink"
-        style={{ fontFamily: "var(--font-display)" }}
+        className="tabular mt-2 text-4xl font-extrabold tracking-[-0.028em] text-ink-strong"
       >
         {value}
       </p>

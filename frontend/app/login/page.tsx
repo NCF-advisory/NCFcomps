@@ -23,21 +23,21 @@ export default function LoginPage() {
     } catch (err) {
       setError(err instanceof ApiError && err.status === 401
         ? "Identifiants invalides."
-        : "Connexion impossible — le backend est-il démarré ?");
+        : "Connexion impossible : le backend est-il démarré ?");
       setBusy(false);
     }
   }
 
   return (
     <main className="flex min-h-screen">
-      {/* Panneau encre : marque + filigrane registre */}
-      <section className="ledger-panel relative hidden w-[44%] flex-col justify-between p-12 text-paper lg:flex">
-        <p className="label-caps text-brass-soft">NCF Advisory — outil interne</p>
+      {/* Panneau navy : marque (tokens band de la charte) */}
+      <section className="band-panel relative hidden w-[44%] flex-col justify-between p-12 lg:flex">
+        <p className="label-caps text-brass-soft">NCF Advisory · outil interne</p>
         <div>
-          <h1 className="font-display text-6xl leading-[1.05]" style={{ fontFamily: "var(--font-display)" }}>
+          <h1 className="text-5xl font-extrabold leading-[1.08] tracking-[-0.032em] text-white">
             Comparables
             <br />
-            <span className="italic text-brass-soft">&amp; Évaluation</span>
+            <span className="text-brass-soft">&amp; Évaluation</span>
           </h1>
           <p className="mt-8 max-w-md text-sm leading-relaxed text-paper/70">
             Bêtas désendettés et multiples de sociétés cotées ; prix de cession des fonds
@@ -45,8 +45,8 @@ export default function LoginPage() {
             jugement d&apos;analyste requis.
           </p>
         </div>
-        <p className="tabular text-xs text-paper/40">
-          β désendetté = β / (1 + (1 − IS) × D/E) — Hamada
+        <p className="tabular text-xs text-paper/50">
+          β désendetté = β / (1 + (1 − IS) × D/E) (Hamada)
         </p>
       </section>
 
@@ -54,8 +54,8 @@ export default function LoginPage() {
       <section className="flex flex-1 items-center justify-center p-8">
         <form onSubmit={submit} className="rise-in w-full max-w-sm space-y-6">
           <div className="lg:hidden">
-            <p className="label-caps text-brass">NCF Advisory</p>
-            <h1 className="font-display text-3xl" style={{ fontFamily: "var(--font-display)" }}>
+            <p className="section-eyebrow mb-2">NCF Advisory</p>
+            <h1 className="text-3xl font-bold tracking-[-0.025em] text-ink-strong">
               Comparables &amp; Évaluation
             </h1>
           </div>

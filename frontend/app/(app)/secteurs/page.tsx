@@ -29,7 +29,7 @@ export default function SecteursPage() {
     api
       .listSectors()
       .then((res) => setSectors(res.sectors))
-      .catch(() => setError("Chargement impossible — le backend est-il démarré ?"));
+      .catch(() => setError("Chargement impossible : le backend est-il démarré ?"));
   }, []);
 
   useEffect(refresh, [refresh]);
@@ -100,10 +100,10 @@ export default function SecteursPage() {
                   <Th tip="Sociétés distinctes (points = lignes cumulées sur toutes les analyses)">
                     Sociétés
                   </Th>
-                  <Th tip="Bêta désendetté (Hamada) — médiane, puis fourchette Q1–Q3 et effectif">
+                  <Th tip="Bêta désendetté (Hamada) : médiane, puis fourchette Q1–Q3 et effectif">
                     β désend.
                   </Th>
-                  <Th tip="Valeur d'entreprise / EBITDA — médiane et fourchette Q1–Q3">VE/EBITDA</Th>
+                  <Th tip="Valeur d'entreprise / EBITDA : médiane et fourchette Q1–Q3">VE/EBITDA</Th>
                   <Th tip="Valeur d'entreprise / chiffre d'affaires">VE/CA</Th>
                   <Th tip="Cours / bénéfice (12 derniers mois)">PER</Th>
                   <Th left tip="Date de la dernière analyse enregistrée utilisant ce secteur">

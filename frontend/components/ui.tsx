@@ -1,6 +1,8 @@
 "use client";
 
-/** Primitives UI du design system « registre » : boutons, cartes, champs, badges. */
+/** Primitives UI de la charte « Institutionnel clair v2 » : boutons, cartes,
+ * champs, badges. Les styles structurants (btn-*, field-input, card-surface,
+ * section-*) vivent dans globals.css, copiés depuis CHARTE-GRAPHIQUE.md. */
 
 import { type ReactNode } from "react";
 
@@ -19,15 +21,11 @@ export function Button({
   disabled?: boolean;
   busy?: boolean;
 }) {
-  const base =
-    "inline-flex items-center gap-2 px-4 py-2 label-caps transition-colors duration-150 " +
-    "disabled:opacity-45 disabled:cursor-not-allowed cursor-pointer select-none " +
-    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brass)]";
   const variants = {
-    primary: "bg-ink text-paper hover:bg-ink-soft",
-    outline: "border border-brass text-ink hover:bg-brass/10",
-    ghost: "text-ink-mut hover:text-ink",
-    danger: "border border-alert/40 text-alert hover:bg-alert/10",
+    primary: "btn-primary",
+    outline: "btn-outline",
+    ghost: "btn-ghost",
+    danger: "btn-danger",
   } as const;
   return (
     <button
@@ -35,7 +33,7 @@ export function Button({
       onClick={onClick}
       disabled={disabled || busy}
       aria-busy={busy}
-      className={`${base} ${variants[variant]}`}
+      className={`btn-base ${variants[variant]} disabled:cursor-not-allowed disabled:opacity-45`}
     >
       {busy && <Spinner />}
       {children}
@@ -53,11 +51,7 @@ export function Spinner() {
 }
 
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return (
-    <div className={`border border-hairline bg-card shadow-[0_1px_2px_rgba(17,36,29,0.05)] ${className}`}>
-      {children}
-    </div>
-  );
+  return <div className={`card-surface ${className}`}>{children}</div>;
 }
 
 export function Field({
@@ -78,20 +72,16 @@ export function Field({
   );
 }
 
-const inputClass =
-  "w-full border border-hairline bg-card px-3 py-2 text-sm text-ink outline-none " +
-  "transition-colors focus:border-brass placeholder:text-ink-mut/60";
-
 export function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
-  return <input {...props} className={inputClass} />;
+  return <input {...props} className="field-input" />;
 }
 
 export function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea {...props} className={`${inputClass} tabular min-h-28 resize-y`} />;
+  return <textarea {...props} className="field-input tabular min-h-28 resize-y" />;
 }
 
 export function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
-  return <select {...props} className={`${inputClass} cursor-pointer`} />;
+  return <select {...props} className="field-input cursor-pointer" />;
 }
 
 export function Badge({
@@ -108,7 +98,9 @@ export function Badge({
     neutral: "text-ink-mut border-hairline bg-paper",
   } as const;
   return (
-    <span className={`inline-block border px-1.5 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wider ${tones[tone]}`}>
+    <span
+      className={`inline-block rounded-[4px] border px-1.5 py-0.5 text-[0.65rem] font-bold tracking-[0.08em] uppercase ${tones[tone]}`}
+    >
       {children}
     </span>
   );
@@ -117,11 +109,9 @@ export function Badge({
 export function PageTitle({ kicker, title, lede }: { kicker: string; title: string; lede?: string }) {
   return (
     <header className="mb-10">
-      <p className="label-caps text-brass">{kicker}</p>
-      <h1 className="rule-brass mt-1 font-display text-4xl text-ink" style={{ fontFamily: "var(--font-display)" }}>
-        {title}
-      </h1>
-      {lede && <p className="mt-6 max-w-2xl text-sm leading-relaxed text-ink-mut">{lede}</p>}
+      <p className="section-eyebrow mb-3">{kicker}</p>
+      <h1 className="section-title">{title}</h1>
+      {lede && <p className="section-sub">{lede}</p>}
     </header>
   );
 }
@@ -129,7 +119,10 @@ export function PageTitle({ kicker, title, lede }: { kicker: string; title: stri
 export function ErrorNote({ message }: { message: string | null }) {
   if (!message) return null;
   return (
-    <p className="border border-alert/30 bg-alert/8 px-3 py-2 text-sm text-alert" role="alert">
+    <p
+      className="rounded-[8px] border border-alert/30 bg-alert/8 px-3 py-2 text-sm text-alert"
+      role="alert"
+    >
       {message}
     </p>
   );
@@ -180,7 +173,7 @@ export function Td({
 export function Disclosure({ summary, children }: { summary: string; children: ReactNode }) {
   return (
     <details className="group -mt-6 mb-8 max-w-2xl">
-      <summary className="label-caps cursor-pointer list-none text-ink-mut transition-colors hover:text-ink">
+      <summary className="label-caps cursor-pointer list-none text-ink-mut transition-colors hover:text-ink-strong">
         <span className="mr-1.5 inline-block text-brass transition-transform group-open:rotate-90">▸</span>
         {summary}
       </summary>

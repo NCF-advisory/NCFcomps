@@ -36,12 +36,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen">
-      <aside className="ledger-panel sticky top-0 flex h-screen w-60 shrink-0 flex-col overflow-y-auto p-6 text-paper">
+      <aside className="band-panel sticky top-0 flex h-screen w-60 shrink-0 flex-col overflow-y-auto p-6">
         <Link href="/comparables" className="block">
-          <span className="font-display text-3xl" style={{ fontFamily: "var(--font-display)" }}>
-            NCF
-          </span>
-          <span className="mt-1 block text-[0.65rem] uppercase tracking-[0.18em] text-brass-soft">
+          <span className="text-2xl font-extrabold tracking-[-0.02em] text-white">NCF</span>
+          <span className="mt-1 block text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-brass-soft">
             Comparables &amp; Évaluation
           </span>
         </Link>
@@ -53,30 +51,28 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`group flex items-baseline gap-3 border-l-2 px-3 py-2.5 text-sm transition-colors ${
+                className={`group flex items-baseline gap-3 rounded-[8px] border-l-2 px-3 py-2.5 text-sm transition-colors ${
                   active
-                    ? "border-brass-soft bg-paper/8 text-paper"
-                    : "border-transparent text-paper/60 hover:text-paper"
+                    ? "border-brass-soft bg-white/8 font-medium text-white"
+                    : "border-transparent text-paper/70 hover:text-white"
                 }`}
               >
-                <span className="font-display text-xs italic text-brass-soft" style={{ fontFamily: "var(--font-display)" }}>
-                  {item.num}
-                </span>
+                <span className="label-caps text-[0.62rem] text-brass-soft">{item.num}</span>
                 {item.label}
               </Link>
             );
           })}
         </nav>
 
-        <div className="mt-auto space-y-3 border-t border-paper/15 pt-4">
+        <div className="mt-auto space-y-3 border-t border-white/15 pt-4">
           {user && (
-            <p className="text-xs text-paper/60">
-              Session : <span className="text-paper">{user.name ?? user.username}</span>
+            <p className="text-xs text-paper/70">
+              Session : <span className="text-white">{user.name ?? user.username}</span>
             </p>
           )}
           <button
             onClick={logout}
-            className="label-caps cursor-pointer text-paper/50 transition-colors hover:text-brass-soft"
+            className="label-caps cursor-pointer text-paper/60 transition-colors hover:text-brass-soft"
           >
             Déconnexion
           </button>

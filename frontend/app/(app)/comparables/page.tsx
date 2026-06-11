@@ -45,7 +45,7 @@ const COLUMNS: {
 }[] = [
   { key: "name", label: "Société", fmt: (v: string | null) => v ?? ND, align: "left" },
   { key: "market_cap", label: "Capi (M)", fmt: fmtMillions, groupStart: true,
-    tip: "Capitalisation boursière, en millions — devise locale (indiquée à côté du ticker)" },
+    tip: "Capitalisation boursière, en millions, devise locale (indiquée à côté du ticker)" },
   { key: "net_debt", label: "Dette nette (M)", fmt: fmtMillions,
     tip: "Dette financière totale − trésorerie, en millions" },
   { key: "enterprise_value", label: "VE (M)", fmt: fmtMillions,
@@ -55,7 +55,7 @@ const COLUMNS: {
   { key: "beta_regression", label: "β régr.", fmt: fmtBeta,
     tip: "Bêta estimé par régression des rendements contre l'indice de la place de cotation" },
   { key: "r2", label: "R²", fmt: fmtBeta,
-    tip: "Qualité d'ajustement de la régression, de 0 à 1 — faible R² = bêta peu fiable" },
+    tip: "Qualité d'ajustement de la régression, de 0 à 1 : faible R² = bêta peu fiable" },
   { key: "n_obs", label: "N pts", fmt: (v: number | null) => (v == null ? ND : String(v)),
     tip: "Nombre de points utilisés dans la régression" },
   { key: "gearing", label: "Gearing", fmt: (v: number | null) => fmtPct(v),
@@ -177,7 +177,7 @@ export default function ComparablesPage() {
       const finished = await pollJob(() => api.comparablesJob(created.id), setJob);
       if (finished.status === "error") setError(finished.error ?? "Échec du calcul.");
     } catch {
-      setError("Échec du lancement — le backend est-il démarré ?");
+      setError("Échec du lancement : le backend est-il démarré ?");
     } finally {
       setPhase("idle");
     }
@@ -224,7 +224,7 @@ export default function ComparablesPage() {
       />
       <Disclosure summary="Méthode & sources">
         <p>
-          <strong className="text-ink">Source : Yahoo Finance</strong> (gratuite) — multiples non
+          <strong className="text-ink">Source : Yahoo Finance</strong> (gratuite) : multiples non
           retraités, à utiliser avec le jugement d&apos;un analyste.
         </p>
         <p>
@@ -235,7 +235,7 @@ export default function ComparablesPage() {
         </p>
         <p>
           Montants en millions, <strong className="text-ink">devise locale</strong> indiquée par
-          ligne — bêtas et multiples restent comparables d&apos;un pays à l&apos;autre (ratios
+          ligne ; bêtas et multiples restent comparables d&apos;un pays à l&apos;autre (ratios
           même-devise).
         </p>
       </Disclosure>
@@ -264,7 +264,7 @@ export default function ComparablesPage() {
               label={mode === "tickers" ? "Tickers (un par ligne)" : "Noms (un par ligne)"}
               hint={
                 mode === "tickers"
-                  ? "Suffixes : .PA Paris, .AS Amsterdam, .L Londres, .SW Suisse, .VI Vienne, .DE Francfort, .MI Milan — sans suffixe : USA."
+                  ? "Suffixes : .PA Paris, .AS Amsterdam, .L Londres, .SW Suisse, .VI Vienne, .DE Francfort, .MI Milan ; sans suffixe : USA."
                   : "Chaque nom est résolu vers son ticker Yahoo (place principale privilégiée)."
               }
             >
@@ -339,11 +339,11 @@ export default function ComparablesPage() {
             <Card className="rise-in">
               <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 px-4 py-3">
                 <h2 className="label-caps text-ink-mut">
-                  Échantillon — {records.length} sociétés, {selection.length} retenues
+                  Échantillon : {records.length} sociétés, {selection.length} retenues
                 </h2>
                 <p className="text-xs text-ink-mut">
                   Décocher une ligne l&apos;exclut des statistiques (bas de tableau) et de
-                  l&apos;export — recalcul immédiat.
+                  l&apos;export (recalcul immédiat).
                 </p>
               </div>
               <div className="overflow-x-auto border-t border-hairline">
@@ -486,7 +486,7 @@ export default function ComparablesPage() {
                   Exporter la sélection (.xlsx)
                 </Button>
                 <p className="mt-1.5 text-xs text-ink-mut">
-                  Fichier Excel formaté — uniquement les {selection.length} sociétés retenues.
+                  Fichier Excel formaté : uniquement les {selection.length} sociétés retenues.
                 </p>
               </div>
               <div className="ml-auto flex items-end gap-3">
@@ -497,7 +497,7 @@ export default function ComparablesPage() {
                   <TextInput
                     value={saveLabel}
                     onChange={(e) => setSaveLabel(e.target.value)}
-                    placeholder="ex : Comparables HVAC — mission X"
+                    placeholder="ex : Comparables HVAC, mission X"
                   />
                 </Field>
                 <Button variant="outline" onClick={saveRun}>
@@ -506,7 +506,7 @@ export default function ComparablesPage() {
               </div>
               {savedId != null && (
                 <p className="w-full text-right text-xs text-ok">
-                  Analyse n° {savedId} enregistrée —{" "}
+                  Analyse n° {savedId} enregistrée :{" "}
                   <Link href="/historique" className="underline underline-offset-2 hover:text-ink">
                     la consulter dans l&apos;Historique
                   </Link>
@@ -519,7 +519,7 @@ export default function ComparablesPage() {
 
         {done && records.length === 0 && (
           <Card className="p-6 text-sm text-ink-mut">
-            Aucune donnée récupérée pour ces tickers — vérifier l&apos;orthographe et les suffixes
+            Aucune donnée récupérée pour ces tickers : vérifier l&apos;orthographe et les suffixes
             de place (ex : <span className="tabular">AIR.PA</span> pour Airbus à Paris).
           </Card>
         )}
