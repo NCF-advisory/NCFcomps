@@ -105,7 +105,25 @@ export type CessionsSummary = {
   }[];
 };
 
-export type CessionsJob = JobBase & { cessions?: Cession[]; summary?: CessionsSummary };
+/** Entonnoir de recherche : requête élargie exécutée + comptage des exclusions. */
+export type CessionsSearch = {
+  n_annonces: number;
+  n_naf_exclues: number;
+  n_sans_ca: number;
+  keywords: string[];
+  naf_codes: string[];
+  naf_labels: string[];
+};
+
+export type CessionsJob = JobBase & {
+  cessions?: Cession[];
+  summary?: CessionsSummary;
+  search?: CessionsSearch;
+  /** Sélection par défaut (règle d'or : bornes + non-outlier), alignée sur `cessions`. */
+  retenu_defaut?: boolean[];
+};
+
+export type RunKind = "comparables" | "cessions";
 
 export type RunSummary = {
   id: number;
@@ -114,6 +132,7 @@ export type RunSummary = {
   label: string | null;
   params: Record<string, unknown>;
   n_records: number;
+  kind: RunKind;
 };
 
 export type MetricStat = {
@@ -216,6 +235,16 @@ export const api = {
     require_ca?: boolean;
   }) => request<CessionsJob>("/api/cessions/jobs", { method: "POST", body: JSON.stringify(body) }),
   cessionsJob: (id: string) => request<CessionsJob>(`/api/cessions/jobs/${id}`),
+  cessionsStats: (cessions: Cession[]) =>
+    request<{ n: number; summary: CessionsSummary }>("/api/cessions/stats", {
+      method: "POST",
+      body: JSON.stringify({ cessions }),
+    }),
+  saveCessionsRun: (cessions: Cession[], label?: string, params?: Record<string, unknown>) =>
+    request<{ id: number }>("/api/runs", {
+      method: "POST",
+      body: JSON.stringify({ cessions, label, params }),
+    }),
 
   // Runs
   listRuns: () => request<{ runs: RunSummary[] }>("/api/runs"),
@@ -224,7 +253,10 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ records, label, params }),
     }),
-  getRun: (id: number) => request<{ id: number; records: CompanyRecord[] }>(`/api/runs/${id}`),
+  getRun: (id: number) =>
+    request<{ id: number; kind: RunKind; records?: CompanyRecord[]; cessions?: Cession[] }>(
+      `/api/runs/${id}`,
+    ),
   deleteRun: (id: number) => request<void>(`/api/runs/${id}`, { method: "DELETE" }),
 
   // Base sectorielle (bêtas + multiples agrégés depuis l'historique enregistré)
@@ -246,10 +278,22 @@ export async function downloadExcel(records: CompanyRecord[], filename = "compar
   triggerDownload(await res.blob(), filename);
 }
 
-export async function downloadRunExcel(runId: number) {
+export async function downloadRunExcel(runId: number, kind: RunKind = "comparables") {
   const res = await fetch(`/api/runs/${runId}/export`);
   if (!res.ok) throw new ApiError(res.status, "Export impossible.");
-  triggerDownload(await res.blob(), `comparables_run_${runId}.xlsx`);
+  const prefix = kind === "cessions" ? "cessions_fr_run" : "comparables_run";
+  triggerDownload(await res.blob(), `${prefix}_${runId}.xlsx`);
+}
+
+/** Télécharge le .xlsx des cessions sélectionnées. */
+export async function downloadCessionsExcel(cessions: Cession[], filename = "cessions_fr.xlsx") {
+  const res = await fetch("/api/cessions/export", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ cessions }),
+  });
+  if (!res.ok) throw new ApiError(res.status, "Export impossible.");
+  triggerDownload(await res.blob(), filename);
 }
 
 function triggerDownload(blob: Blob, filename: string) {

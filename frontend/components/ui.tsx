@@ -81,7 +81,16 @@ export function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement
 }
 
 export function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
-  return <select {...props} className="field-input cursor-pointer" />;
+  return (
+    <span className="select-wrap">
+      <select {...props} className="field-input cursor-pointer" />
+    </span>
+  );
+}
+
+/** Case à cocher stylée charte (la native jurait avec le reste). */
+export function Checkbox(props: React.InputHTMLAttributes<HTMLInputElement>) {
+  return <input type="checkbox" {...props} className={`chk ${props.className ?? ""}`} />;
 }
 
 export function Badge({
@@ -141,26 +150,42 @@ export function ErrorNote({ message }: { message: string | null }) {
   );
 }
 
-/** En-tête de colonne de tableau ; `tip` ajoute une infobulle (soulignement pointillé). */
+/** En-tête de colonne ; `tip` = infobulle (soulignement pointillé) ;
+ * `onSort`/`sortDir` rendent la colonne triable (flèche d'état). */
 export function Th({
   children,
   left,
   tip,
   className = "",
+  onSort,
+  sortDir,
 }: {
   children: ReactNode;
   left?: boolean;
   tip?: string;
   className?: string;
+  onSort?: () => void;
+  sortDir?: 1 | -1 | null;
 }) {
+  const tipCls = tip
+    ? "cursor-help underline decoration-ink-mut/40 decoration-dotted underline-offset-4"
+    : "";
   return (
     <th
       title={tip}
+      aria-sort={sortDir === 1 ? "ascending" : sortDir === -1 ? "descending" : undefined}
       className={`label-caps px-3 py-2.5 whitespace-nowrap text-ink-mut ${left ? "text-left" : "text-right"} ${
-        tip ? "cursor-help underline decoration-ink-mut/40 decoration-dotted underline-offset-4" : ""
+        onSort ? "" : tipCls
       } ${className}`}
     >
-      {children}
+      {onSort ? (
+        <button type="button" onClick={onSort} className={`th-sort ${tipCls}`}>
+          {children}
+          {sortDir != null && <span className="arrow">{sortDir === 1 ? "▲" : "▼"}</span>}
+        </button>
+      ) : (
+        children
+      )}
     </th>
   );
 }
@@ -194,6 +219,30 @@ export function Disclosure({ summary, children }: { summary: string; children: R
         {children}
       </div>
     </details>
+  );
+}
+
+/** Squelette de tableau pendant le calcul : silhouettes de lignes shimmer. */
+export function TableSkeleton({ rows = 6, cols = 8 }: { rows?: number; cols?: number }) {
+  return (
+    <div aria-hidden className="space-y-2.5 p-4">
+      <div className="flex gap-3">
+        {Array.from({ length: cols }, (_, i) => (
+          <div key={i} className="skeleton h-3.5" style={{ width: i === 0 ? 120 : 64 }} />
+        ))}
+      </div>
+      {Array.from({ length: rows }, (_, r) => (
+        <div key={r} className="flex gap-3" style={{ opacity: 1 - r * 0.1 }}>
+          {Array.from({ length: cols }, (_, i) => (
+            <div
+              key={i}
+              className="skeleton h-4"
+              style={{ width: i === 0 ? 120 : 64, animationDelay: `${(r + i) * 60}ms` }}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
   );
 }
 

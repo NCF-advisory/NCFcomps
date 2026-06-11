@@ -299,10 +299,156 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   100% { transform: translateX(320%); }
 }
 
+/* ════════════════════════════════════════════════════════════════════════
+   Tableaux financiers (« table-fin ») : rail d'identité figé au défilement
+   horizontal, en-têtes collants, ombres de défilement. Toutes les couleurs
+   viennent des tokens de la charte (solides : requis sous position:sticky).
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* Coque de défilement : le conteneur devient l'unique contexte de scroll
+   (horizontal ET vertical) pour que sticky top + sticky left cohabitent. */
+.table-shell {
+  overflow: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;                              /* Firefox */
+  scrollbar-color: var(--surface-strong) transparent;
+}
+.table-shell-capped { max-height: min(72vh, 880px); }
+.table-shell::-webkit-scrollbar { width: 10px; height: 10px; }
+.table-shell::-webkit-scrollbar-track { background: transparent; }
+.table-shell::-webkit-scrollbar-thumb {
+  background: var(--surface-strong);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+.table-shell::-webkit-scrollbar-thumb:hover { background-color: var(--accent-a-40); }
+
+/* Voile de droite : « il y a d'autres colonnes » (masqué en butée). */
+.scroll-shade {
+  position: absolute; top: 0; bottom: 0; width: 36px;
+  pointer-events: none; opacity: 0; transition: opacity 0.25s;
+}
+.scroll-shade.on { opacity: 1; }
+.shade-r { right: 0; background: linear-gradient(270deg, rgba(6, 24, 56, 0.10), transparent); }
+.shade-l { left: 0;  background: linear-gradient(90deg,  rgba(6, 24, 56, 0.10), transparent); }
+
+/* Structure : border-collapse:separate obligatoire (les bordures collapsées
+   ne suivent pas les cellules sticky) -> filets portés par les cellules. */
+.table-fin { border-collapse: separate; border-spacing: 0; width: 100%; }
+.table-fin :is(td, th) { border-bottom: 1px solid var(--line-1); }
+
+/* En-têtes collants : bande de groupes (top:0) puis colonnes (top:28px). */
+.table-fin .th-band th {
+  position: sticky; top: 0; z-index: 4;
+  height: 28px; background: #E8EEF7;
+}
+.table-fin .th-cols th {
+  position: sticky; top: 28px; z-index: 4;
+  background: #E0E8F3;                                /* = paper-deep, solide */
+  border-bottom: none;
+  box-shadow: inset 0 -2px 0 var(--text-strong);      /* filet lourd de charte */
+}
+.table-fin.no-band .th-cols th { top: 0; }
+
+/* Rail d'identité : cellules collantes à gauche (offset via --stick-l). */
+.table-fin .stick {
+  position: sticky; left: var(--stick-l, 0px); z-index: 2;
+  background: #FFFFFF;
+}
+.table-fin .th-band .stick, .table-fin .th-cols .stick { z-index: 6; background: inherit; }
+.table-fin .th-band .stick { background: #E8EEF7; }
+.table-fin .th-cols .stick { background: #E0E8F3; }
+.table-fin tfoot .stick { z-index: 3; background: #E6ECF6; }
+.table-fin tbody tr:hover > .stick { background: #F0F4FA; }
+
+/* Bord droit du rail : filet permanent + ombre portée dès qu'on a scrollé. */
+.table-fin .stick-end { box-shadow: inset -1px 0 0 var(--line-2); }
+.is-x .table-fin .stick-end {
+  box-shadow: inset -1px 0 0 var(--line-2), 14px 0 18px -12px rgba(6, 24, 56, 0.28);
+}
+.is-x .table-fin .th-cols .stick-end {
+  box-shadow: inset -1px 0 0 var(--line-2), inset 0 -2px 0 var(--text-strong),
+              14px 0 18px -12px rgba(6, 24, 56, 0.28);
+}
+
+/* Pied statistiques : rangée soulignée d'un filet lourd, fond solide. */
+.table-fin tfoot td { background: #E6ECF6; }
+.table-fin tfoot tr:first-child td { box-shadow: inset 0 2px 0 var(--text-strong); }
+
+/* En-tête triable : zone cliquable entière, flèche discrète. */
+.th-sort {
+  cursor: pointer; user-select: none;
+  display: inline-flex; align-items: baseline; gap: 4px;
+  font: inherit; color: inherit; letter-spacing: inherit;
+  text-transform: inherit; background: none; border: none; padding: 0;
+}
+.th-sort:hover { color: var(--text-strong); }
+.th-sort .arrow { font-size: 0.6rem; color: var(--accent-deeper); }
+
+/* ── Contrôles modernisés (la version native jurait avec la charte) ── */
+.chk {
+  appearance: none; -webkit-appearance: none;
+  width: 17px; height: 17px; flex-shrink: 0;
+  border: 1.5px solid var(--line-4); border-radius: 5px;
+  background: #FFFFFF; cursor: pointer;
+  display: inline-block; vertical-align: middle; position: relative;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.chk:hover { border-color: var(--accent-deep); }
+.chk:checked { background: var(--accent-deeper); border-color: var(--accent-deeper); }
+.chk:checked::after {
+  content: ''; position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2 5 8.7l4.5-5.4' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 11px no-repeat;
+}
+
+.select-wrap { position: relative; display: block; }
+.select-wrap > select { appearance: none; -webkit-appearance: none; padding-right: 34px; }
+.select-wrap::after {
+  content: ''; position: absolute; right: 14px; top: 50%;
+  width: 8px; height: 8px;
+  border-right: 1.6px solid var(--text-2); border-bottom: 1.6px solid var(--text-2);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+/* ── Squelettes de chargement (shimmer charte) ── */
+.skeleton {
+  background: linear-gradient(100deg,
+    var(--surface-low) 35%, var(--surface-mid) 50%, var(--surface-low) 65%);
+  background-size: 220% 100%;
+  animation: shimmer 1.5s linear infinite;
+  border-radius: 6px;
+}
+@keyframes shimmer { to { background-position: -120% 0; } }
+
+/* ── Toasts (confirmations transitoires, bas-droite) ── */
+.toast-stack {
+  position: fixed; right: 20px; bottom: 20px; z-index: 50;
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+}
+.toast-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 16px; border-radius: 10px;
+  background: var(--band-bg); color: var(--band-text);
+  font-size: 0.85rem; font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 3px solid var(--accent);
+  box-shadow: 0 12px 32px -8px rgba(6, 24, 56, 0.45);
+  animation: toast-in 0.35s cubic-bezier(.2,.9,.3,1.2) both;
+}
+.toast-item.tone-alert { border-left-color: var(--color-alert); }
+.toast-item.leaving { animation: toast-out 0.25s ease both; }
+@keyframes toast-in  { from { opacity: 0; transform: translateY(14px) scale(0.97); } }
+@keyframes toast-out { to   { opacity: 0; transform: translateY(8px); } }
+
 /* ── Opt-out animation : chaque animation a son prefers-reduced-motion ── */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .rise-in { animation: none; opacity: 1; transform: none; }
   .progress-indeterminate { animation: none; }
   .progress-fill { transition: none; }
+  .skeleton { animation: none; }
+  .toast-item, .toast-item.leaving { animation: none; }
+  .scroll-shade { transition: none; }
 }

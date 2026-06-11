@@ -15,7 +15,17 @@ import {
   type SectorRecord,
 } from "@/lib/api";
 import { fmtBeta, fmtDate, fmtMult, ND } from "@/lib/format";
-import { Card, ErrorNote, PageTitle, Spinner, Td, TextInput, Th } from "@/components/ui";
+import {
+  Card,
+  ErrorNote,
+  PageTitle,
+  Spinner,
+  TableSkeleton,
+  Td,
+  TextInput,
+  Th,
+} from "@/components/ui";
+import { TableShell, useSort } from "@/components/table";
 
 export default function SecteursPage() {
   const [sectors, setSectors] = useState<SectorAggregate[] | null>(null);
@@ -54,6 +64,7 @@ export default function SecteursPage() {
 
   const q = filter.trim().toLowerCase();
   const shown = (sectors ?? []).filter((s) => !q || s.sector.toLowerCase().includes(q));
+  const { sorted, toggle: toggleSort, dirFor } = useSort(shown);
 
   return (
     <div>
@@ -67,7 +78,11 @@ export default function SecteursPage() {
 
       <ErrorNote message={error} />
 
-      {sectors === null && <p className="text-sm text-ink-mut">Chargement…</p>}
+      {sectors === null && (
+        <Card className="overflow-hidden">
+          <TableSkeleton rows={4} cols={6} />
+        </Card>
+      )}
       {sectors?.length === 0 && (
         <Card className="p-6 text-sm text-ink-mut">
           Aucune donnée sectorielle pour l&apos;instant. La base se remplit automatiquement à
@@ -92,48 +107,54 @@ export default function SecteursPage() {
             />
           </div>
 
-          <Card className="rise-in overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b-2 border-ink bg-paper-deep text-left">
-                  <Th left>Secteur</Th>
-                  <Th tip="Sociétés distinctes (points = lignes cumulées sur toutes les analyses)">
-                    Sociétés
-                  </Th>
-                  <Th tip="Bêta désendetté (Hamada) : médiane, puis fourchette Q1–Q3 et effectif">
-                    β désend.
-                  </Th>
-                  <Th tip="Valeur d'entreprise / EBITDA : médiane et fourchette Q1–Q3">VE/EBITDA</Th>
-                  <Th tip="Valeur d'entreprise / chiffre d'affaires">VE/CA</Th>
-                  <Th tip="Cours / bénéfice (12 derniers mois)">PER</Th>
-                  <Th left tip="Date de la dernière analyse enregistrée utilisant ce secteur">
-                    Dern. util.
-                  </Th>
-                </tr>
-              </thead>
-              <tbody>
-                {shown.map((s) => {
-                  const open = openSector === s.sector;
-                  return (
-                    <FragmentRow
-                      key={s.sector}
-                      s={s}
-                      open={open}
-                      onToggle={() => toggle(s.sector)}
-                      detail={detail}
-                      loadingDetail={loadingDetail}
-                    />
-                  );
-                })}
-                {shown.length === 0 && (
-                  <tr>
-                    <td colSpan={7} className="px-3 py-4 text-center text-ink-mut">
-                      Aucun secteur ne correspond à « {filter} ».
-                    </td>
+          <Card className="rise-in overflow-hidden">
+            <TableShell className="rounded-[13px]">
+              <table className="table-fin no-band text-sm">
+                <thead>
+                  <tr className="th-cols text-left">
+                    <Th left onSort={() => toggleSort("sector")} sortDir={dirFor("sector")}>
+                      Secteur
+                    </Th>
+                    <Th tip="Sociétés distinctes (points = lignes cumulées sur toutes les analyses)"
+                        onSort={() => toggleSort("n_companies")} sortDir={dirFor("n_companies")}>
+                      Sociétés
+                    </Th>
+                    <Th tip="Bêta désendetté (Hamada) : médiane, puis fourchette Q1–Q3 et effectif">
+                      β désend.
+                    </Th>
+                    <Th tip="Valeur d'entreprise / EBITDA : médiane et fourchette Q1–Q3">VE/EBITDA</Th>
+                    <Th tip="Valeur d'entreprise / chiffre d'affaires">VE/CA</Th>
+                    <Th tip="Cours / bénéfice (12 derniers mois)">PER</Th>
+                    <Th left tip="Date de la dernière analyse enregistrée utilisant ce secteur"
+                        onSort={() => toggleSort("last_used")} sortDir={dirFor("last_used")}>
+                      Dern. util.
+                    </Th>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {sorted.map((s) => {
+                    const open = openSector === s.sector;
+                    return (
+                      <FragmentRow
+                        key={s.sector}
+                        s={s}
+                        open={open}
+                        onToggle={() => toggle(s.sector)}
+                        detail={detail}
+                        loadingDetail={loadingDetail}
+                      />
+                    );
+                  })}
+                  {sorted.length === 0 && (
+                    <tr>
+                      <td colSpan={7} className="px-3 py-4 text-center text-ink-mut">
+                        Aucun secteur ne correspond à « {filter} ».
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </TableShell>
           </Card>
         </>
       )}
@@ -158,9 +179,7 @@ function FragmentRow({
     <>
       <tr
         onClick={onToggle}
-        className={`cursor-pointer border-b border-hairline hover:bg-paper-deep/50 ${
-          open ? "bg-paper-deep/40" : ""
-        }`}
+        className={`cursor-pointer hover:bg-paper-deep/50 ${open ? "bg-paper-deep/40" : ""}`}
       >
         <td className="px-3 py-2 font-medium">
           <span className="mr-2 text-brass">{open ? "▾" : "▸"}</span>

@@ -23,6 +23,7 @@ import {
   Badge,
   Button,
   Card,
+  Checkbox,
   Disclosure,
   ErrorNote,
   Field,
@@ -30,10 +31,13 @@ import {
   PageTitle,
   Select,
   StatCard,
+  TableSkeleton,
   TextArea,
   TextInput,
   Th,
 } from "@/components/ui";
+import { TableShell, useSort } from "@/components/table";
+import { toast } from "@/components/toast";
 
 type Mode = "tickers" | "noms";
 
@@ -115,6 +119,7 @@ export default function ComparablesPage() {
   const statsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const records = useMemo(() => job?.records ?? [], [job]);
+  const { sorted, toggle: toggleSort, dirFor } = useSort(records);
   const selection = useMemo(
     () => records.filter((r) => !excluded.has(r.ticker)),
     [records, excluded],
@@ -202,8 +207,9 @@ export default function ComparablesPage() {
     setBusyExport(true);
     try {
       await downloadExcel(selection);
+      toast(`Export Excel téléchargé (${selection.length} sociétés).`);
     } catch {
-      setError("Export impossible.");
+      toast("Export impossible.", "alert");
     } finally {
       setBusyExport(false);
     }
@@ -213,8 +219,9 @@ export default function ComparablesPage() {
     try {
       const res = await api.saveRun(selection, saveLabel || undefined, job?.params);
       setSavedId(res.id);
+      toast(`Analyse n° ${res.id} enregistrée.`);
     } catch {
-      setError("Sauvegarde impossible.");
+      toast("Sauvegarde impossible.", "alert");
     }
   }
 
@@ -334,12 +341,15 @@ export default function ComparablesPage() {
         <ErrorNote message={error} />
 
         {job && job.status !== "done" && job.status !== "error" && (
-          <Card className="p-6">
-            <JobProgress
-              progress={job.progress}
-              total={job.total}
-              label="Sociétés traitées"
-            />
+          <Card className="overflow-hidden">
+            <div className="p-6 pb-2">
+              <JobProgress
+                progress={job.progress}
+                total={job.total}
+                label="Sociétés traitées"
+              />
+            </div>
+            <TableSkeleton rows={Math.min(8, Math.max(3, job.total))} cols={9} />
           </Card>
         )}
 
@@ -363,15 +373,18 @@ export default function ComparablesPage() {
                   </p>
                 </div>
               </div>
-              <div className="overflow-x-auto border-t border-hairline">
-              <table className="w-full text-sm">
+              <TableShell className="overflow-hidden rounded-b-[13px] border-t border-hairline">
+              <table className="table-fin text-sm">
                 <thead>
-                  <tr className="bg-paper-deep/60">
-                    {GROUPS.map((g, i) => (
+                  <tr className="th-band">
+                    {/* Rail : 2 cellules (colSpan 2 + colonne Société) pour un bord exact */}
+                    <th colSpan={2} className="stick [--stick-l:0px]" />
+                    <th className="stick stick-end [--stick-l:158px]" />
+                    {GROUPS.slice(1).map((g, i) => (
                       <th
                         key={i}
                         colSpan={g.span}
-                        className={`px-3 pt-2 pb-1 text-center text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-ink-mut/70 ${
+                        className={`px-3 text-center text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-ink-mut/70 ${
                           g.label ? "border-l border-hairline" : ""
                         }`}
                       >
@@ -379,17 +392,33 @@ export default function ComparablesPage() {
                       </th>
                     ))}
                   </tr>
-                  <tr className="border-b-2 border-ink bg-paper-deep text-left">
-                    <Th left tip="Cocher = la société compte dans les statistiques et l'export">
-                      Retenu
+                  <tr className="th-cols text-left">
+                    <Th
+                      left
+                      tip="Cocher = la société compte dans les statistiques et l'export"
+                      className="stick w-12 [--stick-l:0px]"
+                    >
+                      <span aria-hidden>✓</span>
+                      <span className="sr-only">Retenu</span>
                     </Th>
-                    <Th left>Ticker</Th>
+                    <Th
+                      left
+                      className="stick w-[110px] [--stick-l:48px]"
+                      onSort={() => toggleSort("ticker")}
+                      sortDir={dirFor("ticker")}
+                    >
+                      Ticker
+                    </Th>
                     {COLUMNS.map((c) => (
                       <Th
                         key={c.key}
                         left={c.align === "left"}
                         tip={c.tip}
-                        className={c.groupStart ? "border-l border-hairline" : ""}
+                        onSort={() => toggleSort(c.key)}
+                        sortDir={dirFor(c.key)}
+                        className={`${c.groupStart ? "border-l border-hairline" : ""} ${
+                          c.key === "name" ? "stick stick-end [--stick-l:158px]" : ""
+                        }`}
                       >
                         {c.label}
                       </Th>
@@ -400,26 +429,24 @@ export default function ComparablesPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {records.map((r) => {
+                  {sorted.map((r) => {
                     const off = excluded.has(r.ticker);
                     const cov = job.coverage?.[r.ticker] ?? "ok";
                     return (
                       <tr
                         key={r.ticker}
-                        className={`border-b border-hairline transition-opacity hover:bg-paper-deep/50 ${
+                        className={`transition-opacity hover:bg-paper-deep/50 ${
                           off ? "opacity-35" : ""
                         }`}
                       >
-                        <td className="px-3 py-2">
-                          <input
-                            type="checkbox"
+                        <td className="stick px-3 py-2 [--stick-l:0px]">
+                          <Checkbox
                             checked={!off}
                             onChange={() => toggle(r.ticker)}
                             aria-label={`Retenir ${r.ticker} dans l'échantillon`}
-                            className="size-4 cursor-pointer accent-[var(--color-brass)]"
                           />
                         </td>
-                        <td className="tabular px-3 py-2 font-medium whitespace-nowrap">
+                        <td className="tabular stick px-3 py-2 font-medium whitespace-nowrap [--stick-l:48px]">
                           {r.ticker}
                           {r.currency && (
                             <span className="ml-1.5 text-[0.65rem] font-normal text-ink-mut">
@@ -429,17 +456,20 @@ export default function ComparablesPage() {
                         </td>
                         {COLUMNS.map((c) => {
                           const lowBeta = c.qualityBound && isLowR2(r);
+                          const isName = c.key === "name";
                           return (
                             <td
                               key={c.key}
                               title={lowBeta
                                 ? `R² < ${minR2.toLocaleString("fr-FR")} : bêta affiché mais exclu des statistiques`
-                                : undefined}
+                                : isName ? ((r.name as string | null) ?? undefined) : undefined}
                               className={`px-3 py-2 whitespace-nowrap ${
                                 c.align === "left" ? "" : "tabular text-right"
                               } ${off ? "line-through" : ""} ${
                                 c.groupStart ? "border-l border-hairline" : ""
-                              } ${lowBeta ? "font-medium text-warn" : ""}`}
+                              } ${lowBeta ? "font-medium text-warn" : ""} ${
+                                isName ? "stick stick-end max-w-[200px] truncate [--stick-l:158px]" : ""
+                              }`}
                             >
                               {c.fmt(r[c.key] as never)}
                             </td>
@@ -458,17 +488,15 @@ export default function ComparablesPage() {
                 {stats && (
                   <tfoot>
                     {STAT_ROWS.map((row, i) => (
-                      <tr
-                        key={row.key}
-                        className={`bg-paper-deep/70 ${i === 0 ? "border-t-2 border-ink" : ""}`}
-                      >
-                        <td colSpan={3} className="label-caps px-3 py-2 text-ink-mut">
+                      <tr key={row.key}>
+                        <td
+                          colSpan={2}
+                          className="label-caps stick px-3 py-2 whitespace-nowrap text-ink-mut [--stick-l:0px]"
+                        >
                           {row.label}
-                          {i === 0 && (
-                            <span className="tabular ml-2 normal-case tracking-normal">
-                              ({statsN} retenues)
-                            </span>
-                          )}
+                        </td>
+                        <td className="tabular stick stick-end px-3 py-2 text-xs text-ink-mut [--stick-l:158px]">
+                          {i === 0 ? `${statsN} retenues` : ""}
                         </td>
                         {COLUMNS.slice(1).map((c) => {
                           const s = stats[c.key as string];
@@ -499,7 +527,7 @@ export default function ComparablesPage() {
                   </tfoot>
                 )}
               </table>
-              </div>
+              </TableShell>
             </Card>
 
             {/* ——— Synthèse bêta : moyens retenus, endetté / ajusté / désendetté ——— */}

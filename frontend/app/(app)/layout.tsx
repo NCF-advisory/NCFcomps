@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { api, ApiError } from "@/lib/api";
+import { Toaster } from "@/components/toast";
 
 const NAV = [
   { href: "/comparables", label: "Comparables boursiers", num: "I" },
@@ -80,6 +81,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       </aside>
 
       <main className="min-w-0 flex-1 px-12 py-10">{children}</main>
+      <Toaster />
     </div>
   );
 }
