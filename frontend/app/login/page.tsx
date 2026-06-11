@@ -41,7 +41,7 @@ export default function LoginPage() {
           </h1>
           <p className="mt-8 max-w-md text-sm leading-relaxed text-paper/70">
             Bêtas désendettés et multiples de sociétés cotées ; prix de cession des fonds
-            de commerce français en % du CA et en multiple d&apos;EBE. Sources publiques,
+            de commerce français en % du CA et en multiple d&apos;EBITDA. Sources publiques,
             jugement d&apos;analyste requis.
           </p>
         </div>

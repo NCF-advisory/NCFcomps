@@ -21,13 +21,13 @@ class Cession(BaseModel):
     naf: Optional[str] = None               # code activite principale
     activite: Optional[str] = None          # libelle d'activite
     ca: Optional[float] = None              # chiffre d'affaires (euros)
-    ebe: Optional[float] = None             # excedent brut d'exploitation (~EBITDA)
+    ebe: Optional[float] = None             # EBE, proxy d'EBITDA -> AFFICHE « EBITDA » cote UI
     ebit: Optional[float] = None            # resultat d'exploitation
     ca_annee: Optional[int] = None          # exercice retenu (cale sur la date de cession)
 
     # Derives
     pct_ca: Optional[float] = None          # prix / CA (ratio, ex: 0.85 = 85% du CA)
-    mult_ebe: Optional[float] = None        # prix / EBE (multiple, ex: 4.2 = 4,2x l'EBE)
+    mult_ebe: Optional[float] = None        # prix / EBE(=EBITDA) (multiple, ex: 4.2 = 4,2x)
 
     # Tracabilite
     descriptif: Optional[str] = None

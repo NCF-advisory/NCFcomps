@@ -1,9 +1,11 @@
 "use client";
 
-/** Module II — Cessions de fonds de commerce (France) : % du CA et multiple d'EBE.
+/** Module II — Cessions de fonds de commerce (France) : % du CA et multiple d'EBITDA.
  *
- * Sources publiques gratuites : BODACC (prix), ratios INPI/BCE (CA/EBE), Recherche
- * d'entreprises (NAF). Couverture partielle : comptes confidentiels (~45 %) exclus.
+ * Métrique de marge = EBE des comptes sociaux, utilisé comme proxy d'EBITDA (champ
+ * interne `ebe`/`mult_ebe`, affiché « EBITDA »). Sources publiques gratuites : BODACC
+ * (prix), ratios INPI/BCE (CA, EBE), Recherche d'entreprises (NAF). Couverture
+ * partielle : comptes confidentiels (~45 %) exclus.
  */
 
 import { useState } from "react";
@@ -63,9 +65,10 @@ export default function CessionsPage() {
       <PageTitle
         kicker="Module II"
         title="Cessions de fonds de commerce — France"
-        lede="Prix de cession publiés au BODACC rapportés au CA et à l'EBE de l'exercice précédant
-        la cession (ratios INPI/Banque de France). Ratios retenus entre 5–400 % du CA et
-        0,5–15× l'EBE ; ordre de grandeur indicatif, couverture partielle (comptes confidentiels)."
+        lede="Prix de cession publiés au BODACC rapportés au CA et à l'EBITDA — approché par l'EBE
+        des comptes sociaux (ratios INPI/Banque de France) — de l'exercice précédant la cession.
+        Ratios retenus entre 5–400 % du CA et 0,5–15× l'EBITDA ; ordre de grandeur indicatif,
+        couverture partielle (comptes confidentiels)."
       />
 
       {/* ——— Formulaire ——— */}
@@ -124,7 +127,7 @@ export default function CessionsPage() {
               note={`${overall.n_plausible} ratios plausibles · ${overall.n_pct_outliers} extrêmes exclus`}
             />
             <StatCard
-              label="Prix médian / EBE"
+              label="Prix médian / EBITDA"
               value={overall.median_mult_ebe != null ? fmtMult(overall.median_mult_ebe) : ND}
               note={`${overall.n_avec_ebe} multiples retenus · ${overall.n_ebe_outliers} extrêmes exclus`}
             />
@@ -148,7 +151,7 @@ export default function CessionsPage() {
                   <Th left>NAF</Th>
                   <Th>n</Th>
                   <Th>% du CA</Th>
-                  <Th>× EBE</Th>
+                  <Th>× EBITDA</Th>
                   <Th>Prix médian</Th>
                   <Th>CA médian</Th>
                 </tr>
@@ -185,9 +188,9 @@ export default function CessionsPage() {
                   <Th left>Date</Th>
                   <Th>Prix</Th>
                   <Th>CA (exercice)</Th>
-                  <Th>EBE</Th>
+                  <Th>EBITDA</Th>
                   <Th>% CA</Th>
-                  <Th>× EBE</Th>
+                  <Th>× EBITDA</Th>
                   <Th left>Vérifier</Th>
                 </tr>
               </thead>
