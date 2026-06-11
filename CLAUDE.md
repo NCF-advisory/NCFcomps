@@ -173,7 +173,36 @@ européenne payante **sans rien réécrire**.
   seuil de points par fréquence (`MIN_BETA_OBS_WEEKLY=52`) ; mapping d'indices élargi à
   Copenhague/Helsinki/Oslo/Lisbonne/Dublin/Toronto/Sydney/Tokyo/Hong Kong/Singapour
   (symboles validés contre l'API) ; suffixe inconnu signalé `(defaut)` dans `index_used`.
-- **Lot 4 — déploiement VPS** (docker-compose api + front + caddy) : à faire.
+- **[FAIT 2026-06-11] Recherche intelligente d'activité (cessions FR).** Le texte libre
+  (« conseil en informatique ») est interprété par `fr/activites.py` : mots-clés élargis
+  (synonymes) combinés en OU sur le BODACC + codes NAF cibles via la nomenclature INSEE
+  embarquée (niveaux 2-5, `fr/data/naf_rev2.csv` — un libellé de division matché cible toute
+  la famille). Double passe BODACC (nom du commerçant d'abord — haute précision — puis texte
+  de l'acte), filtre NAF AVANT les finances (identité par SIREN ; repêchage par le nom officiel
+  de la cédante uniquement : le champ `commercant` mêle cédant et cessionnaire). Garde-fou de
+  débit Recherche d'entreprises (7 req/s + retry 429). `build_cessions` renvoie un
+  `CessionsBatch` (cessions + compteurs d'entonnoir : annonces balayées / hors NAF / sans CA),
+  exposé par l'API (`search`) et affiché (site + Streamlit) pour rendre tout « 0 résultat »
+  explicable. Validé en réel : « conseil en informatique » passe de 0 à 10 cessions pertinentes.
+- **[FAIT 2026-06-11] Efficacité du site (suite recherche intelligente).**
+  (a) **Progression cessions** : `build_cessions(progress=…)` câblé au job (annonces
+  traitées / balayées affichées pendant la recherche). (b) **Export .xlsx cessions**
+  (`fr/export.py`, POST `/api/cessions/export`) au format de l'export comparables, médianes
+  robustes en pied. (c) **Sélection « Retenu »** sur la page web cessions (présélection
+  règle d'or renvoyée par l'API via `retenu_defaut`, recalcul des agrégats par POST
+  `/api/cessions/stats`, parité Streamlit). (d) **Historique mixte** : `store.py` porte un
+  `kind` ('comparables'|'cessions', migration ALTER douce), sauvegarde/consultation/ré-export
+  des recherches cessions, base sectorielle filtrée sur kind. (e) **Jobs persistés** :
+  table `jobs` dans history.sqlite (résultats sérialisés par kind, rechargés après
+  redémarrage), 3 workers. (f) **Référentiels locaux** (`fr/referentiels.py` +
+  `referentiels_db_path`) : Sirene (SIREN→nom/NAF) et ratios INPI/BCE (CA/EBE/EBIT)
+  répliqués en SQLite — lookups instantanés, zéro quota/429, repli API automatique si
+  non chargés. CLI : `python -m comparables.fr.referentiels refresh` (~2-3 Go, mensuel).
+  Tests : `test_fr_referentiels.py`, `test_fr_export.py`, `test_backend_jobs.py`,
+  `tests/conftest.py` (bases SQLite isolées par test).
+- **[FAIT 2026-06-11] Lot 4 — socle de déploiement VPS** : `deploy/` (Dockerfile.api,
+  Dockerfile.front standalone, docker-compose api+front+caddy, Caddyfile, README pas-à-pas).
+  Non testé en réel (pas de Docker sur le poste) : à valider au premier déploiement.
 
 ## Commandes
 
@@ -192,6 +221,10 @@ cd frontend && npm install && npm run dev   # http://localhost:3000
 pytest
 ruff check .
 
+# Référentiels locaux cessions FR (Sirene + ratios BCE, ~2 Go ; mensuel)
+python -m comparables.fr.referentiels refresh    # ou `status`
+
 # Déploiement interne
-docker compose up --build   # puis reverse proxy HTTPS + auth (voir docker-compose.yml)
+docker compose up --build   # Streamlit héritée (voir docker-compose.yml)
+docker compose -f deploy/docker-compose.yml up -d --build   # site + API + Caddy (lot 4, cf. deploy/README.md)
 ```

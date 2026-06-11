@@ -1,0 +1,45 @@
+# Déploiement VPS (lot 4) : API FastAPI + site Next.js + Caddy (HTTPS automatique).
+# Lancer depuis la RACINE du repo : docker compose -f deploy/docker-compose.yml up -d --build
+# Prérequis : .env de prod (AUTH_ENABLED=true, AUTH_COOKIE_KEY fort, credentials INPI),
+# auth_config.yaml (hash bcrypt), et le domaine pointé sur le VPS (cf. deploy/Caddyfile).
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.api
+    env_file:
+      - ../.env
+    volumes:
+      # Caches (cours, fondamentaux, HTTP), historisation et référentiels locaux :
+      # un seul data/ partagé par tous les analystes, qui survit aux redéploiements.
+      - ../data:/app/data
+      - ../auth_config.yaml:/app/auth_config.yaml:ro
+    restart: unless-stopped
+    mem_limit: 2g
+    cpus: "2.0"
+
+  front:
+    build:
+      context: ../frontend
+      dockerfile: ../deploy/Dockerfile.front
+    restart: unless-stopped
+    mem_limit: 512m
+    cpus: "1.0"
+
+  caddy:
+    image: caddy:2
+    depends_on:
+      - api
+      - front
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:

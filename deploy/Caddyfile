@@ -1,0 +1,20 @@
+# Reverse proxy HTTPS (certificat Let's Encrypt automatique).
+# Remplacer le domaine par le vôtre (DNS A -> IP du VPS) avant de lancer.
+# /api/* va directement à l'API (cookies même origine, pas de CORS) ; le reste au site.
+
+comparables.ncf-advisory.fr {
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+	handle {
+		reverse_proxy front:3000
+	}
+
+	# En-têtes de durcissement (app interne derrière auth applicative).
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "same-origin"
+	}
+}
