@@ -5,6 +5,7 @@
  * Lecture seule, alimentée automatiquement par les analyses enregistrées (Historique).
  * Médiane + fourchette interquartile [Q1–Q3] par secteur ; détail société par société. */
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -14,7 +15,7 @@ import {
   type SectorRecord,
 } from "@/lib/api";
 import { fmtBeta, fmtDate, fmtMult, ND } from "@/lib/format";
-import { Card, ErrorNote, PageTitle, Spinner, TextInput } from "@/components/ui";
+import { Card, ErrorNote, PageTitle, Spinner, Td, TextInput, Th } from "@/components/ui";
 
 export default function SecteursPage() {
   const [sectors, setSectors] = useState<SectorAggregate[] | null>(null);
@@ -69,8 +70,15 @@ export default function SecteursPage() {
       {sectors === null && <p className="text-sm text-ink-mut">Chargement…</p>}
       {sectors?.length === 0 && (
         <Card className="p-6 text-sm text-ink-mut">
-          Aucune donnée sectorielle — la base se remplit dès qu&apos;une analyse est
-          enregistrée (module Comparables → « Enregistrer »).
+          Aucune donnée sectorielle pour l&apos;instant. La base se remplit automatiquement à
+          chaque analyse enregistrée :{" "}
+          <Link
+            href="/comparables"
+            className="text-brass underline underline-offset-2 hover:text-ink"
+          >
+            lancer un calcul dans le module Comparables
+          </Link>{" "}
+          puis « Enregistrer ».
         </Card>
       )}
 
@@ -89,12 +97,18 @@ export default function SecteursPage() {
               <thead>
                 <tr className="border-b-2 border-ink bg-paper-deep text-left">
                   <Th left>Secteur</Th>
-                  <Th>Sociétés</Th>
-                  <Th>β désend.</Th>
-                  <Th>VE/EBITDA</Th>
-                  <Th>VE/CA</Th>
-                  <Th>PER</Th>
-                  <Th left>Dern. util.</Th>
+                  <Th tip="Sociétés distinctes (points = lignes cumulées sur toutes les analyses)">
+                    Sociétés
+                  </Th>
+                  <Th tip="Bêta désendetté (Hamada) — médiane, puis fourchette Q1–Q3 et effectif">
+                    β désend.
+                  </Th>
+                  <Th tip="Valeur d'entreprise / EBITDA — médiane et fourchette Q1–Q3">VE/EBITDA</Th>
+                  <Th tip="Valeur d'entreprise / chiffre d'affaires">VE/CA</Th>
+                  <Th tip="Cours / bénéfice (12 derniers mois)">PER</Th>
+                  <Th left tip="Date de la dernière analyse enregistrée utilisant ce secteur">
+                    Dern. util.
+                  </Th>
                 </tr>
               </thead>
               <tbody>
@@ -207,11 +221,11 @@ function DetailTable({ records }: { records: SectorRecord[] }) {
               <td className="tabular px-3 py-1.5 font-medium">{r.ticker ?? ND}</td>
               <td className="px-3 py-1.5">{r.name ?? ND}</td>
               <td className="px-3 py-1.5 text-ink-mut">{r.country ?? ND}</td>
-              <Td>{fmtBeta(r.beta_regression)}</Td>
-              <Td>{fmtBeta(r.beta_unlevered)}</Td>
-              <Td>{fmtMult(r.ev_ebitda)}</Td>
-              <Td>{fmtMult(r.ev_sales)}</Td>
-              <Td>{fmtMult(r.pe_trailing)}</Td>
+              <Td dense>{fmtBeta(r.beta_regression)}</Td>
+              <Td dense>{fmtBeta(r.beta_unlevered)}</Td>
+              <Td dense>{fmtMult(r.ev_ebitda)}</Td>
+              <Td dense>{fmtMult(r.ev_sales)}</Td>
+              <Td dense>{fmtMult(r.pe_trailing)}</Td>
               <td className="px-3 py-1.5 text-xs text-ink-mut whitespace-nowrap">
                 {r.label || `n° ${r.run_id}`} · {fmtDate(r.created_at)}
               </td>
@@ -236,14 +250,3 @@ function MetricCell({ stat, kind }: { stat?: MetricStat; kind: "beta" | "mult" }
   );
 }
 
-function Th({ children, left }: { children: React.ReactNode; left?: boolean }) {
-  return (
-    <th className={`label-caps px-3 py-2.5 whitespace-nowrap text-ink-mut ${left ? "text-left" : "text-right"}`}>
-      {children}
-    </th>
-  );
-}
-
-function Td({ children }: { children: React.ReactNode }) {
-  return <td className="tabular px-3 py-1.5 text-right whitespace-nowrap">{children}</td>;
-}

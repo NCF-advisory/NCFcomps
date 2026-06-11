@@ -21,7 +21,8 @@ export function Button({
 }) {
   const base =
     "inline-flex items-center gap-2 px-4 py-2 label-caps transition-colors duration-150 " +
-    "disabled:opacity-45 disabled:cursor-not-allowed cursor-pointer select-none";
+    "disabled:opacity-45 disabled:cursor-not-allowed cursor-pointer select-none " +
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brass)]";
   const variants = {
     primary: "bg-ink text-paper hover:bg-ink-soft",
     outline: "border border-brass text-ink hover:bg-brass/10",
@@ -29,7 +30,13 @@ export function Button({
     danger: "border border-alert/40 text-alert hover:bg-alert/10",
   } as const;
   return (
-    <button type={type} onClick={onClick} disabled={disabled || busy} className={`${base} ${variants[variant]}`}>
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled || busy}
+      aria-busy={busy}
+      className={`${base} ${variants[variant]}`}
+    >
       {busy && <Spinner />}
       {children}
     </button>
@@ -125,6 +132,62 @@ export function ErrorNote({ message }: { message: string | null }) {
     <p className="border border-alert/30 bg-alert/8 px-3 py-2 text-sm text-alert" role="alert">
       {message}
     </p>
+  );
+}
+
+/** En-tête de colonne de tableau ; `tip` ajoute une infobulle (soulignement pointillé). */
+export function Th({
+  children,
+  left,
+  tip,
+  className = "",
+}: {
+  children: ReactNode;
+  left?: boolean;
+  tip?: string;
+  className?: string;
+}) {
+  return (
+    <th
+      title={tip}
+      className={`label-caps px-3 py-2.5 whitespace-nowrap text-ink-mut ${left ? "text-left" : "text-right"} ${
+        tip ? "cursor-help underline decoration-ink-mut/40 decoration-dotted underline-offset-4" : ""
+      } ${className}`}
+    >
+      {children}
+    </th>
+  );
+}
+
+/** Cellule numérique alignée à droite (chiffres tabulaires). */
+export function Td({
+  children,
+  dense,
+  className = "",
+}: {
+  children: ReactNode;
+  dense?: boolean;
+  className?: string;
+}) {
+  return (
+    <td className={`tabular px-3 ${dense ? "py-1.5" : "py-2"} text-right whitespace-nowrap ${className}`}>
+      {children}
+    </td>
+  );
+}
+
+/** Bloc repliable « Méthode & sources » : garde les ledes courtes, le détail à un clic. */
+export function Disclosure({ summary, children }: { summary: string; children: ReactNode }) {
+  return (
+    <details className="group -mt-6 mb-8 max-w-2xl">
+      <summary className="label-caps cursor-pointer list-none text-ink-mut transition-colors hover:text-ink">
+        <span className="mr-1.5 inline-block text-brass transition-transform group-open:rotate-90">▸</span>
+        {summary}
+      </summary>
+      <div className="mt-3 space-y-2 border-l-2 border-brass/40 pl-4 text-sm leading-relaxed text-ink-mut">
+        {children}
+      </div>
+    </details>
   );
 }
 

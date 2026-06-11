@@ -15,12 +15,14 @@ import { fmtDate, fmtEuros, fmtMult, fmtPct, ND } from "@/lib/format";
 import {
   Button,
   Card,
+  Disclosure,
   ErrorNote,
   Field,
   JobProgress,
   PageTitle,
   Select,
   TextInput,
+  Th,
 } from "@/components/ui";
 
 export default function CessionsPage() {
@@ -65,11 +67,27 @@ export default function CessionsPage() {
       <PageTitle
         kicker="Module II"
         title="Cessions de fonds de commerce — France"
-        lede="Prix de cession publiés au BODACC rapportés au CA et à l'EBITDA — approché par l'EBE
-        des comptes sociaux (ratios INPI/Banque de France) — de l'exercice précédant la cession.
-        Ratios retenus entre 5–400 % du CA et 0,5–15× l'EBITDA ; ordre de grandeur indicatif,
-        couverture partielle (comptes confidentiels)."
+        lede="Rechercher les cessions publiées au BODACC par activité ou département : l'outil
+        rapproche chaque prix du CA et de l'EBITDA de la société cédante, puis en tire un barème
+        par activité."
       />
+      <Disclosure summary="Méthode & sources">
+        <p>
+          <strong className="text-ink">Sources publiques gratuites</strong> : BODACC (prix de
+          cession), ratios INPI/Banque de France et comptes déposés à l&apos;INPI (CA, EBE) —
+          exercice clos précédant la cession.
+        </p>
+        <p>
+          L&apos;<strong className="text-ink">EBITDA est approché par l&apos;EBE</strong> des
+          comptes sociaux (convention Banque de France). Médianes robustes : ratios retenus entre
+          5–400 % du CA et 0,5–15× l&apos;EBITDA, extrêmes exclus.
+        </p>
+        <p>
+          <strong className="text-ink">Couverture partielle</strong> : les sociétés aux comptes
+          confidentiels (~45 % des dépôts, art. L232-25) n&apos;ont pas de CA/EBE exploitable.
+          Ordre de grandeur indicatif — chaque ligne est vérifiable (liens BODACC / Annuaire).
+        </p>
+      </Disclosure>
 
       {/* ——— Formulaire ——— */}
       <Card className="p-6">
@@ -91,7 +109,7 @@ export default function CessionsPage() {
               <option value="10">10 ans</option>
             </Select>
           </Field>
-          <Field label="Cessions visées">
+          <Field label="Nombre de cessions" hint="objectif de lignes exploitables (CA connu)">
             <Select value={limit} onChange={(e) => setLimit(e.target.value)}>
               <option value="25">25</option>
               <option value="50">50</option>
@@ -148,10 +166,10 @@ export default function CessionsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b-2 border-ink bg-paper-deep text-left">
-                  <Th left>NAF</Th>
-                  <Th>n</Th>
-                  <Th>% du CA</Th>
-                  <Th>× EBITDA</Th>
+                  <Th left tip="Code d'activité principale (nomenclature NAF)">NAF</Th>
+                  <Th tip="Nombre de cessions retenues dans l'activité">n</Th>
+                  <Th tip="Médiane des prix de cession rapportés au CA">% du CA</Th>
+                  <Th tip="Médiane des prix rapportés à l'EBITDA (EBE des comptes sociaux)">× EBITDA</Th>
                   <Th>Prix médian</Th>
                   <Th>CA médian</Th>
                 </tr>
@@ -186,12 +204,14 @@ export default function CessionsPage() {
                   <Th left>Entreprise</Th>
                   <Th left>Lieu</Th>
                   <Th left>Date</Th>
-                  <Th>Prix</Th>
-                  <Th>CA (exercice)</Th>
-                  <Th>EBITDA</Th>
-                  <Th>% CA</Th>
-                  <Th>× EBITDA</Th>
-                  <Th left>Vérifier</Th>
+                  <Th tip="Prix de cession publié au BODACC">Prix</Th>
+                  <Th tip="Chiffre d'affaires du dernier exercice clos avant la cession">
+                    CA (exercice)
+                  </Th>
+                  <Th tip="EBE des comptes sociaux — proxy d'EBITDA">EBITDA</Th>
+                  <Th tip="Prix de cession / CA">% CA</Th>
+                  <Th tip="Prix de cession / EBITDA">× EBITDA</Th>
+                  <Th left tip="Sources officielles pour contrôler la ligne">Vérifier</Th>
                 </tr>
               </thead>
               <tbody>
@@ -257,14 +277,6 @@ function StatCard({ label, value, note }: { label: string; value: string; note: 
       </p>
       <p className="mt-2 text-xs text-ink-mut">{note}</p>
     </Card>
-  );
-}
-
-function Th({ children, left }: { children: React.ReactNode; left?: boolean }) {
-  return (
-    <th className={`label-caps px-3 py-2.5 whitespace-nowrap text-ink-mut ${left ? "text-left" : "text-right"}`}>
-      {children}
-    </th>
   );
 }
 

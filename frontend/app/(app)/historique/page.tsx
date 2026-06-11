@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { api, type CompanyRecord, downloadRunExcel, type RunSummary } from "@/lib/api";
 import { fmtBeta, fmtMillions, fmtMult, fmtPct, ND } from "@/lib/format";
-import { Button, Card, ErrorNote, PageTitle } from "@/components/ui";
+import { Button, Card, ErrorNote, PageTitle, Td, Th } from "@/components/ui";
 
 export default function HistoriquePage() {
   const [runs, setRuns] = useState<RunSummary[] | null>(null);
@@ -52,10 +52,11 @@ export default function HistoriquePage() {
   return (
     <div>
       <PageTitle
-        kicker="Module III"
+        kicker="Module IV"
         title="Historique des analyses"
         lede="Chaque analyse enregistrée fige l'échantillon et ses paramètres (IS, période,
-        fréquence) à la date du calcul — utile pour tracer une valorisation dans le temps."
+        fréquence) à la date du calcul — utile pour tracer une valorisation dans le temps.
+        Ces analyses alimentent aussi la Base sectorielle."
       />
 
       <ErrorNote message={error} />
@@ -108,12 +109,12 @@ export default function HistoriquePage() {
                     <tr className="bg-paper-deep text-left">
                       <Th left>Ticker</Th>
                       <Th left>Société</Th>
-                      <Th>Capi (M)</Th>
-                      <Th>VE (M)</Th>
-                      <Th>β régr.</Th>
-                      <Th>R²</Th>
-                      <Th>Gearing</Th>
-                      <Th>β désend.</Th>
+                      <Th tip="Capitalisation boursière, en millions (devise locale)">Capi (M)</Th>
+                      <Th tip="Valeur d'entreprise = capitalisation + dette nette">VE (M)</Th>
+                      <Th tip="Bêta de régression contre l'indice de la place de cotation">β régr.</Th>
+                      <Th tip="Qualité d'ajustement de la régression (0 à 1)">R²</Th>
+                      <Th tip="Dette nette / capitalisation (D/E)">Gearing</Th>
+                      <Th tip="Bêta désendetté (Hamada)">β désend.</Th>
                       <Th>VE/CA</Th>
                       <Th>VE/EBITDA</Th>
                       <Th>PER</Th>
@@ -146,14 +147,3 @@ export default function HistoriquePage() {
   );
 }
 
-function Th({ children, left }: { children: React.ReactNode; left?: boolean }) {
-  return (
-    <th className={`label-caps px-3 py-2.5 whitespace-nowrap text-ink-mut ${left ? "text-left" : "text-right"}`}>
-      {children}
-    </th>
-  );
-}
-
-function Td({ children }: { children: React.ReactNode }) {
-  return <td className="tabular px-3 py-2 text-right whitespace-nowrap">{children}</td>;
-}

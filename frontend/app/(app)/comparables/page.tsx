@@ -6,6 +6,7 @@
  * recalcule les stats via /api/comparables/stats sans aucun re-téléchargement.
  */
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
@@ -21,6 +22,7 @@ import {
   Badge,
   Button,
   Card,
+  Disclosure,
   ErrorNote,
   Field,
   JobProgress,
@@ -28,6 +30,7 @@ import {
   Select,
   TextArea,
   TextInput,
+  Th,
 } from "@/components/ui";
 
 type Mode = "tickers" | "noms";
@@ -37,22 +40,47 @@ const COLUMNS: {
   label: string;
   fmt: (v: never) => string;
   align?: "left";
+  tip?: string;
+  groupStart?: boolean; // première colonne d'une famille -> filet vertical
 }[] = [
   { key: "name", label: "Société", fmt: (v: string | null) => v ?? ND, align: "left" },
-  { key: "market_cap", label: "Capi (M)", fmt: fmtMillions },
-  { key: "net_debt", label: "Dette nette (M)", fmt: fmtMillions },
-  { key: "enterprise_value", label: "VE (M)", fmt: fmtMillions },
-  { key: "beta_source", label: "β publié", fmt: fmtBeta },
-  { key: "beta_regression", label: "β régr.", fmt: fmtBeta },
-  { key: "r2", label: "R²", fmt: fmtBeta },
-  { key: "n_obs", label: "N pts", fmt: (v: number | null) => (v == null ? ND : String(v)) },
-  { key: "gearing", label: "Gearing", fmt: (v: number | null) => fmtPct(v) },
-  { key: "beta_unlevered", label: "β désend.", fmt: fmtBeta },
-  { key: "ev_sales", label: "VE/CA", fmt: fmtMult },
-  { key: "ev_ebitda", label: "VE/EBITDA", fmt: fmtMult },
-  { key: "ev_ebit", label: "VE/EBIT", fmt: fmtMult },
-  { key: "pe_trailing", label: "PER", fmt: fmtMult },
-  { key: "pb", label: "P/B", fmt: fmtMult },
+  { key: "market_cap", label: "Capi (M)", fmt: fmtMillions, groupStart: true,
+    tip: "Capitalisation boursière, en millions — devise locale (indiquée à côté du ticker)" },
+  { key: "net_debt", label: "Dette nette (M)", fmt: fmtMillions,
+    tip: "Dette financière totale − trésorerie, en millions" },
+  { key: "enterprise_value", label: "VE (M)", fmt: fmtMillions,
+    tip: "Valeur d'entreprise = capitalisation + dette nette" },
+  { key: "beta_source", label: "β publié", fmt: fmtBeta, groupStart: true,
+    tip: "Bêta publié par Yahoo Finance (donné à titre de recoupement)" },
+  { key: "beta_regression", label: "β régr.", fmt: fmtBeta,
+    tip: "Bêta estimé par régression des rendements contre l'indice de la place de cotation" },
+  { key: "r2", label: "R²", fmt: fmtBeta,
+    tip: "Qualité d'ajustement de la régression, de 0 à 1 — faible R² = bêta peu fiable" },
+  { key: "n_obs", label: "N pts", fmt: (v: number | null) => (v == null ? ND : String(v)),
+    tip: "Nombre de points utilisés dans la régression" },
+  { key: "gearing", label: "Gearing", fmt: (v: number | null) => fmtPct(v),
+    tip: "Dette nette / capitalisation (D/E, en valeur de marché)" },
+  { key: "beta_unlevered", label: "β désend.", fmt: fmtBeta,
+    tip: "Bêta désendetté (Hamada) : β / (1 + (1 − IS) × D/E)" },
+  { key: "ev_sales", label: "VE/CA", fmt: fmtMult, groupStart: true,
+    tip: "Valeur d'entreprise / chiffre d'affaires" },
+  { key: "ev_ebitda", label: "VE/EBITDA", fmt: fmtMult,
+    tip: "Valeur d'entreprise / EBITDA" },
+  { key: "ev_ebit", label: "VE/EBIT", fmt: fmtMult,
+    tip: "Valeur d'entreprise / EBIT (résultat d'exploitation)" },
+  { key: "pe_trailing", label: "PER", fmt: fmtMult,
+    tip: "Cours / bénéfice net par action (12 derniers mois)" },
+  { key: "pb", label: "P/B", fmt: fmtMult,
+    tip: "Cours / actif net comptable par action" },
+];
+
+// Bandeau de regroupement au-dessus des en-têtes (la somme des spans = nb total de colonnes).
+const GROUPS = [
+  { label: "", span: 3 },                            // sélection + ticker + société
+  { label: "Taille (M, devise locale)", span: 3 },
+  { label: "Bêtas & structure", span: 6 },
+  { label: "Multiples", span: 5 },
+  { label: "", span: 1 },                            // couverture
 ];
 
 const STAT_ROWS: { key: keyof StatsMap[string]; label: string }[] = [
@@ -191,10 +219,26 @@ export default function ComparablesPage() {
       <PageTitle
         kicker="Module I"
         title="Comparables boursiers"
-        lede="Bêta de régression (R², nombre de points), bêta désendetté (Hamada) et multiples de
-        valorisation d'un échantillon de sociétés cotées. Source : Yahoo Finance — multiples non
-        retraités, à utiliser avec le jugement d'un analyste."
+        lede="Saisir un échantillon de sociétés cotées : l'outil calcule bêtas et multiples,
+        affiche les statistiques de l'échantillon, puis exporte en Excel ou enregistre l'analyse."
       />
+      <Disclosure summary="Méthode & sources">
+        <p>
+          <strong className="text-ink">Source : Yahoo Finance</strong> (gratuite) — multiples non
+          retraités, à utiliser avec le jugement d&apos;un analyste.
+        </p>
+        <p>
+          Le <strong className="text-ink">bêta de régression</strong> est estimé sur les rendements
+          (période et fréquence choisies) contre l&apos;indice de la place de cotation ; R² et nombre
+          de points mesurent sa fiabilité. Le <strong className="text-ink">bêta désendetté</strong>{" "}
+          suit la formule de Hamada avec le taux d&apos;IS saisi.
+        </p>
+        <p>
+          Montants en millions, <strong className="text-ink">devise locale</strong> indiquée par
+          ligne — bêtas et multiples restent comparables d&apos;un pays à l&apos;autre (ratios
+          même-devise).
+        </p>
+      </Disclosure>
 
       {/* ——— Formulaire ——— */}
       <Card className="p-6">
@@ -283,23 +327,50 @@ export default function ComparablesPage() {
         {/* ——— Résultats ——— */}
         {done && records.length > 0 && (
           <>
-            <Card className="rise-in overflow-x-auto">
+            <Card className="rise-in">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 px-4 py-3">
+                <h2 className="label-caps text-ink-mut">
+                  Échantillon — {records.length} sociétés, {selection.length} retenues
+                </h2>
+                <p className="text-xs text-ink-mut">
+                  Décocher une ligne l&apos;exclut des statistiques (bas de tableau) et de
+                  l&apos;export — recalcul immédiat.
+                </p>
+              </div>
+              <div className="overflow-x-auto border-t border-hairline">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b-2 border-ink bg-paper-deep text-left">
-                    <th className="px-3 py-2.5 label-caps text-ink-mut">Retenu</th>
-                    <th className="px-3 py-2.5 label-caps text-ink-mut">Ticker</th>
-                    {COLUMNS.map((c) => (
+                  <tr className="bg-paper-deep/60">
+                    {GROUPS.map((g, i) => (
                       <th
-                        key={c.key}
-                        className={`px-3 py-2.5 label-caps whitespace-nowrap text-ink-mut ${
-                          c.align === "left" ? "text-left" : "text-right"
+                        key={i}
+                        colSpan={g.span}
+                        className={`px-3 pt-2 pb-1 text-center text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-ink-mut/70 ${
+                          g.label ? "border-l border-hairline" : ""
                         }`}
                       >
-                        {c.label}
+                        {g.label}
                       </th>
                     ))}
-                    <th className="px-3 py-2.5 label-caps text-ink-mut">Couv.</th>
+                  </tr>
+                  <tr className="border-b-2 border-ink bg-paper-deep text-left">
+                    <Th left tip="Cocher = la société compte dans les statistiques et l'export">
+                      Retenu
+                    </Th>
+                    <Th left>Ticker</Th>
+                    {COLUMNS.map((c) => (
+                      <Th
+                        key={c.key}
+                        left={c.align === "left"}
+                        tip={c.tip}
+                        className={c.groupStart ? "border-l border-hairline" : ""}
+                      >
+                        {c.label}
+                      </Th>
+                    ))}
+                    <Th left tip="Couverture des données Yahoo : ok, partielle ou vide">
+                      Couv.
+                    </Th>
                   </tr>
                 </thead>
                 <tbody>
@@ -318,16 +389,26 @@ export default function ComparablesPage() {
                             type="checkbox"
                             checked={!off}
                             onChange={() => toggle(r.ticker)}
+                            aria-label={`Retenir ${r.ticker} dans l'échantillon`}
                             className="size-4 cursor-pointer accent-[var(--color-brass)]"
                           />
                         </td>
-                        <td className="tabular px-3 py-2 font-medium">{r.ticker}</td>
+                        <td className="tabular px-3 py-2 font-medium whitespace-nowrap">
+                          {r.ticker}
+                          {r.currency && (
+                            <span className="ml-1.5 text-[0.65rem] font-normal text-ink-mut">
+                              {r.currency}
+                            </span>
+                          )}
+                        </td>
                         {COLUMNS.map((c) => (
                           <td
                             key={c.key}
                             className={`px-3 py-2 whitespace-nowrap ${
                               c.align === "left" ? "" : "tabular text-right"
-                            } ${off ? "line-through" : ""}`}
+                            } ${off ? "line-through" : ""} ${
+                              c.groupStart ? "border-l border-hairline" : ""
+                            }`}
                           >
                             {c.fmt(r[c.key] as never)}
                           </td>
@@ -370,7 +451,12 @@ export default function ComparablesPage() {
                             } else text = fmtBeta(v);
                           }
                           return (
-                            <td key={c.key} className="tabular px-3 py-2 text-right font-medium">
+                            <td
+                              key={c.key}
+                              className={`tabular px-3 py-2 text-right font-medium ${
+                                c.groupStart ? "border-l border-hairline" : ""
+                              }`}
+                            >
                               {text}
                             </td>
                           );
@@ -381,15 +467,24 @@ export default function ComparablesPage() {
                   </tfoot>
                 )}
               </table>
+              </div>
             </Card>
 
             {/* ——— Actions ——— */}
-            <Card className="rise-in flex flex-wrap items-end gap-4 p-5">
-              <Button onClick={exportSelection} busy={busyExport}>
-                Exporter la sélection (.xlsx)
-              </Button>
+            <Card className="rise-in flex flex-wrap items-start gap-x-10 gap-y-4 p-5">
+              <div>
+                <Button onClick={exportSelection} busy={busyExport}>
+                  Exporter la sélection (.xlsx)
+                </Button>
+                <p className="mt-1.5 text-xs text-ink-mut">
+                  Fichier Excel formaté — uniquement les {selection.length} sociétés retenues.
+                </p>
+              </div>
               <div className="ml-auto flex items-end gap-3">
-                <Field label="Libellé de l'analyse">
+                <Field
+                  label="Libellé de l'analyse"
+                  hint="L'enregistrement alimente l'Historique et la Base sectorielle."
+                >
                   <TextInput
                     value={saveLabel}
                     onChange={(e) => setSaveLabel(e.target.value)}
@@ -402,11 +497,22 @@ export default function ComparablesPage() {
               </div>
               {savedId != null && (
                 <p className="w-full text-right text-xs text-ok">
-                  Analyse n° {savedId} enregistrée — visible dans l&apos;Historique.
+                  Analyse n° {savedId} enregistrée —{" "}
+                  <Link href="/historique" className="underline underline-offset-2 hover:text-ink">
+                    la consulter dans l&apos;Historique
+                  </Link>
+                  .
                 </p>
               )}
             </Card>
           </>
+        )}
+
+        {done && records.length === 0 && (
+          <Card className="p-6 text-sm text-ink-mut">
+            Aucune donnée récupérée pour ces tickers — vérifier l&apos;orthographe et les suffixes
+            de place (ex : <span className="tabular">AIR.PA</span> pour Airbus à Paris).
+          </Card>
         )}
       </div>
     </div>
