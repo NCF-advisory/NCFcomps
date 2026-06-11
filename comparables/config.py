@@ -11,7 +11,8 @@ class Settings(BaseSettings):
     tax_rate: float = 0.25                 # IS pour le desendettement (Hamada)
     beta_period: str = "5y"                # historique pour la regression du beta
     beta_frequency: str = "1mo"            # "1mo" (mensuel) ou "1wk" (hebdo)
-    min_beta_obs: int = 24                 # nb minimum de points de rendement
+    min_beta_obs: int = 24                 # nb minimum de points de rendement (mensuel)
+    min_beta_obs_weekly: int = 52          # seuil hebdo : 24 pts hebdo = ~6 mois, trop bruite
 
     base_currency: str = "EUR"             # devise de reference pour les visuels
     benchmark_unique: Optional[str] = None # ex: "^STOXX" pour des betas comparables
@@ -52,6 +53,7 @@ class Settings(BaseSettings):
 settings = Settings()
 
 # Indice de reference Yahoo par suffixe de place de cotation.
+# Symboles valides contre l'API Yahoo (cf. commit) : ne pas ajouter de symbole non teste.
 INDEX_BY_SUFFIX: dict[str, str] = {
     "": "^GSPC",        # USA          -> S&P 500
     "SW": "^SSMI",      # Suisse       -> SMI
@@ -59,11 +61,22 @@ INDEX_BY_SUFFIX: dict[str, str] = {
     "L": "^FTSE",       # Londres      -> FTSE 100
     "VI": "^ATX",       # Vienne       -> ATX
     "PA": "^FCHI",      # Paris        -> CAC 40
-    "DE": "^GDAXI",     # Francfort    -> DAX
+    "DE": "^GDAXI",     # Francfort (Xetra) -> DAX
+    "F": "^GDAXI",      # Francfort (parquet) -> DAX
     "MI": "FTSEMIB.MI", # Milan        -> FTSE MIB
     "MC": "^IBEX",      # Madrid       -> IBEX 35
     "BR": "^BFX",       # Bruxelles    -> BEL 20
     "ST": "^OMX",       # Stockholm    -> OMX Stockholm 30
+    "CO": "^OMXC25",    # Copenhague   -> OMX Copenhagen 25
+    "HE": "^OMXH25",    # Helsinki     -> OMX Helsinki 25
+    "OL": "^OSEAX",     # Oslo         -> Oslo All-Share
+    "LS": "PSI20.LS",   # Lisbonne     -> PSI 20
+    "IR": "^ISEQ",      # Dublin       -> ISEQ
+    "TO": "^GSPTSE",    # Toronto      -> S&P/TSX
+    "AX": "^AXJO",      # Sydney       -> S&P/ASX 200
+    "T": "^N225",       # Tokyo        -> Nikkei 225
+    "HK": "^HSI",       # Hong Kong    -> Hang Seng
+    "SI": "^STI",       # Singapour    -> Straits Times
 }
 DEFAULT_INDEX = "^GSPC"
 
@@ -73,4 +86,19 @@ def index_for(ticker: str) -> str:
     if settings.benchmark_unique:
         return settings.benchmark_unique
     suffix = ticker.rsplit(".", 1)[1] if "." in ticker else ""
-    return INDEX_BY_SUFFIX.get(suffix, DEFAULT_INDEX)
+    return INDEX_BY_SUFFIX.get(suffix.upper(), DEFAULT_INDEX)
+
+
+def index_is_assumed(ticker: str) -> bool:
+    """True si l'indice retenu est le defaut faute de mapping (suffixe inconnu) :
+    le beta serait calcule contre un indice potentiellement hors place -> a signaler."""
+    if settings.benchmark_unique:
+        return False
+    suffix = ticker.rsplit(".", 1)[1] if "." in ticker else ""
+    return suffix != "" and suffix.upper() not in INDEX_BY_SUFFIX
+
+
+def min_obs_for(frequency: str) -> int:
+    """Seuil de points de regression selon la frequence : 24 points mensuels (~2 ans)
+    sont defendables, mais 24 points hebdo (~6 mois) ne le sont pas."""
+    return settings.min_beta_obs_weekly if frequency == "1wk" else settings.min_beta_obs

@@ -288,7 +288,16 @@ export default function ComparablesPage() {
                 <option value="10y">10 ans</option>
               </Select>
             </Field>
-            <Field label="Fréquence">
+            <Field
+              label="Fréquence"
+              hint={
+                frequency === "1mo" && (period === "2y" || period === "3y")
+                  ? "⚠ 2–3 ans en mensuel = trop peu de points (2 ans → 23 < seuil de 24) : préférer l'hebdomadaire."
+                  : frequency === "1wk"
+                    ? "Seuil : 52 points hebdo (~1 an de cotation minimum)."
+                    : undefined
+              }
+            >
               <Select value={frequency} onChange={(e) => setFrequency(e.target.value)}>
                 <option value="1mo">Mensuelle</option>
                 <option value="1wk">Hebdomadaire</option>

@@ -101,20 +101,78 @@ def _val(info: dict, *keys):
     return None
 
 
+def _positive(v) -> Optional[float]:
+    """Multiple pre-calcule Yahoo : ne garder que les valeurs finies > 0.
+
+    Un multiple negatif (EBITDA ou resultat negatif) n'a pas de sens pour des
+    comparables et polluerait les statistiques d'echantillon."""
+    if v is None or not isinstance(v, (int, float)):
+        return None
+    if v != v or v in (float("inf"), float("-inf")) or v <= 0:
+        return None
+    return float(v)
+
+
+def _pick_row(df, names: tuple[str, ...]) -> Optional[float]:
+    """Premiere valeur non nulle (exercice le plus recent) parmi des lignes candidates
+    d'un etat financier yfinance (index = libelles de lignes, colonnes = exercices)."""
+    if df is None or getattr(df, "empty", True):
+        return None
+    for row in names:
+        if row in df.index:
+            s = df.loc[row].dropna()
+            if not s.empty:
+                return float(s.iloc[0])
+    return None
+
+
 def _ebit(tk: "yf.Ticker") -> Optional[float]:
     for attr in ("income_stmt", "financials"):
         try:
-            df = getattr(tk, attr)
-            if df is None or df.empty:
-                continue
-            for row in ("EBIT", "Operating Income", "OperatingIncome"):
-                if row in df.index:
-                    s = df.loc[row].dropna()
-                    if not s.empty:
-                        return float(s.iloc[0])
+            v = _pick_row(getattr(tk, attr), ("EBIT", "Operating Income", "OperatingIncome"))
         except Exception:
             continue
+        if v is not None:
+            return v
     return None
+
+
+def _fill_gaps(tk: "yf.Ticker", rec: CompanyRecord) -> None:
+    """Comble les champs absents de `info` depuis fast_info et les etats financiers.
+
+    Les small/mid caps ont souvent un `info` lacunaire alors que les etats yfinance
+    portent la donnee : ce repli evite des lignes « partielle/vide » inutiles.
+    Chaque acces est tolere en echec (None conserve), aucun reseau supplementaire
+    n'est force si tout est deja renseigne."""
+    if rec.market_cap is None or rec.currency is None:
+        try:
+            fi = tk.fast_info
+            if rec.market_cap is None:
+                rec.market_cap = _positive(fi["marketCap"])
+            if rec.currency is None:
+                rec.currency = fi["currency"] or None
+        except Exception:
+            pass
+    if rec.revenue is None or rec.ebitda is None:
+        try:
+            stmt = tk.income_stmt
+            if rec.revenue is None:
+                rec.revenue = _pick_row(stmt, ("Total Revenue", "Operating Revenue"))
+            if rec.ebitda is None:
+                rec.ebitda = _pick_row(stmt, ("EBITDA", "Normalized EBITDA"))
+        except Exception:
+            pass
+    if rec.total_debt is None or rec.total_cash is None:
+        try:
+            bs = tk.balance_sheet
+            if rec.total_debt is None:
+                rec.total_debt = _pick_row(bs, ("Total Debt",))
+            if rec.total_cash is None:
+                rec.total_cash = _pick_row(
+                    bs, ("Cash Cash Equivalents And Short Term Investments",
+                         "Cash And Cash Equivalents"))
+        except Exception:
+            pass
 
 
 class YahooSource(DataSource):
@@ -142,13 +200,16 @@ class YahooSource(DataSource):
             ebitda=_val(info, "ebitda"),
             ebit=_ebit(tk),
             beta_source=_val(info, "beta", "beta3Year"),
-            ev_sales=_val(info, "enterpriseToRevenue"),
-            ev_ebitda=_val(info, "enterpriseToEbitda"),
-            pe_trailing=_val(info, "trailingPE"),
-            pe_forward=_val(info, "forwardPE"),
-            pb=_val(info, "priceToBook"),
+            # Multiples pre-calcules Yahoo : repli si nos composants manquent (le
+            # pipeline prefere les multiples derives de la VE affichee). Filtres > 0.
+            ev_sales=_positive(_val(info, "enterpriseToRevenue")),
+            ev_ebitda=_positive(_val(info, "enterpriseToEbitda")),
+            pe_trailing=_positive(_val(info, "trailingPE")),
+            pe_forward=_positive(_val(info, "forwardPE")),
+            pb=_positive(_val(info, "priceToBook")),
             source="yahoo",
         )
+        _fill_gaps(tk, rec)
         # Ne cache que les recuperations utiles : figer 72 h un record vide issu d'un
         # echec transitoire empecherait toute nouvelle tentative.
         if rec.name is not None or rec.market_cap is not None:

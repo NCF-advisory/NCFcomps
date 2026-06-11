@@ -159,13 +159,20 @@ européenne payante **sans rien réécrire**.
   parallélisation du lot + mutualisation des indices, dédoublonnage BODACC + SIREN cédant
   déterministe, CI GitHub Actions, `.gitattributes`.
 - **[FAIT 2026-06-10] Lots 1 & 2 — backend FastAPI (`backend/`) + site Next.js (`frontend/`).**
-- **[PARTIEL 2026-06-10] Lot 3 — extraction comptes INPI (`comparables/fr/comptes/`).**
-  Liasse 2052/2033-B (codes en tables, EBE recalculé convention BdF), cascade PDF texte →
-  OCR (optionnel) → Claude (inactif sans clé, modèle via `CLAUDE_MODEL`), client API RNE,
-  fallback branché dans `fr/pipeline.build_cessions` (inactif sans credentials INPI).
-  **Bloqué sur** : compte INPI (`INPI_USERNAME`/`INPI_PASSWORD`) + clé Claude
-  (`ANTHROPIC_API_KEY`) dans `.env`. À la levée : valider les schémas RNE réels et les
-  codes 2033-B sur liasse réelle, ajouter le cache définitif des extractions + Batch API.
+- **[FAIT 2026-06-11] Lot 3 — extraction comptes INPI (`comparables/fr/comptes/`).**
+  Credentials INPI posés (`.env`), API RNE validée en réel. Découverte clé : `bilansSaisis`
+  = liasse déjà numérisée (codes CERFA → montants) → extraction **structurée, gratuite et
+  déterministe** (`bilan_saisi.py`, colonne m1 en 2033-B / m3 en 2052, CA codé `FJ` en 2052
+  structuré), branchée structuré-d'abord dans `fr/pipeline.build_cessions` ; cascade
+  PDF→OCR→LLM en simple filet (clé Claude **optionnelle**). Validé au centime vs dataset
+  ratios sur 6 PME réelles (les deux régimes). Garde-fou anti-rafale RNE (cadence mini +
+  retry, `INPI_MIN_INTERVAL_SECONDS`). Reste (optionnel) : cache des extractions + Batch API.
+- **[FAIT 2026-06-11] Fiabilisation bêtas & multiples.** Tie-out : VE et multiples recalculés
+  depuis les composants affichés (valeurs pré-calculées Yahoo en simple repli, filtrées > 0) ;
+  repli `fast_info`/états financiers pour combler les `info` lacunaires (small/mid caps) ;
+  seuil de points par fréquence (`MIN_BETA_OBS_WEEKLY=52`) ; mapping d'indices élargi à
+  Copenhague/Helsinki/Oslo/Lisbonne/Dublin/Toronto/Sydney/Tokyo/Hong Kong/Singapour
+  (symboles validés contre l'API) ; suffixe inconnu signalé `(defaut)` dans `index_used`.
 - **Lot 4 — déploiement VPS** (docker-compose api + front + caddy) : à faire.
 
 ## Commandes

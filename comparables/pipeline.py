@@ -7,7 +7,7 @@ from typing import Callable, Optional
 
 import pandas as pd
 
-from comparables.config import settings, index_for
+from comparables.config import settings, index_for, index_is_assumed, min_obs_for
 from comparables.models import CompanyRecord
 from comparables.sources.registry import fundamentals_source_for, price_source_for
 from comparables.finance.beta import compute_beta, returns_from_prices
@@ -21,28 +21,32 @@ def build_record(ticker: str, tax_rate: float, period: str, frequency: str,
                  index_prices: Optional[pd.Series] = None) -> CompanyRecord:
     rec = fundamentals_source_for(ticker).fetch_fundamentals(ticker) or CompanyRecord(ticker=ticker)
 
-    # Derives manquants
+    # Coherence interne (tie-out) : la VE et les multiples affiches sont recalcules
+    # depuis les composants affiches (capi, dette nette, agregats) des qu'ils existent.
+    # Les valeurs pre-calculees de la source (dates/definitions opaques) ne servent
+    # que de repli quand un composant manque.
     if rec.net_debt is None:
         rec.net_debt = m.net_debt(rec.total_debt, rec.total_cash)
-    if rec.enterprise_value is None:
-        rec.enterprise_value = m.enterprise_value(rec.market_cap, rec.net_debt)
-    if rec.ev_sales is None:
-        rec.ev_sales = m.safe_ratio(rec.enterprise_value, rec.revenue)
-    if rec.ev_ebitda is None:
-        rec.ev_ebitda = m.safe_ratio(rec.enterprise_value, rec.ebitda)
-    if rec.ev_ebit is None:
-        rec.ev_ebit = m.safe_ratio(rec.enterprise_value, rec.ebit)
+    own_ev = m.enterprise_value(rec.market_cap, rec.net_debt)
+    if own_ev is not None:
+        rec.enterprise_value = own_ev
+    # VE <= 0 (tresorerie nette > capi) -> multiples de VE non significatifs, repli source.
+    ev = rec.enterprise_value if rec.enterprise_value and rec.enterprise_value > 0 else None
+    rec.ev_sales = m.safe_ratio(ev, rec.revenue) or rec.ev_sales
+    rec.ev_ebitda = m.safe_ratio(ev, rec.ebitda) or rec.ev_ebitda
+    rec.ev_ebit = m.safe_ratio(ev, rec.ebit) or rec.ev_ebit
 
-    # Beta par regression + R2
+    # Beta par regression + R2 ; seuil de points adapte a la frequence (24 points
+    # mensuels sont defendables, 24 points hebdo = ~6 mois ne le sont pas).
     idx = index_for(ticker)
-    rec.index_used = idx
+    rec.index_used = f"{idx} (defaut)" if index_is_assumed(ticker) else idx
     ps = price_source_for(ticker)
     try:
         stock = ps.fetch_prices(ticker, period, frequency)
         index = index_prices if index_prices is not None else ps.fetch_prices(idx, period, frequency)
         if stock is not None and index is not None:
             br = compute_beta(returns_from_prices(stock), returns_from_prices(index),
-                              settings.min_beta_obs)
+                              min_obs_for(frequency))
             rec.beta_regression, rec.r2, rec.n_obs = br.beta, br.r2, br.n_obs
     except Exception as exc:
         logger.warning("Echec du calcul du beta pour %s : %s", ticker, exc)

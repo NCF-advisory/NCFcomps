@@ -169,3 +169,77 @@ def test_build_comparables_parallel_preserves_order_and_rule5(monkeypatch):
     assert [r.ticker for r in recs] == tickers
     assert recs[2].net_debt is None                  # BAD : record partiel
     assert all(r.net_debt == 30.0 for i, r in enumerate(recs) if i != 2)
+
+
+# --- Coherence interne (tie-out) : multiples derives de la VE affichee ---
+
+def test_build_record_prefere_les_multiples_derives(monkeypatch):
+    """Quand les composants existent, le multiple affiche = VE affichee / agregat affiche,
+    meme si la source fournit un multiple pre-calcule divergent (dates opaques)."""
+    rec_in = CompanyRecord(ticker="TIE", market_cap=100.0, total_debt=40.0,
+                           total_cash=10.0, revenue=50.0, ebitda=20.0,
+                           enterprise_value=999.0,        # VE source perimee
+                           ev_sales=99.0, ev_ebitda=99.0) # multiples source divergents
+    _patch_sources(monkeypatch, FakeSource(record=rec_in),
+                   FakeSource(prices=_price_series(7)))
+
+    rec = pipeline.build_record("TIE", tax_rate=0.25, period="5y", frequency="1mo")
+
+    assert rec.enterprise_value == 130.0             # 100 + 30 (recalcule, pas 999)
+    assert abs(rec.ev_sales - 2.6) < 1e-9            # 130/50, pas 99
+    assert abs(rec.ev_ebitda - 6.5) < 1e-9          # 130/20, pas 99
+
+
+def test_build_record_replis_sur_multiple_source_si_composant_manquant(monkeypatch):
+    """Sans agregat local (EBITDA absent), le multiple pre-calcule de la source survit."""
+    rec_in = CompanyRecord(ticker="FBK", market_cap=100.0, total_debt=40.0,
+                           total_cash=10.0, ebitda=None, ev_ebitda=8.5)
+    _patch_sources(monkeypatch, FakeSource(record=rec_in),
+                   FakeSource(prices=_price_series(8)))
+
+    rec = pipeline.build_record("FBK", tax_rate=0.25, period="5y", frequency="1mo")
+
+    assert rec.ev_ebitda == 8.5                      # repli source conserve
+
+
+def test_build_record_ve_negative_pas_de_multiple_derive(monkeypatch):
+    """Tresorerie nette superieure a la capi -> VE <= 0 : multiples derives sans objet."""
+    rec_in = CompanyRecord(ticker="CASH", market_cap=50.0, total_debt=0.0,
+                           total_cash=120.0, revenue=40.0, ev_sales=1.2)
+    _patch_sources(monkeypatch, FakeSource(record=rec_in),
+                   FakeSource(prices=_price_series(9)))
+
+    rec = pipeline.build_record("CASH", tax_rate=0.25, period="5y", frequency="1mo")
+
+    assert rec.enterprise_value == -70.0             # 50 - 70 : VE affichee (auditabilite)
+    assert rec.ev_sales == 1.2                       # repli source, pas -1.75
+
+
+def test_build_record_seuil_hebdo(monkeypatch):
+    """En hebdo, 60 points < seuil 52 ? Non : 59 rendements >= 52 -> beta calcule ;
+    mais avec un seuil hebdo de 52, 30 points mensuels n'auraient pas suffi."""
+    monkeypatch.setattr(pipeline.settings, "min_beta_obs", 24)
+    monkeypatch.setattr(pipeline.settings, "min_beta_obs_weekly", 52)
+    prices_short = _price_series(10, n=40)           # 39 rendements
+    rec_in = CompanyRecord(ticker="WK", market_cap=100.0)
+    _patch_sources(monkeypatch, FakeSource(record=rec_in),
+                   FakeSource(prices=prices_short))
+
+    rec_w = pipeline.build_record("WK", tax_rate=0.25, period="2y", frequency="1wk")
+    assert rec_w.beta_regression is None             # 39 < 52 : refuse en hebdo
+
+    rec_m = pipeline.build_record("WK", tax_rate=0.25, period="5y", frequency="1mo")
+    assert rec_m.beta_regression is not None         # 39 >= 24 : accepte en mensuel
+
+
+def test_build_record_signale_indice_par_defaut(monkeypatch):
+    """Suffixe de place inconnu -> l'indice retenu est marque « (defaut) »."""
+    _patch_sources(monkeypatch, FakeSource(record=CompanyRecord(ticker="X.ZZ")),
+                   FakeSource(prices=_price_series(11)))
+    rec = pipeline.build_record("X.ZZ", tax_rate=0.25, period="5y", frequency="1mo")
+    assert rec.index_used == "^GSPC (defaut)"
+
+    _patch_sources(monkeypatch, FakeSource(record=CompanyRecord(ticker="AIR.PA")),
+                   FakeSource(prices=_price_series(12)))
+    rec2 = pipeline.build_record("AIR.PA", tax_rate=0.25, period="5y", frequency="1mo")
+    assert rec2.index_used == "^FCHI"
