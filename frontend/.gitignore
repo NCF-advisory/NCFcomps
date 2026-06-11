@@ -1,0 +1,3 @@
+
+# cache incrémental TypeScript (tsc --noEmit)
+*.tsbuildinfo
