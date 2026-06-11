@@ -33,6 +33,17 @@ export type CompanyRecord = {
 export type FieldStats = { median: number; mean: number; min: number; max: number };
 export type StatsMap = Record<string, FieldStats>;
 
+/** Synthèse bêta de la sélection : retenu = R² >= min_r2 (sinon affiché mais exclu). */
+export type BetaSummary = {
+  min_r2: number;
+  n_retained: number;
+  n_excluded_low_r2: number;
+  mean_levered: number | null;
+  median_levered: number | null;
+  mean_adjusted: number | null;
+  mean_unlevered: number | null;
+};
+
 export type JobBase = {
   id: string;
   kind: "comparables" | "cessions";
@@ -48,6 +59,7 @@ export type ComparablesJob = JobBase & {
   records?: CompanyRecord[];
   coverage?: Record<string, "ok" | "partielle" | "vide">;
   stats?: StatsMap;
+  beta_summary?: BetaSummary | null;
 };
 
 export type Cession = {
@@ -185,10 +197,10 @@ export const api = {
   }) => request<ComparablesJob>("/api/comparables/jobs", { method: "POST", body: JSON.stringify(body) }),
   comparablesJob: (id: string) => request<ComparablesJob>(`/api/comparables/jobs/${id}`),
   statsFor: (records: CompanyRecord[]) =>
-    request<{ n: number; stats: StatsMap }>("/api/comparables/stats", {
-      method: "POST",
-      body: JSON.stringify({ records }),
-    }),
+    request<{ n: number; stats: StatsMap; beta_summary: BetaSummary | null }>(
+      "/api/comparables/stats",
+      { method: "POST", body: JSON.stringify({ records }) },
+    ),
   resolveNames: (names: string[]) =>
     request<{ results: { query: string; match: { symbol: string; name: string; exchange: string } | null }[] }>(
       "/api/comparables/resolve",

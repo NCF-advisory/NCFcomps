@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     beta_frequency: str = "1mo"            # "1mo" (mensuel) ou "1wk" (hebdo)
     min_beta_obs: int = 24                 # nb minimum de points de rendement (mensuel)
     min_beta_obs_weekly: int = 52          # seuil hebdo : 24 pts hebdo = ~6 mois, trop bruite
+    beta_min_r2: float = 0.10              # R2 sous ce seuil : beta affiche mais exclu des stats
 
     base_currency: str = "EUR"             # devise de reference pour les visuels
     benchmark_unique: Optional[str] = None # ex: "^STOXX" pour des betas comparables

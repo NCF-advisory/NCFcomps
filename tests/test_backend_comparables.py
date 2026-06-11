@@ -120,3 +120,31 @@ def test_export_excel(monkeypatch):
     assert r.status_code == 200
     assert r.headers["content-type"].startswith("application/vnd.openxmlformats")
     assert r.content[:2] == b"PK"                    # signature zip d'un .xlsx
+
+
+def test_stats_excluent_les_betas_faible_r2(monkeypatch):
+    """R2 < seuil : beta hors mediane/moyenne ET synthese beta_summary coherente."""
+    monkeypatch.setattr(settings, "beta_min_r2", 0.10)
+    client = _client(monkeypatch)
+
+    records = [
+        {"ticker": "A", "beta_regression": 1.2, "r2": 0.40, "beta_unlevered": 0.9},
+        {"ticker": "B", "beta_regression": 0.8, "r2": 0.20, "beta_unlevered": 0.7},
+        {"ticker": "C", "beta_regression": 9.0, "r2": 0.03, "beta_unlevered": 8.0},  # ecarte
+    ]
+    r = client.post("/api/comparables/stats", json={"records": records})
+    assert r.status_code == 200
+    payload = r.json()
+
+    # mediane/moyenne du beta de regression : sans le 9.0 au R2 quasi nul
+    assert abs(payload["stats"]["beta_regression"]["median"] - 1.0) < 1e-9
+    assert abs(payload["stats"]["beta_regression"]["mean"] - 1.0) < 1e-9
+    assert abs(payload["stats"]["beta_unlevered"]["mean"] - 0.8) < 1e-9
+    # le R2 lui-meme reste decrit sur tout l'echantillon (qualite globale)
+    assert abs(payload["stats"]["r2"]["min"] - 0.03) < 1e-9
+
+    s = payload["beta_summary"]
+    assert s["n_retained"] == 2 and s["n_excluded_low_r2"] == 1
+    assert abs(s["mean_levered"] - 1.0) < 1e-9
+    assert abs(s["mean_adjusted"] - 1.0) < 1e-9              # Blume(1.0) = 1.0
+    assert s["min_r2"] == 0.10

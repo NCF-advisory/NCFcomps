@@ -116,6 +116,19 @@ export function PageTitle({ kicker, title, lede }: { kicker: string; title: stri
   );
 }
 
+/** Carte statistique : grand chiffre + libellé + note explicative. */
+export function StatCard({ label, value, note }: { label: string; value: string; note: string }) {
+  return (
+    <Card className="p-5">
+      <p className="label-caps text-ink-mut">{label}</p>
+      <p className="tabular mt-2 text-4xl font-extrabold tracking-[-0.028em] text-ink-strong">
+        {value}
+      </p>
+      <p className="mt-2 text-xs text-ink-mut">{note}</p>
+    </Card>
+  );
+}
+
 export function ErrorNote({ message }: { message: string | null }) {
   if (!message) return null;
   return (

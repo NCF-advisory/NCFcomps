@@ -21,6 +21,7 @@ import {
   JobProgress,
   PageTitle,
   Select,
+  StatCard,
   TextInput,
   Th,
 } from "@/components/ui";
@@ -262,20 +263,6 @@ export default function CessionsPage() {
         )}
       </div>
     </div>
-  );
-}
-
-function StatCard({ label, value, note }: { label: string; value: string; note: string }) {
-  return (
-    <Card className="p-5">
-      <p className="label-caps text-ink-mut">{label}</p>
-      <p
-        className="tabular mt-2 text-4xl font-extrabold tracking-[-0.028em] text-ink-strong"
-      >
-        {value}
-      </p>
-      <p className="mt-2 text-xs text-ink-mut">{note}</p>
-    </Card>
   );
 }
 

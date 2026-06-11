@@ -46,3 +46,53 @@ def test_beta_zero_variance_index():
     flat = pd.Series([0.01] * 30)
     res = compute_beta(stock, flat, min_obs=10)
     assert res.beta is None and res.r2 is None
+
+
+# --- Qualite d'echantillon : filtre R2, beta ajuste (Blume), synthese ---
+
+def test_reliable_beta_seuil():
+    from comparables.finance.beta import reliable_beta
+    assert reliable_beta(1.2, 0.30, 0.10) == 1.2
+    assert reliable_beta(1.2, 0.10, 0.10) == 1.2      # egalite = retenu
+    assert reliable_beta(1.2, 0.09, 0.10) is None     # sous le seuil
+    assert reliable_beta(1.2, None, 0.10) is None     # pas de regression
+    assert reliable_beta(None, 0.50, 0.10) is None
+    assert reliable_beta(float("nan"), 0.5, 0.10) is None
+    assert reliable_beta(1.2, float("nan"), 0.10) is None
+
+
+def test_blume_adjusted():
+    from comparables.finance.beta import blume_adjusted
+    assert abs(blume_adjusted(1.0) - 1.0) < 1e-12             # beta de marche : inchange
+    assert abs(blume_adjusted(1.5) - (2/3 * 1.5 + 1/3)) < 1e-12
+    assert abs(blume_adjusted(0.6) - (2/3 * 0.6 + 1/3)) < 1e-12
+    assert blume_adjusted(None) is None
+    assert blume_adjusted(float("inf")) is None
+
+
+def test_sample_summary_exclut_les_faibles_r2():
+    from comparables.finance.beta import sample_summary
+    triples = [
+        (1.2, 0.40, 0.9),     # retenu
+        (0.8, 0.20, 0.7),     # retenu
+        (3.0, 0.05, 2.5),     # ecarte : R2 < 0.10 (et ne pollue pas la moyenne)
+        (None, None, None),   # pas de beta : ni retenu ni ecarte
+    ]
+    s = sample_summary(triples, min_r2=0.10)
+    assert s is not None
+    assert s["n_retained"] == 2 and s["n_excluded_low_r2"] == 1
+    assert abs(s["mean_levered"] - 1.0) < 1e-12               # (1.2 + 0.8) / 2
+    assert abs(s["median_levered"] - 1.0) < 1e-12
+    assert abs(s["mean_adjusted"] - 1.0) < 1e-12              # Blume(1.0) = 1.0
+    assert abs(s["mean_unlevered"] - 0.8) < 1e-12             # (0.9 + 0.7) / 2
+    assert s["min_r2"] == 0.10
+
+
+def test_sample_summary_vide():
+    from comparables.finance.beta import sample_summary
+    assert sample_summary([], min_r2=0.10) is None
+    assert sample_summary([(None, None, None)], min_r2=0.10) is None
+    # que des ecartes : synthese presente, moyennes absentes
+    s = sample_summary([(2.0, 0.02, 1.5)], min_r2=0.10)
+    assert s["n_retained"] == 0 and s["n_excluded_low_r2"] == 1
+    assert s["mean_levered"] is None and s["mean_adjusted"] is None

@@ -40,10 +40,11 @@ def test_workbook_montants_en_millions_et_nd():
 
 
 def test_workbook_ligne_mediane_filtre_inf():
+    # r2 >= seuil requis depuis la regle qualite : un beta sans R2 est exclu des stats.
     records = [
-        CompanyRecord(ticker="A", beta_regression=1.0),
-        CompanyRecord(ticker="B", beta_regression=2.0),
-        CompanyRecord(ticker="C", beta_regression=math.inf),
+        CompanyRecord(ticker="A", beta_regression=1.0, r2=0.5),
+        CompanyRecord(ticker="B", beta_regression=2.0, r2=0.5),
+        CompanyRecord(ticker="C", beta_regression=math.inf, r2=0.5),
     ]
     ws = _wb(records)["Comparables"]
     # Stats : ligne vide puis Mediane/Moyenne/Min/Max apres les 3 lignes de donnees.
@@ -52,3 +53,32 @@ def test_workbook_ligne_mediane_filtre_inf():
     # beta_regression est la colonne 11 (cf. DISPLAY).
     assert ws.cell(row=r_med, column=11).value == 1.5
     assert ws.cell(row=labels["Maximum"], column=11).value == 2.0
+
+
+def test_stats_beta_excluent_faible_r2():
+    """Beta avec R2 < seuil : affiche en ambre mais hors mediane/moyenne (regle ecran)."""
+    records = [
+        CompanyRecord(ticker="A", beta_regression=1.0, r2=0.40, beta_unlevered=0.8),
+        CompanyRecord(ticker="B", beta_regression=2.0, r2=0.30, beta_unlevered=1.6),
+        CompanyRecord(ticker="C", beta_regression=9.0, r2=0.05, beta_unlevered=8.0),
+    ]
+    s = _stats(records)
+    assert s["beta_regression"]["Mediane"] == 1.5            # sans le 9.0
+    assert abs(s["beta_unlevered"]["Moyenne"] - 1.2) < 1e-9  # sans le 8.0
+    # le R2 lui-meme decrit tout l'echantillon
+    assert s["r2"]["Minimum"] == 0.05
+
+
+def test_workbook_synthese_beta_presente():
+    records = [
+        CompanyRecord(ticker="A", beta_regression=1.0, r2=0.40, beta_unlevered=0.8),
+        CompanyRecord(ticker="B", beta_regression=2.0, r2=0.30, beta_unlevered=1.6),
+    ]
+    ws = _wb(records)["Comparables"]
+    cells = [(ws.cell(row=r, column=1).value, ws.cell(row=r, column=2).value)
+             for r in range(1, 30)]
+    labels = {label: value for label, value in cells if label}
+    assert any(str(k).startswith("Synthese beta") for k in labels)
+    assert labels["Beta endette moyen retenu"] == 1.5
+    assert abs(labels["Beta ajuste (Blume : 2/3 x beta + 1/3)"] - (2/3 * 1.5 + 1/3)) < 1e-9
+    assert abs(labels["Beta desendette moyen retenu"] - 1.2) < 1e-9

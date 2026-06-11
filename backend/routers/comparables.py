@@ -11,7 +11,8 @@ from backend.jobs import Job, manager
 from backend.schemas import ComparablesJobRequest, RecordsPayload, ResolveRequest
 from comparables import pipeline
 from comparables.config import settings
-from comparables.export.excel import STATS_FIELDS, build_excel_bytes
+from comparables.export.excel import BETA_QUALITY_FIELDS, STATS_FIELDS, build_excel_bytes
+from comparables.finance.beta import reliable_beta, sample_summary
 from comparables.finance.multiples import summary_stats
 from comparables.models import CompanyRecord
 from comparables.sources import yahoo
@@ -22,13 +23,29 @@ EXCEL_MEDIA_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.
 
 
 def _stats(records: list[CompanyRecord]) -> dict[str, dict[str, float]]:
-    """Stats d'échantillon par champ (mêmes filtres inf/nan que l'Excel)."""
+    """Stats d'échantillon par champ (mêmes filtres inf/nan que l'Excel).
+
+    Les champs bêta (régression, désendetté) excluent les R² < beta_min_r2 :
+    affichés dans le tableau mais hors médiane/moyenne (pente non exploitable)."""
     out: dict[str, dict[str, float]] = {}
     for f in STATS_FIELDS:
-        s = summary_stats(getattr(r, f) for r in records)
+        if f in BETA_QUALITY_FIELDS:
+            values = (reliable_beta(getattr(r, f), r.r2, settings.beta_min_r2)
+                      for r in records)
+        else:
+            values = (getattr(r, f) for r in records)
+        s = summary_stats(values)
         if s:
             out[f] = s
     return out
+
+
+def _beta_summary(records: list[CompanyRecord]) -> dict | None:
+    """Synthèse bêta de la sélection : β moyen retenu endetté, ajusté (Blume), désendetté."""
+    return sample_summary(
+        ((r.beta_regression, r.r2, r.beta_unlevered) for r in records),
+        settings.beta_min_r2,
+    )
 
 
 def _coverage(rec: CompanyRecord) -> str:
@@ -54,6 +71,7 @@ def _records_payload(records: list[CompanyRecord]) -> dict:
         "records": [sanitize(r.model_dump()) for r in records],
         "coverage": {r.ticker: _coverage(r) for r in records},
         "stats": _stats(records),
+        "beta_summary": _beta_summary(records),
     }
 
 
@@ -101,7 +119,8 @@ def stats_for_selection(body: RecordsPayload,
                         user: str = Depends(security.current_user)) -> dict:
     """Recalcule les stats sur une sélection de comparables, sans aucun re-fetch réseau
     (exclusion d'un outlier = le client renvoie le sous-ensemble retenu)."""
-    return {"n": len(body.records), "stats": _stats(body.records)}
+    return {"n": len(body.records), "stats": _stats(body.records),
+            "beta_summary": _beta_summary(body.records)}
 
 
 @router.post("/resolve")

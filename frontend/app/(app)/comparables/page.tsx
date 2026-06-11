@@ -11,6 +11,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   api,
+  type BetaSummary,
   type CompanyRecord,
   type ComparablesJob,
   downloadExcel,
@@ -28,6 +29,7 @@ import {
   JobProgress,
   PageTitle,
   Select,
+  StatCard,
   TextArea,
   TextInput,
   Th,
@@ -42,6 +44,7 @@ const COLUMNS: {
   align?: "left";
   tip?: string;
   groupStart?: boolean; // première colonne d'une famille -> filet vertical
+  qualityBound?: boolean; // dérivé de la régression : ambre + hors stats si R² < seuil
 }[] = [
   { key: "name", label: "Société", fmt: (v: string | null) => v ?? ND, align: "left" },
   { key: "market_cap", label: "Capi (M)", fmt: fmtMillions, groupStart: true,
@@ -52,15 +55,15 @@ const COLUMNS: {
     tip: "Valeur d'entreprise = capitalisation + dette nette" },
   { key: "beta_source", label: "β publié", fmt: fmtBeta, groupStart: true,
     tip: "Bêta publié par Yahoo Finance (donné à titre de recoupement)" },
-  { key: "beta_regression", label: "β régr.", fmt: fmtBeta,
+  { key: "beta_regression", label: "β régr.", fmt: fmtBeta, qualityBound: true,
     tip: "Bêta estimé par régression des rendements contre l'indice de la place de cotation" },
-  { key: "r2", label: "R²", fmt: fmtBeta,
+  { key: "r2", label: "R²", fmt: fmtBeta, qualityBound: true,
     tip: "Qualité d'ajustement de la régression, de 0 à 1 : faible R² = bêta peu fiable" },
   { key: "n_obs", label: "N pts", fmt: (v: number | null) => (v == null ? ND : String(v)),
     tip: "Nombre de points utilisés dans la régression" },
   { key: "gearing", label: "Gearing", fmt: (v: number | null) => fmtPct(v),
     tip: "Dette nette / capitalisation (D/E, en valeur de marché)" },
-  { key: "beta_unlevered", label: "β désend.", fmt: fmtBeta,
+  { key: "beta_unlevered", label: "β désend.", fmt: fmtBeta, qualityBound: true,
     tip: "Bêta désendetté (Hamada) : β / (1 + (1 − IS) × D/E)" },
   { key: "ev_sales", label: "VE/CA", fmt: fmtMult, groupStart: true,
     tip: "Valeur d'entreprise / chiffre d'affaires" },
@@ -104,6 +107,7 @@ export default function ComparablesPage() {
 
   const [excluded, setExcluded] = useState<Set<string>>(new Set());
   const [stats, setStats] = useState<StatsMap | null>(null);
+  const [betaSummary, setBetaSummary] = useState<BetaSummary | null>(null);
   const [statsN, setStatsN] = useState(0);
   const [saveLabel, setSaveLabel] = useState("");
   const [savedId, setSavedId] = useState<number | null>(null);
@@ -125,6 +129,7 @@ export default function ComparablesPage() {
         .statsFor(selection)
         .then((res) => {
           setStats(res.stats);
+          setBetaSummary(res.beta_summary);
           setStatsN(res.n);
         })
         .catch(() => undefined);
@@ -141,6 +146,7 @@ export default function ComparablesPage() {
     setResolved([]);
     setExcluded(new Set());
     setStats(null);
+    setBetaSummary(null);
     setJob(null);
 
     let tickers = input.split("\n").map((l) => l.trim()).filter(Boolean);
@@ -213,6 +219,10 @@ export default function ComparablesPage() {
   }
 
   const done = job?.status === "done";
+  const minR2 = betaSummary?.min_r2 ?? 0.1;
+  // Régression trop faible : bêta affiché (en ambre) mais exclu des stats et de la synthèse.
+  const isLowR2 = (r: CompanyRecord) =>
+    r.beta_regression != null && (r.r2 == null || r.r2 < minR2);
 
   return (
     <div>
@@ -341,10 +351,17 @@ export default function ComparablesPage() {
                 <h2 className="label-caps text-ink-mut">
                   Échantillon : {records.length} sociétés, {selection.length} retenues
                 </h2>
-                <p className="text-xs text-ink-mut">
-                  Décocher une ligne l&apos;exclut des statistiques (bas de tableau) et de
-                  l&apos;export (recalcul immédiat).
-                </p>
+                <div className="text-right text-xs text-ink-mut">
+                  <p>
+                    Décocher une ligne l&apos;exclut des statistiques (bas de tableau) et de
+                    l&apos;export (recalcul immédiat).
+                  </p>
+                  <p>
+                    <span className="font-medium text-warn">En ambre</span> : R² &lt;{" "}
+                    {minR2.toLocaleString("fr-FR")}, bêta affiché mais exclu des statistiques
+                    et de la synthèse.
+                  </p>
+                </div>
               </div>
               <div className="overflow-x-auto border-t border-hairline">
               <table className="w-full text-sm">
@@ -410,18 +427,24 @@ export default function ComparablesPage() {
                             </span>
                           )}
                         </td>
-                        {COLUMNS.map((c) => (
-                          <td
-                            key={c.key}
-                            className={`px-3 py-2 whitespace-nowrap ${
-                              c.align === "left" ? "" : "tabular text-right"
-                            } ${off ? "line-through" : ""} ${
-                              c.groupStart ? "border-l border-hairline" : ""
-                            }`}
-                          >
-                            {c.fmt(r[c.key] as never)}
-                          </td>
-                        ))}
+                        {COLUMNS.map((c) => {
+                          const lowBeta = c.qualityBound && isLowR2(r);
+                          return (
+                            <td
+                              key={c.key}
+                              title={lowBeta
+                                ? `R² < ${minR2.toLocaleString("fr-FR")} : bêta affiché mais exclu des statistiques`
+                                : undefined}
+                              className={`px-3 py-2 whitespace-nowrap ${
+                                c.align === "left" ? "" : "tabular text-right"
+                              } ${off ? "line-through" : ""} ${
+                                c.groupStart ? "border-l border-hairline" : ""
+                              } ${lowBeta ? "font-medium text-warn" : ""}`}
+                            >
+                              {c.fmt(r[c.key] as never)}
+                            </td>
+                          );
+                        })}
                         <td className="px-3 py-2">
                           <Badge tone={cov === "ok" ? "ok" : cov === "partielle" ? "warn" : "alert"}>
                             {cov}
@@ -478,6 +501,27 @@ export default function ComparablesPage() {
               </table>
               </div>
             </Card>
+
+            {/* ——— Synthèse bêta : moyens retenus, endetté / ajusté / désendetté ——— */}
+            {betaSummary && betaSummary.mean_levered != null && (
+              <section className="rise-in grid grid-cols-1 gap-4 md:grid-cols-3">
+                <StatCard
+                  label="β endetté moyen retenu"
+                  value={fmtBeta(betaSummary.mean_levered)}
+                  note={`${betaSummary.n_retained} bêta(s) retenu(s) · ${betaSummary.n_excluded_low_r2} écarté(s) (R² < ${minR2.toLocaleString("fr-FR")}) · médiane ${fmtBeta(betaSummary.median_levered)}`}
+                />
+                <StatCard
+                  label="β ajusté (Blume)"
+                  value={fmtBeta(betaSummary.mean_adjusted)}
+                  note="2/3 × β endetté moyen + 1/3 : convergence vers le bêta de marché (usage prospectif)."
+                />
+                <StatCard
+                  label="β désendetté moyen retenu"
+                  value={fmtBeta(betaSummary.mean_unlevered)}
+                  note={`Hamada, IS ${taxRate} % : base de réendettement sur la cible.`}
+                />
+              </section>
+            )}
 
             {/* ——— Actions ——— */}
             <Card className="rise-in flex flex-wrap items-start gap-x-10 gap-y-4 p-5">
