@@ -34,16 +34,33 @@ def fetch_financials(siren: str) -> list[dict]:
     return resp.json().get("results", [])
 
 
+# Ancienneté maximale de l'exercice retenu : au-delà, le CA ne reflète plus l'activité
+# cédée (et un exercice POSTÉRIEUR à la cession reflète la société APRÈS la vente du
+# fonds — interdit : c'est ce repli qui faussait les multiples sur la fenêtre 2008-,
+# le jeu ratios INPI/BCE ne commençant qu'en 2016).
+MAX_ANCIENNETE_ANNEES = 3
+
+
+def _trop_ancien(cloture: str, cession_date: str) -> bool:
+    try:
+        return int(cession_date[:4]) - int(cloture[:4]) > MAX_ANCIENNETE_ANNEES
+    except ValueError:
+        return True
+
+
 def pick_for_date(financials: list[dict], cession_date: Optional[str],
                   require: str = "chiffre_d_affaires") -> Optional[dict]:
-    """Choisit l'exercice pertinent : le plus récent CLOS AVANT la cession et portant la
-    donnée requise (CA) ; sinon le plus récent disponible. PURE (testée)."""
+    """Choisit l'exercice pertinent : le plus récent CLOS AVANT la cession (jamais après —
+    le cédant a vendu l'activité, son CA postérieur ne veut rien dire) et pas plus ancien
+    que MAX_ANCIENNETE_ANNEES. Sans date de cession : le plus récent. PURE (testée)."""
     cand = [f for f in financials
             if f.get(require) and f.get(require) > 0 and f.get("date_cloture_exercice")]
     if not cand:
         return None
     if cession_date:
-        before = [f for f in cand if f["date_cloture_exercice"] <= cession_date]
-        if before:
-            return max(before, key=lambda f: f["date_cloture_exercice"])
+        before = [f for f in cand if f["date_cloture_exercice"] <= cession_date
+                  and not _trop_ancien(f["date_cloture_exercice"], cession_date)]
+        if not before:
+            return None
+        return max(before, key=lambda f: f["date_cloture_exercice"])
     return max(cand, key=lambda f: f["date_cloture_exercice"])

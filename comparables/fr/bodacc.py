@@ -9,7 +9,7 @@ from typing import Optional
 
 from comparables import cache
 from comparables.fr.models import Cession
-from comparables.fr.parsing import extract_price, extract_sirens
+from comparables.fr.parsing import cedant_siren, extract_price
 
 BODACC_URL = ("https://bodacc-datadila.opendatasoft.com/api/explore/v2.0"
               "/catalog/datasets/annonces-commerciales/records")
@@ -27,17 +27,9 @@ def _acte_dict(fields: dict) -> dict:
 
 
 def _cedant_siren(fields: dict, descriptif: str) -> Optional[str]:
-    """SIREN du cédant. Le champ `registre` donne les SIREN *validés* (cédant + cessionnaire) ;
-    le cédant est nommé en premier dans le descriptif. On prend donc le 1er SIREN du descriptif
-    qui figure aussi dans `registre` (évite les n° de dossier/enregistrement parasites).
-    À défaut, le 1er SIREN du `registre` dans son ordre de publication (cédant en tête) —
-    jamais une itération de set, non déterministe, qui pourrait retenir le cessionnaire."""
-    registre = extract_sirens(fields.get("registre"))      # liste ordonnée, dédupliquée
-    valides = set(registre)
-    for s in extract_sirens(descriptif):
-        if s in valides:
-            return s
-    return registre[0] if registre else None
+    """SIREN du cédant (logique pure dans parsing.cedant_siren, partagée avec la
+    réplique locale des ventes — cf. fr/referentiels.py)."""
+    return cedant_siren(fields.get("registre"), descriptif)
 
 
 def fetch_cessions(departement: Optional[str] = None, contains: Optional[str] = None,

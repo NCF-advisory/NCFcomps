@@ -17,6 +17,13 @@ logger = logging.getLogger(__name__)
 
 __all__ = ["build_cessions", "summarize_by_activity", "to_dataframe", "default_since"]
 
+# Filet « comptes déposés INPI » : budget de sociétés tentées par lot (chaque tentative
+# = 1 à 3 appels RNE cadencés à >= 0,5 s — sans plafond, une recherche de niche sur la
+# fenêtre 2008- peut durer des heures) et plancher de date de cession (le RNE n'a
+# pratiquement aucun compte déposé avant 2017 : appels à fonds perdus).
+_RNE_BUDGET_LOT = 150
+_RNE_COMPTES_DEPUIS = "2017-01-01"
+
 
 def default_since(years: int = 10) -> str:
     """Date 'YYYY-MM-DD' il y a `years` ans (fenêtre d'analyse par défaut)."""
@@ -79,6 +86,10 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
     récupérée AVANT ses finances et l'annonce est écartée si l'activité ne correspond pas
     (sauf si son nom porte un mot-clé de la recherche).
 
+    Avec les référentiels locaux chargés (ventes BODACC + Sirene), la recherche est une
+    JOINTURE locale exhaustive sur toute la fenêtre (prix et NAF déjà résolus) ; sinon,
+    balayage de l'API par passes (mots-clés, puis générique si l'identité est locale).
+
     require_ca=True : ne renvoie QUE les sociétés dont le CA est disponible (comptes publics),
     en sur-balayant le BODACC (jusqu'à max_scan cessions) pour en réunir `limit`. L'échec
     d'une société n'arrête pas le lot. Renvoie un `CessionsBatch` (cessions + compteurs).
@@ -86,10 +97,28 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
     """
     query = activites.interpret(contains) if contains and contains.strip() else None
     naf_filter = bool(query and query.naf_codes and enrich)
-    # Référentiels locaux (Sirene / ratios BCE) : lookups instantanés quand chargés,
-    # repli automatique sur les API unitaires sinon (cf. fr/referentiels.py).
+    # Référentiels locaux (Sirene / ratios BCE / ventes BODACC) : lookups instantanés
+    # quand chargés, repli automatique sur les API unitaires sinon (fr/referentiels.py).
     local_id = referentiels.available("unites_legales") if enrich else False
     local_fin = referentiels.available("ratios") if enrich else False
+
+    # Voie royale : ventes BODACC répliquées en local + identité Sirene locale ->
+    # la recherche par activité est une JOINTURE exhaustive (toute la fenêtre, prix
+    # déjà extraits, NAF déjà joints), sans pagination ni balayage par mots-clés.
+    pool: list[Cession] = []
+    pool_local = False
+    if naf_filter and local_id and referentiels.available("ventes"):
+        ventes = referentiels.lookup_ventes(since=since or default_since(),
+                                            departement=departement)
+        if ventes is not None:
+            pool_local = True
+            pool = [Cession(siren=v["siren"], nom=v["nom_officiel"] or v["nom_bodacc"],
+                            ville=v["ville"], departement=v["departement"],
+                            date=v["date"], categorie=v["categorie"], prix=v["prix"],
+                            url=v["url"], naf=v["naf"], activite=v["naf"])
+                    for v in ventes]
+            max_scan = len(pool)
+
     if max_scan is None:
         if naf_filter and local_id:
             # Identité locale = filtrage NAF gratuit : on peut balayer très large
@@ -106,7 +135,9 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
             max_scan = min(600, max(limit * 12, limit))
         else:
             max_scan = limit
-    if naf_filter:
+    if pool_local:
+        pass                                # pool déjà construit par la jointure locale
+    elif naf_filter:
         # Jusqu'à trois passes BODACC, de la plus précise à la plus large :
         # 1) le NOM du commerçant (« DUPONT INFORMATIQUE » exerce vraiment dans le
         #    domaine) ; 2) le texte de l'acte (haut rappel mais bruité : « matériel
@@ -154,6 +185,7 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
     out: list[Cession] = []
     fin_cache: dict[str, list] = {}
     id_cache: dict[str, Optional[dict]] = {}
+    rne_tentees = 0
     total = len(pool)
     done = 0
     if progress:
@@ -175,8 +207,12 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
         #    le champ `commercant` BODACC mêle cédant et cessionnaire (un acheteur
         #    « X INFORMATIQUE » ne rend pas la cible informatique).
         if naf_filter:
-            _apply_identity(c, id_cache, local=local_id)
-            nom_cedant = c.nom if (c.siren and id_cache.get(c.siren)) else None
+            if pool_local:
+                # Identité déjà jointe (Sirene) : NAF présent <=> cédante identifiée.
+                nom_cedant = c.nom if c.naf is not None else None
+            else:
+                _apply_identity(c, id_cache, local=local_id)
+                nom_cedant = c.nom if (c.siren and id_cache.get(c.siren)) else None
             if not activites.keep_cession(c.naf, nom_cedant, query):
                 batch.n_naf_exclues += 1
                 _tick()
@@ -204,7 +240,10 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
         # 1bis) Comptes déposés INPI quand le dataset ratios n'a rien donné — inactif sans
         #        credentials INPI (lot 3). On privilégie le compte STRUCTURÉ (bilanSaisi,
         #        gratuit et déterministe) ; à défaut seulement, la cascade PDF/OCR/LLM.
-        if c.siren and c.ca is None and inpi_client.configured():
+        #        Budget par lot + plancher de date : cf. _RNE_BUDGET_LOT.
+        if (c.siren and c.ca is None and inpi_client.configured()
+                and (c.date or "") >= _RNE_COMPTES_DEPUIS and rne_tentees < _RNE_BUDGET_LOT):
+            rne_tentees += 1
             extraction = None
             meta: Optional[dict] = None
             try:
@@ -241,6 +280,17 @@ def build_cessions(departement: Optional[str] = None, contains: Optional[str] = 
         _tick()
         if len(out) >= limit:
             break
+    # 4) Objet social RNE (détail d'activité, texte libre) pour les cessions RETENUES
+    #    seulement — best-effort, jamais bloquant (cf. inpi_client.fetch_objet_social).
+    if inpi_client.configured():
+        for c in out:
+            if c.siren:
+                c.objet_social = inpi_client.fetch_objet_social(c.siren, client=inpi)
+    # Compteurs exacts : « balayées » = annonces réellement traitées (la boucle s'arrête
+    # à `limit` atteint — en jointure locale, le pool est la fenêtre entière).
+    batch.n_annonces = done
+    if progress and done < total:
+        progress(done, done)
     batch.cessions = out
     return batch
 

@@ -208,6 +208,9 @@ def _with_credentials(monkeypatch):
     monkeypatch.setattr(settings, "inpi_username", "user@cabinet.fr")
     monkeypatch.setattr(settings, "inpi_password", "secret")
     monkeypatch.setattr(settings, "inpi_min_interval_seconds", 0)   # pas de pause en test
+    # Disjoncteur RNE : état partagé au niveau module -> remis à zéro pour chaque test
+    monkeypatch.setattr(inpi_client, "_echecs_consecutifs", 0)
+    monkeypatch.setattr(inpi_client, "_coupe_jusqua", 0.0)
 
 
 def test_inpi_non_configure(monkeypatch):
@@ -271,3 +274,149 @@ def test_inpi_retry_sur_refus_de_connexion(monkeypatch):
     out = inpi_client.fetch_comptes_pdf("123456789", client=client)
     assert session.post_calls == 2                              # a bien réessayé
     assert out is not None and out[0]["id"] == "b1"
+
+
+# --- fetch_objet_social (détail d'activité RNE, type Pappers) ---
+
+class _FakeRneClient:
+    def __init__(self, payload):
+        self._payload = payload
+
+    def company(self, siren):
+        if isinstance(self._payload, Exception):
+            raise self._payload
+        return self._payload
+
+
+def test_objet_social_personne_morale(monkeypatch):
+    _with_credentials(monkeypatch)
+    client = _FakeRneClient({"formality": {"content": {"personneMorale": {
+        "identite": {"description": {"objet": "  Travaux de menuiserie bois et PVC  "}}}}}})
+    assert inpi_client.fetch_objet_social("111222333", client=client) == \
+        "Travaux de menuiserie bois et PVC"
+
+
+def test_objet_social_personne_physique(monkeypatch):
+    _with_credentials(monkeypatch)
+    client = _FakeRneClient({"formality": {"content": {"personnePhysique": {
+        "identite": {"description": {"objet": "Boulangerie-pâtisserie"}}}}}})
+    assert inpi_client.fetch_objet_social("111222333", client=client) == \
+        "Boulangerie-pâtisserie"
+
+
+def test_objet_social_absent_ou_vide(monkeypatch):
+    _with_credentials(monkeypatch)
+    assert inpi_client.fetch_objet_social(
+        "111222333", client=_FakeRneClient({"formality": {"content": {}}})) is None
+    assert inpi_client.fetch_objet_social(
+        "111222333", client=_FakeRneClient({"formality": {"content": {"personneMorale": {
+            "identite": {"description": {"objet": "   "}}}}}})) is None
+
+
+def test_objet_social_echec_reseau_silencieux(monkeypatch):
+    _with_credentials(monkeypatch)
+    client = _FakeRneClient(requests.exceptions.ConnectionError("boom"))
+    assert inpi_client.fetch_objet_social("111222333", client=client) is None
+
+
+def test_objet_social_sans_credentials(monkeypatch):
+    monkeypatch.setattr(settings, "inpi_username", None)
+    monkeypatch.setattr(settings, "inpi_password", None)
+    assert inpi_client.fetch_objet_social("111222333") is None
+
+
+# --- disjoncteur RNE (cooldown anti-rafale -> un lot ne doit plus prendre des heures) ---
+
+class _SessionKO:
+    """Session dont chaque appel échoue (RNE en cooldown : la requête expire)."""
+
+    def __init__(self):
+        self.appels = 0
+
+    def post(self, *a, **k):
+        self.appels += 1
+        raise requests.exceptions.ConnectionError("refus RNE")
+
+    def get(self, *a, **k):
+        self.appels += 1
+        raise requests.exceptions.ConnectionError("refus RNE")
+
+
+def test_disjoncteur_ouvre_apres_3_echecs(monkeypatch):
+    _with_credentials(monkeypatch)
+    monkeypatch.setattr(settings, "inpi_max_attempts", 1)
+    session = _SessionKO()
+    client = inpi_client.InpiClient(session=session)
+    for _ in range(3):
+        try:
+            client._login()
+        except requests.exceptions.ConnectionError:
+            pass
+    assert session.appels == 3
+    # Disjoncteur ouvert : échec IMMÉDIAT, plus aucun appel réseau
+    try:
+        client._login()
+        raise AssertionError("aurait dû lever RneIndisponible")
+    except inpi_client.RneIndisponible:
+        pass
+    assert session.appels == 3
+    # Les helpers publics avalent l'erreur -> None : le lot continue sans le RNE
+    assert inpi_client.fetch_objet_social("111222333", client=client) is None
+    assert inpi_client.fetch_comptes_saisi("111222333", client=client) is None
+    assert session.appels == 3
+
+
+def test_disjoncteur_succes_remet_le_compteur(monkeypatch):
+    _with_credentials(monkeypatch)
+    monkeypatch.setattr(settings, "inpi_max_attempts", 1)
+
+    class _SessionAlternee(_SessionKO):
+        def post(self, *a, **k):
+            self.appels += 1
+            if self.appels == 3:            # 2 échecs, puis un succès
+                return _FakeResponse({"token": "tok"})
+            raise requests.exceptions.ConnectionError("refus")
+
+    session = _SessionAlternee()
+    client = inpi_client.InpiClient(session=session)
+    for _ in range(2):
+        try:
+            client._login()
+        except requests.exceptions.ConnectionError:
+            pass
+    client._login()                         # succès -> compteur remis à zéro
+    assert inpi_client._echecs_consecutifs == 0
+    try:
+        client._login()                     # un nouvel échec ne déclenche pas
+    except requests.exceptions.ConnectionError:
+        pass
+    assert session.appels == 4 and inpi_client._coupe_jusqua == 0.0
+
+
+def test_disjoncteur_compte_les_429_persistants(monkeypatch):
+    """Un 429 en dernière tentative est un signal de cooldown : il doit alimenter le
+    disjoncteur (et non remettre le compteur à zéro) — sinon un cooldown mixte
+    timeouts/429 ne déclenche jamais la coupure."""
+    _with_credentials(monkeypatch)
+    monkeypatch.setattr(settings, "inpi_max_attempts", 1)
+    monkeypatch.setattr(settings, "inpi_backoff_seconds", 0)
+
+    class _Session429(_SessionKO):
+        def post(self, *a, **k):
+            self.appels += 1
+            return _FakeResponse({}, status_code=429)
+
+    session = _Session429()
+    client = inpi_client.InpiClient(session=session)
+    for _ in range(3):
+        try:
+            client._login()
+        except Exception:
+            pass
+    assert session.appels == 3
+    try:
+        client._login()
+        raise AssertionError("aurait dû lever RneIndisponible")
+    except inpi_client.RneIndisponible:
+        pass
+    assert session.appels == 3

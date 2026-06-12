@@ -69,6 +69,8 @@ _SYNONYMES: dict[str, tuple[str, ...]] = {
     "menuiserie": ("ebenisterie", "agencement"),
     "plomberie": ("chauffage", "sanitaire"),
     "electricite": ("electricien",),
+    "peintre": ("peinture", "vitrerie"),
+    "peinture": ("peintre", "vitrerie"),
 }
 
 _MAX_KEYWORDS = 8

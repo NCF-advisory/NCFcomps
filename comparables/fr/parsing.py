@@ -59,9 +59,24 @@ def extract_sirens(registre) -> list[str]:
             digits = re.sub(r"[\s" + _SP + r"]", "", tok)
             if len(digits) >= 9:
                 siren = digits[:9]
-                if siren not in out:
+                # "000000000" : SIREN factice vu dans certains registres BODACC
+                if siren != "000000000" and siren not in out:
                     out.append(siren)
     return out
+
+
+def cedant_siren(registre, descriptif: str) -> Optional[str]:
+    """SIREN du cédant. Le champ `registre` donne les SIREN *validés* (cédant + cessionnaire) ;
+    le cédant est nommé en premier dans le descriptif. On prend donc le 1er SIREN du descriptif
+    qui figure aussi dans `registre` (évite les n° de dossier/enregistrement parasites).
+    À défaut, le 1er SIREN du `registre` dans son ordre de publication (cédant en tête) —
+    jamais une itération de set, non déterministe, qui pourrait retenir le cessionnaire."""
+    valides_ordonnes = extract_sirens(registre)
+    valides = set(valides_ordonnes)
+    for s in extract_sirens(descriptif):
+        if s in valides:
+            return s
+    return valides_ordonnes[0] if valides_ordonnes else None
 
 
 # Bandes de plausibilité. prix/CA : un fonds vaut typiquement 0,05 à 4 x le CA.

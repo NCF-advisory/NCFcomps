@@ -122,3 +122,8 @@ def test_summarize_by_activity():
     assert math.isclose(s["by_activite"][0]["median_mult_ebe"], 5.0)
     # l'activité aberrante (46.49Z) n'apparaît pas dans les groupes plausibles
     assert all(g["naf"] != "46.49Z" for g in s["by_activite"])
+
+
+def test_extract_sirens_ignore_le_siren_factice():
+    from comparables.fr.parsing import extract_sirens
+    assert extract_sirens("000000000, 442 003 117") == ["442003117"]

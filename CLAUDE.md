@@ -203,6 +203,28 @@ européenne payante **sans rien réécrire**.
 - **[FAIT 2026-06-11] Lot 4 — socle de déploiement VPS** : `deploy/` (Dockerfile.api,
   Dockerfile.front standalone, docker-compose api+front+caddy, Caddyfile, README pas-à-pas).
   Non testé en réel (pas de Docker sur le poste) : à valider au premier déploiement.
+- **[FAIT 2026-06-12] Pipeline inversé « type Pappers » : réplique ventes BODACC + jointure
+  locale + objet social RNE.** (1) Table `ventes` dans les référentiels : TOUTES les ventes
+  de fonds avec prix extractible depuis 2008 (~33 k sur 115 292 annonces candidates — 79 %
+  des publications ne donnent AUCUN prix, vérifié : c'est la limite de la source, pas de
+  l'extracteur), chargée par tranches annuelles VÉRIFIÉES reçu=attendu (l'export complet
+  ODS tronque silencieusement), tout-ou-rien (rollback si échec). (2) `build_cessions` :
+  quand ventes+Sirene sont locaux, la recherche est une JOINTURE exhaustive (prix et NAF
+  pré-résolus, fenêtre 2008- instantanée, plus aucun appel BODACC) ; repli cascade API
+  sinon. (3) Objet social RNE (`inpi_client.fetch_objet_social`, le « détail d'activité »
+  que revend Pappers) sur les cessions retenues : colonne Excel + infobulle web. Fenêtre
+  « Tout (depuis 2008) » ajoutée au site. Potentiels mesurés (avant filtre CA) : 5 ans =
+  menuiserie 27 / informatique 39 / boulangerie 221 / agence immo 54 / peintre 23 ;
+  2008- = 216 / 355 / 2010 / 533 / 196 → l'historique complet est le levier d'échantillon.
+  **Garde-fous issus de la revue adversariale + incident réel (recherche de 7 h 35 pendant
+  un cooldown RNE)** : (a) appariement STRICT des exercices — clos AVANT la cession et
+  <= 3 ans (`pick_for_date`/`_select_deposit` : plus aucun repli sur un exercice postérieur,
+  qui appariait des cessions 2008-2015 à des comptes 2016+ — les ratios INPI/BCE commencent
+  en 2016) ; (b) disjoncteur RNE partagé module-level (3 échecs transport OU 429 persistants
+  -> coupure 10 min, `RneIndisponible`, les lots continuent sans le filet) ; (c) budget
+  filet INPI : 150 sociétés/lot max + plancher cession >= 2017 (pas de comptes RNE avant) ;
+  (d) compteurs/progression = annonces réellement traitées ; (e) retry du flux export par
+  tranche annuelle (reçu = attendu vérifié) ; (f) SIREN factice 000000000 ignoré.
 
 ## Commandes
 

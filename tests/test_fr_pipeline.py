@@ -245,6 +245,74 @@ def test_build_cessions_passe_generique_avec_referentiel(monkeypatch):
     assert batch.cessions[0].naf == "43.32A"
 
 
+def test_build_cessions_jointure_locale(monkeypatch):
+    """Ventes BODACC + Sirene en local -> AUCUN appel à l'API BODACC : la recherche est
+    une jointure exhaustive, filtrée par NAF, avec compteurs et objet social RNE."""
+    def fake_lookup_ventes(since, departement=None, db_path=None):
+        return [
+            {"siren": "111111111", "nom_bodacc": "MENUISERIE A", "nom_officiel":
+             "MENUISERIE ALPHA", "naf": "43.32A", "ville": "LYON", "departement": "69",
+             "date": "2024-03-01", "categorie": "Vente", "prix": 150000.0, "url": "u1"},
+            {"siren": "222222222", "nom_bodacc": "LE BISTROT", "nom_officiel":
+             "LE BISTROT SARL", "naf": "56.10A", "ville": "PARIS", "departement": "75",
+             "date": "2024-02-01", "categorie": "Vente", "prix": 90000.0, "url": "u2"},
+            {"siren": "333333333", "nom_bodacc": "X", "nom_officiel": None,
+             "naf": None, "ville": None, "departement": None,
+             "date": "2024-01-01", "categorie": None, "prix": 50000.0, "url": "u3"},
+        ]
+
+    def interdit(**kwargs):
+        raise AssertionError("API BODACC appelée alors que la réplique locale est chargée")
+
+    monkeypatch.setattr(bodacc, "fetch_cessions", interdit)
+    monkeypatch.setattr(referentiels, "available", lambda table, db_path=None: True)
+    monkeypatch.setattr(referentiels, "lookup_ventes", fake_lookup_ventes)
+    monkeypatch.setattr(referentiels, "lookup_financials",
+                        lambda siren, db_path=None: [
+                            {"date_cloture_exercice": "2023-12-31",
+                             "chiffre_d_affaires": 300000.0, "ebe": 45000.0,
+                             "ebit": 35000.0}] if siren == "111111111" else [])
+    monkeypatch.setattr(inpi_client, "configured", lambda: True)
+    monkeypatch.setattr(inpi_client, "InpiClient", lambda: None)
+    monkeypatch.setattr(inpi_client, "fetch_comptes_saisi",
+                        lambda siren, before_date=None, client=None: None)
+    monkeypatch.setattr(inpi_client, "fetch_comptes_pdf",
+                        lambda siren, before_date=None, client=None: None)
+    monkeypatch.setattr(inpi_client, "fetch_objet_social",
+                        lambda siren, client=None: "Travaux de menuiserie bois"
+                        if siren == "111111111" else None)
+
+    avancement: list[tuple[int, int]] = []
+    batch = pipeline.build_cessions(contains="menuiserie", limit=10, require_ca=True,
+                                    progress=lambda d, t: avancement.append((d, t)))
+    # Seule la menuiserie identifiée passe : bistrot hors NAF, identité inconnue exclue
+    assert [c.siren for c in batch.cessions] == ["111111111"]
+    c = batch.cessions[0]
+    assert c.nom == "MENUISERIE ALPHA" and c.naf == "43.32A"
+    assert abs(c.pct_ca - 0.5) < 1e-9                    # 150 000 / 300 000
+    assert c.objet_social == "Travaux de menuiserie bois"
+    assert batch.n_annonces == 3 and batch.n_naf_exclues == 2 and batch.n_sans_ca == 0
+    assert avancement[0] == (0, 3) and avancement[-1] == (3, 3)
+
+
+def test_build_cessions_jointure_locale_transmet_le_departement(monkeypatch):
+    """Le filtre département doit atteindre la jointure locale (régression silencieuse)."""
+    recu: dict = {}
+
+    def fake_lookup_ventes(since, departement=None, db_path=None):
+        recu.update({"since": since, "departement": departement})
+        return []
+
+    monkeypatch.setattr(bodacc, "fetch_cessions",
+                        lambda **kwargs: (_ for _ in ()).throw(AssertionError("API appelée")))
+    monkeypatch.setattr(referentiels, "available", lambda table, db_path=None: True)
+    monkeypatch.setattr(referentiels, "lookup_ventes", fake_lookup_ventes)
+    monkeypatch.setattr(inpi_client, "configured", lambda: False)
+    pipeline.build_cessions(contains="menuiserie", departement="69",
+                            since="2021-01-01", limit=10)
+    assert recu == {"since": "2021-01-01", "departement": "69"}
+
+
 def test_build_cessions_sans_referentiel_pas_de_passe_generique(monkeypatch):
     """Sans base locale, le balayage générique (coûteux en API) n'est pas tenté."""
     calls: list = []

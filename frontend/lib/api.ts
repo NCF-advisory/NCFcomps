@@ -72,6 +72,7 @@ export type Cession = {
   prix: number | null;
   naf: string | null;
   activite: string | null;
+  objet_social: string | null;
   ca: number | null;
   ebe: number | null;
   ebit: number | null;

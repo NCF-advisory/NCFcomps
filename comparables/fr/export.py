@@ -30,6 +30,7 @@ DISPLAY = [
     ("ebe", "EBITDA = EBE (EUR)", "eur", 15),
     ("pct_ca", "Prix / CA", "pct", 10),
     ("mult_ebe", "Prix / EBITDA", "mult", 12),
+    ("objet_social", "Objet social (RNE)", "texte", 45),
     ("url", "Lien BODACC", "texte", 38),
 ]
 

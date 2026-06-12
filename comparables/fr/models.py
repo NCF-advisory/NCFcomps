@@ -17,9 +17,10 @@ class Cession(BaseModel):
     # Prix de cession (extrait du texte libre de l'annonce)
     prix: Optional[float] = None            # en euros
 
-    # Enrichissement : identite (Recherche d'entreprises) + finances (ratios_inpi_bce)
+    # Enrichissement : identite (Sirene/Recherche d'entreprises) + finances (ratios INPI/BCE)
     naf: Optional[str] = None               # code activite principale
     activite: Optional[str] = None          # libelle d'activite
+    objet_social: Optional[str] = None      # texte libre declare au RNE (detail d'activite)
     ca: Optional[float] = None              # chiffre d'affaires (euros)
     ebe: Optional[float] = None             # EBE, proxy d'EBITDA -> AFFICHE « EBITDA » cote UI
     ebit: Optional[float] = None            # resultat d'exploitation

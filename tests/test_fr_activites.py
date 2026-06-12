@@ -67,6 +67,14 @@ def test_interpret_restaurant_couvre_la_division():
     assert {"56.10A", "56.10C", "56.29A"} <= set(q.naf_codes)
 
 
+def test_interpret_peintre_via_synonyme():
+    # « peintre » ne préfixe pas « peinture » (divergence en 6e lettre) : le synonyme
+    # explicite doit cibler les travaux de peinture.
+    q = interpret("peintre")
+    assert "43.34Z" in q.naf_codes                  # Travaux de peinture et vitrerie
+    assert "peinture" in q.keywords
+
+
 def test_interpret_singulier_pluriel():
     q = interpret("agence immobilière")
     assert "68.31Z" in q.naf_codes                  # libellé « Agences immobilières »

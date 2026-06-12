@@ -62,12 +62,16 @@ export default function CessionsPage() {
     setJob(null);
     setRunning(true);
     try {
-      const since = new Date();
-      since.setFullYear(since.getFullYear() - Number(years));
+      let since = "2008-01-01";             // le BODACC ne publie pas avant 2008
+      if (years !== "tout") {
+        const d = new Date();
+        d.setFullYear(d.getFullYear() - Number(years));
+        since = d.toISOString().slice(0, 10);
+      }
       const created = await api.createCessionsJob({
         contains: contains.trim() || undefined,
         departement: departement.trim() || undefined,
-        since: since.toISOString().slice(0, 10),
+        since,
         limit: Number(limit),
         require_ca: requireCa === "oui",
       });
@@ -199,6 +203,7 @@ export default function CessionsPage() {
               <option value="3">3 ans</option>
               <option value="5">5 ans</option>
               <option value="10">10 ans</option>
+              <option value="tout">Tout (depuis 2008)</option>
             </Select>
           </Field>
           <Field label="Cessions visées" hint="objectif de lignes exploitables (CA connu)">
@@ -418,10 +423,15 @@ export default function CessionsPage() {
                       </td>
                       <td
                         className={`stick stick-end max-w-[260px] truncate px-3 py-2 [--stick-l:48px] ${off ? "line-through" : ""}`}
-                        title={c.nom ?? undefined}
+                        title={[c.nom, c.objet_social].filter(Boolean).join(" — ") || undefined}
                       >
                         <span className="font-medium">{c.nom ?? ND}</span>
                         {c.naf && <span className="tabular ml-2 text-xs text-ink-mut">{c.naf}</span>}
+                        {c.objet_social && (
+                          <span className="ml-1.5 cursor-help text-xs text-brass" aria-hidden>
+                            ℹ
+                          </span>
+                        )}
                       </td>
                       <td className="px-3 py-2 whitespace-nowrap">
                         {c.ville ?? ND}

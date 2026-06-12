@@ -30,6 +30,7 @@ def test_export_cessions_xlsx():
     assert ws.title == "Cessions FR"
     headers = [c.value for c in ws[4]]
     assert "Societe" in headers and "Prix de cession (EUR)" in headers
+    assert "Objet social (RNE)" in headers
     # Lignes de données : 3 cessions à partir de la ligne 5
     assert ws.cell(row=5, column=1).value == "BOULANGERIE A"
     assert ws.cell(row=5, column=7).value == 150000.0
