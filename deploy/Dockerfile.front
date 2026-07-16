@@ -5,6 +5,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
+# public/ n'existe pas encore dans le repo (aucun asset statique) : le créer pour la copie finale.
+RUN mkdir -p public
 # En prod, Caddy route /api directement vers l'API : le proxy Next ne sert qu'en dev.
 RUN npm run build
 
