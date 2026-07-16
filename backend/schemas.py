@@ -23,7 +23,9 @@ class ComparablesJobRequest(BaseModel):
     # Garde 0 <= IS < 1 (un IS > 1 inverserait le signe du désendettement).
     tax_rate: Optional[float] = Field(default=None, ge=0.0, lt=1.0)
     period: Optional[str] = None        # ex "5y" (défaut : settings.beta_period)
-    frequency: Optional[str] = None     # "1mo" | "1wk" (défaut : settings.beta_frequency)
+    frequency: Optional[str] = None     # "1wk" | "1mo" (défaut : settings.beta_frequency = 1wk)
+    # Planche la dette nette à 0 dans Hamada (sociétés en trésorerie nette) ; défaut : settings.
+    floor_net_debt: Optional[bool] = None
 
 
 class ResolveRequest(BaseModel):
@@ -34,6 +36,8 @@ class ResolveRequest(BaseModel):
 class RecordsPayload(BaseModel):
     """Sous-ensemble de comparables (sélection/exclusion côté client, sans re-fetch)."""
     records: list[CompanyRecord]
+    # Libellé de l'échantillon repris dans l'en-tête « Données à retenir » de la feuille Synthese.
+    libelle: Optional[str] = None
 
 
 class SaveRunRequest(BaseModel):

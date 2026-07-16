@@ -42,6 +42,15 @@ def test_min_obs_par_frequence(monkeypatch):
     assert min_obs_for("1wk") == 52
 
 
+def test_config_beta_par_defaut_hebdomadaire():
+    # Decision 2026-07-06 (benchmark CIQ) : defaut = 5 ans hebdomadaire, indice local.
+    # On verrouille le defaut du MODELE (independant d'un .env local eventuel).
+    assert config.Settings.model_fields["beta_frequency"].default == "1wk"
+    assert config.Settings.model_fields["beta_period"].default == "5y"
+    # Le seuil hebdo s'applique bien au chemin hebdo.
+    assert min_obs_for("1wk") == settings.min_beta_obs_weekly
+
+
 def test_mapping_sans_doublon_de_suffixe():
     # garde-fou : chaque suffixe est unique et associe a un symbole non vide
     assert all(config.INDEX_BY_SUFFIX.values())

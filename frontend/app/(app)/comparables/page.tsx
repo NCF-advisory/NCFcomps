@@ -14,6 +14,7 @@ import {
   type BetaSummary,
   type CompanyRecord,
   type ComparablesJob,
+  type DamodaranIndustry,
   downloadExcel,
   pollJob,
   type StatsMap,
@@ -61,6 +62,9 @@ const COLUMNS: {
     tip: "Bêta publié par Yahoo Finance (donné à titre de recoupement)" },
   { key: "beta_regression", label: "β régr.", fmt: fmtBeta, qualityBound: true,
     tip: "Bêta estimé par régression des rendements contre l'indice de la place de cotation" },
+  { key: "beta_std_err", label: "± IC 95 %",
+    fmt: (v: number | null) => (v == null ? ND : fmtBeta(1.96 * v)),
+    tip: "Demi-largeur de l'intervalle de confiance à 95 % du β de régression (± 1,96 × écart-type OLS de la pente)" },
   { key: "r2", label: "R²", fmt: fmtBeta, qualityBound: true,
     tip: "Qualité d'ajustement de la régression, de 0 à 1 : faible R² = bêta peu fiable" },
   { key: "n_obs", label: "N pts", fmt: (v: number | null) => (v == null ? ND : String(v)),
@@ -69,6 +73,8 @@ const COLUMNS: {
     tip: "Dette nette / capitalisation (D/E, en valeur de marché)" },
   { key: "beta_unlevered", label: "β désend.", fmt: fmtBeta, qualityBound: true,
     tip: "Bêta désendetté (Hamada) : β / (1 + (1 − IS) × D/E)" },
+  { key: "beta_unlevered_adjusted", label: "β désend. ajusté", fmt: fmtBeta, qualityBound: true,
+    tip: "Bêta désendetté ajusté vers le marché : 0,67 × β désend. + 0,33 × 1" },
   { key: "ev_sales", label: "VE/CA", fmt: fmtMult, groupStart: true,
     tip: "Valeur d'entreprise / chiffre d'affaires" },
   { key: "ev_ebitda", label: "VE/EBITDA", fmt: fmtMult,
@@ -85,7 +91,7 @@ const COLUMNS: {
 const GROUPS = [
   { label: "", span: 3 },                            // sélection + ticker + société
   { label: "Taille (M, devise locale)", span: 3 },
-  { label: "Bêtas & structure", span: 6 },
+  { label: "Bêtas & structure", span: 8 },
   { label: "Multiples", span: 5 },
   { label: "", span: 1 },                            // couverture
 ];
@@ -102,18 +108,22 @@ export default function ComparablesPage() {
   const [input, setInput] = useState("WMS\nGF.SW\nAALB.AS\nGEN.L\nWIE.VI\nMWA");
   const [taxRate, setTaxRate] = useState("25");
   const [period, setPeriod] = useState("5y");
-  const [frequency, setFrequency] = useState("1mo");
+  const [frequency, setFrequency] = useState("1wk");
+  const [floorNetDebt, setFloorNetDebt] = useState(false);
 
   const [job, setJob] = useState<ComparablesJob | null>(null);
   const [phase, setPhase] = useState<"idle" | "resolving" | "running">("idle");
   const [error, setError] = useState<string | null>(null);
-  const [resolved, setResolved] = useState<string[]>([]);
 
   const [excluded, setExcluded] = useState<Set<string>>(new Set());
   const [stats, setStats] = useState<StatsMap | null>(null);
   const [betaSummary, setBetaSummary] = useState<BetaSummary | null>(null);
+  const [damList, setDamList] = useState<DamodaranIndustry[]>([]);
+  const [damAsOf, setDamAsOf] = useState<string | null>(null);
+  const [damIndustry, setDamIndustry] = useState<string>("");
   const [statsN, setStatsN] = useState(0);
   const [saveLabel, setSaveLabel] = useState("");
+  const [exportLibelle, setExportLibelle] = useState("");
   const [savedId, setSavedId] = useState<number | null>(null);
   const [busyExport, setBusyExport] = useState(false);
   const statsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -144,45 +154,33 @@ export default function ComparablesPage() {
     };
   }, [selection, job?.status]);
 
-  async function launch(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setSavedId(null);
-    setResolved([]);
-    setExcluded(new Set());
-    setStats(null);
-    setBetaSummary(null);
-    setJob(null);
+  // Référentiel Damodaran (étalon sectoriel) — chargé une fois.
+  useEffect(() => {
+    api
+      .damodaranIndustries()
+      .then((r) => {
+        setDamList(r.industries);
+        setDamAsOf(r.as_of);
+      })
+      .catch(() => undefined);
+  }, []);
 
-    let tickers = input.split("\n").map((l) => l.trim()).filter(Boolean);
-    if (tickers.length === 0) {
-      setError("Saisir au moins une ligne.");
-      return;
-    }
+  // Présélection de l'industrie Damodaran suggérée à chaque nouveau résultat.
+  useEffect(() => {
+    const s = job?.damodaran?.suggested_industry;
+    if (s) setDamIndustry(s);
+  }, [job?.damodaran?.suggested_industry]);
 
+  // Lance le calcul pour une liste de tickers déjà arrêtée.
+  async function runTickers(tickers: string[]) {
     try {
-      if (mode === "noms") {
-        setPhase("resolving");
-        const res = await api.resolveNames(tickers);
-        const found = res.results.filter((r) => r.match);
-        const missing = res.results.filter((r) => !r.match).map((r) => r.query);
-        if (missing.length > 0) {
-          setError(`Sans correspondance Yahoo : ${missing.join(", ")}`);
-        }
-        setResolved(found.map((r) => `${r.query} → ${r.match!.symbol} (${r.match!.name})`));
-        tickers = found.map((r) => r.match!.symbol);
-        if (tickers.length === 0) {
-          setPhase("idle");
-          return;
-        }
-      }
-
       setPhase("running");
       const created = await api.createComparablesJob({
         tickers,
         tax_rate: Number(taxRate) / 100,
         period,
         frequency,
+        floor_net_debt: floorNetDebt,
       });
       setJob(created);
       const finished = await pollJob(() => api.comparablesJob(created.id), setJob);
@@ -192,6 +190,52 @@ export default function ComparablesPage() {
     } finally {
       setPhase("idle");
     }
+  }
+
+  async function launch(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setSavedId(null);
+    setExcluded(new Set());
+    setStats(null);
+    setBetaSummary(null);
+    setJob(null);
+
+    const lines = input.split("\n").map((l) => l.trim()).filter(Boolean);
+    if (lines.length === 0) {
+      setError("Saisir au moins une ligne.");
+      return;
+    }
+
+    // Mode « tickers » : on lance directement.
+    if (mode === "tickers") {
+      await runTickers(lines);
+      return;
+    }
+
+    // Mode « noms » : résolution AUTOMATIQUE (aucun choix laissé à l'utilisateur), puis
+    // lancement. On ne notifie QUE les noms pour lesquels aucun ticker n'a été trouvé.
+    let tickers: string[] = [];
+    try {
+      setPhase("resolving");
+      const res = await api.resolveNames(lines);
+      tickers = res.results.filter((r) => r.match).map((r) => r.match!.symbol);
+      const missing = res.results.filter((r) => !r.match).map((r) => r.query);
+      if (missing.length > 0) {
+        const msg = `Ticker introuvable — ${missing.length === 1 ? "société ignorée" : "sociétés ignorées"} : ${missing.join(", ")}. Saisis-le(s) directement en mode « Tickers ».`;
+        setError(msg);
+        toast(msg, "alert");
+      }
+    } catch {
+      setError("Échec de la résolution : le backend est-il démarré ?");
+      setPhase("idle");
+      return;
+    }
+    if (tickers.length === 0) {
+      setPhase("idle");
+      return;
+    }
+    await runTickers(tickers);
   }
 
   function toggle(ticker: string) {
@@ -206,7 +250,7 @@ export default function ComparablesPage() {
   async function exportSelection() {
     setBusyExport(true);
     try {
-      await downloadExcel(selection);
+      await downloadExcel(selection, exportLibelle);
       toast(`Export Excel téléchargé (${selection.length} sociétés).`);
     } catch {
       toast("Export impossible.", "alert");
@@ -227,9 +271,27 @@ export default function ComparablesPage() {
 
   const done = job?.status === "done";
   const minR2 = betaSummary?.min_r2 ?? 0.1;
+  // Seuil d'illiquidité (part de rendements nuls) : serveur si dispo, sinon repli = settings.
+  const maxZeroShare = betaSummary?.max_zero_share ?? 0.15;
   // Régression trop faible : bêta affiché (en ambre) mais exclu des stats et de la synthèse.
   const isLowR2 = (r: CompanyRecord) =>
     r.beta_regression != null && (r.r2 == null || r.r2 < minR2);
+  // Titre peu liquide : trop de périodes sans variation de cours -> bêta OLS biaisé vers le bas.
+  const isIlliquid = (r: CompanyRecord) =>
+    r.zero_return_share != null && r.zero_return_share > maxZeroShare;
+  // Fenêtre effective de régression (AAAA-MM) : une IPO récente peut afficher un « 5 ans » court.
+  const shortMonth = (iso: string | null) => (iso ? iso.slice(0, 7) : "");
+
+  // Comparaison Damodaran : β désendetté de l'échantillon (médiane retenue) vs secteur.
+  const damSelected = damList.find((d) => d.industry === damIndustry) ?? null;
+  const sampleUnlevMed = stats?.beta_unlevered?.median ?? null;
+  const sampleUnlevMean = betaSummary?.mean_unlevered ?? null;
+  // β ajusté : simple repère, HORS écart (Damodaran publie un bêta brut, cf. méthodo).
+  const sampleAdjusted = betaSummary?.mean_unlevered_adjusted ?? null;
+  const damGap =
+    damSelected?.unlevered_beta != null && sampleUnlevMed != null
+      ? (sampleUnlevMed - damSelected.unlevered_beta) / damSelected.unlevered_beta
+      : null;
 
   return (
     <div>
@@ -320,21 +382,25 @@ export default function ComparablesPage() {
                 <option value="1wk">Hebdomadaire</option>
               </Select>
             </Field>
+            <label className="flex cursor-pointer items-start gap-2 text-sm text-ink">
+              <Checkbox
+                checked={floorNetDebt}
+                onChange={() => setFloorNetDebt((v) => !v)}
+                className="mt-0.5"
+                aria-label="Plancher la dette nette à 0 dans le désendettement"
+              />
+              <span
+                title="Sociétés en trésorerie nette (dette nette < 0) : sans plancher, le désendettement (Hamada) ressort un β désendetté SUPÉRIEUR au β endetté. Cochée, la dette nette est bornée à 0 pour le seul désendettement (β désend. = β endetté) ; le gearing affiché reste le vrai gearing négatif."
+              >
+                Plancher la dette nette à 0 (sociétés en trésorerie nette)
+              </span>
+            </label>
             <Button type="submit" busy={phase !== "idle"}>
               {phase === "resolving" ? "Résolution…" : "Lancer le calcul"}
             </Button>
           </div>
         </form>
 
-        {resolved.length > 0 && (
-          <div className="mt-4 border-t border-hairline pt-3">
-            {resolved.map((line) => (
-              <p key={line} className="tabular text-xs text-ink-mut">
-                {line}
-              </p>
-            ))}
-          </div>
-        )}
       </Card>
 
       <div className="mt-6 space-y-6">
@@ -457,17 +523,35 @@ export default function ComparablesPage() {
                         {COLUMNS.map((c) => {
                           const lowBeta = c.qualityBound && isLowR2(r);
                           const isName = c.key === "name";
+                          // Signal d'illiquidité (soulignement pointillé ambre) sur « β régr. ».
+                          const illiquid = c.key === "beta_regression" && isIlliquid(r);
+                          // Infobulle « N pts » : fenêtre effectivement régressée (du … au …).
+                          const windowTip =
+                            c.key === "n_obs" && r.n_obs != null && r.beta_start && r.beta_end
+                              ? `${r.n_obs} pts · du ${shortMonth(r.beta_start)} au ${shortMonth(r.beta_end)}`
+                              : undefined;
+                          const title = illiquid
+                            ? `${Math.round((r.zero_return_share ?? 0) * 100)} % de périodes sans variation de cours : bêta possiblement sous-estimé (illiquidité).`
+                            : windowTip
+                              ? windowTip
+                              : lowBeta
+                                ? `R² < ${minR2.toLocaleString("fr-FR")} : bêta affiché mais exclu des statistiques`
+                                : isName
+                                  ? ((r.name as string | null) ?? undefined)
+                                  : undefined;
                           return (
                             <td
                               key={c.key}
-                              title={lowBeta
-                                ? `R² < ${minR2.toLocaleString("fr-FR")} : bêta affiché mais exclu des statistiques`
-                                : isName ? ((r.name as string | null) ?? undefined) : undefined}
+                              title={title}
                               className={`px-3 py-2 whitespace-nowrap ${
                                 c.align === "left" ? "" : "tabular text-right"
                               } ${off ? "line-through" : ""} ${
                                 c.groupStart ? "border-l border-hairline" : ""
                               } ${lowBeta ? "font-medium text-warn" : ""} ${
+                                illiquid ? "cursor-help underline decoration-warn decoration-dotted underline-offset-4" : ""
+                              } ${
+                                windowTip ? "cursor-help" : ""
+                              } ${
                                 isName ? "stick stick-end max-w-[200px] truncate [--stick-l:158px]" : ""
                               }`}
                             >
@@ -530,7 +614,7 @@ export default function ComparablesPage() {
               </TableShell>
             </Card>
 
-            {/* ——— Synthèse bêta : moyens retenus, endetté / ajusté / désendetté ——— */}
+            {/* ——— Synthèse bêta : moyens retenus, endetté / désendetté / désendetté ajusté ——— */}
             {betaSummary && betaSummary.mean_levered != null && (
               <section className="rise-in grid grid-cols-1 gap-4 md:grid-cols-3">
                 <StatCard
@@ -539,27 +623,125 @@ export default function ComparablesPage() {
                   note={`${betaSummary.n_retained} bêta(s) retenu(s) · ${betaSummary.n_excluded_low_r2} écarté(s) (R² < ${minR2.toLocaleString("fr-FR")}) · médiane ${fmtBeta(betaSummary.median_levered)}`}
                 />
                 <StatCard
-                  label="β ajusté (Blume)"
-                  value={fmtBeta(betaSummary.mean_adjusted)}
-                  note="2/3 × β endetté moyen + 1/3 : convergence vers le bêta de marché (usage prospectif)."
-                />
-                <StatCard
                   label="β désendetté moyen retenu"
                   value={fmtBeta(betaSummary.mean_unlevered)}
                   note={`Hamada, IS ${taxRate} % : base de réendettement sur la cible.`}
                 />
+                <StatCard
+                  label="β désendetté ajusté"
+                  value={fmtBeta(betaSummary.mean_unlevered_adjusted)}
+                  note="0,67 × β désendetté moyen + 0,33 × 1 : convergence vers le bêta de marché (usage prospectif)."
+                />
               </section>
+            )}
+
+            {/* ——— Comparaison sectorielle Damodaran (étalon de fiabilité) ——— */}
+            {done && sampleUnlevMed != null && damList.length > 0 && (
+              <Card className="rise-in p-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p className="label-caps text-ink-mut">
+                      Comparaison sectorielle — Damodaran (Global)
+                    </p>
+                    <p className="mt-1 text-xs text-ink-mut">
+                      β désendetté de l&apos;échantillon vs secteur Damodaran
+                      {damAsOf ? ` (au ${damAsOf})` : ""}.
+                      {job?.damodaran?.suggested_industry
+                        ? " Secteur déduit des sociétés ; ajustable."
+                        : " Aucun secteur déduit : choisis-le."}
+                    </p>
+                  </div>
+                  <div className="w-64 max-w-full">
+                    <Select value={damIndustry} onChange={(e) => setDamIndustry(e.target.value)}>
+                      {!damIndustry && <option value="">— choisir un secteur —</option>}
+                      {damList.map((d) => (
+                        <option key={d.industry} value={d.industry}>
+                          {d.industry}
+                        </option>
+                      ))}
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                  <div>
+                    <p className="label-caps text-ink-mut">β désend. — échantillon</p>
+                    <p className="tabular mt-1 text-3xl font-extrabold text-ink-strong">
+                      {fmtBeta(sampleUnlevMed)}
+                    </p>
+                    <p className="mt-1 text-xs text-ink-mut">
+                      médiane retenue · moyenne {fmtBeta(sampleUnlevMean)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="label-caps text-ink-mut">β désend. — Damodaran</p>
+                    <p className="tabular mt-1 text-3xl font-extrabold text-ink-strong">
+                      {fmtBeta(damSelected?.unlevered_beta ?? null)}
+                    </p>
+                    <p className="mt-1 text-xs text-ink-mut">
+                      {damSelected?.n_firms ? `${damSelected.n_firms} sociétés` : "—"} · corrigé cash{" "}
+                      {fmtBeta(damSelected?.unlevered_beta_cash ?? null)}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="label-caps text-ink-mut">Écart vs secteur</p>
+                    <p
+                      className="tabular mt-1 text-3xl font-extrabold"
+                      style={{
+                        color:
+                          damGap == null
+                            ? undefined
+                            : Math.abs(damGap) <= 0.15
+                              ? "#15803d"
+                              : Math.abs(damGap) <= 0.3
+                                ? "#B45309"
+                                : "#b91c1c",
+                      }}
+                    >
+                      {damGap == null ? ND : `${damGap > 0 ? "+" : ""}${(damGap * 100).toFixed(0)} %`}
+                    </p>
+                    <p className="mt-1 text-xs text-ink-mut">
+                      {damGap == null
+                        ? "—"
+                        : Math.abs(damGap) <= 0.15
+                          ? "cohérent avec le secteur"
+                          : Math.abs(damGap) <= 0.3
+                            ? "à surveiller"
+                            : "écart important — à investiguer"}
+                    </p>
+                  </div>
+                </div>
+
+                <p className="mt-3 border-t border-hairline pt-2 text-xs text-ink-mut">
+                  Pour mémoire — notre β désendetté <strong>ajusté</strong> (0,67·βu + 0,33) ={" "}
+                  {fmtBeta(sampleAdjusted)}. Repère seulement : l&apos;écart se mesure en β{" "}
+                  <strong>brut</strong>, car Damodaran publie un bêta de régression brut (non
+                  ajusté) — comparer l&apos;ajusté au brut introduirait un biais vers 1.
+                </p>
+              </Card>
             )}
 
             {/* ——— Actions ——— */}
             <Card className="rise-in flex flex-wrap items-start gap-x-10 gap-y-4 p-5">
-              <div>
-                <Button onClick={exportSelection} busy={busyExport}>
-                  Exporter la sélection (.xlsx)
-                </Button>
-                <p className="mt-1.5 text-xs text-ink-mut">
-                  Fichier Excel formaté : uniquement les {selection.length} sociétés retenues.
-                </p>
+              <div className="flex items-end gap-3">
+                <Field
+                  label="Libellé de l'échantillon"
+                  hint="En-tête du tableau « Données à retenir » de l'export."
+                >
+                  <TextInput
+                    value={exportLibelle}
+                    onChange={(e) => setExportLibelle(e.target.value)}
+                    placeholder="ex : Acier, Software…"
+                  />
+                </Field>
+                <div>
+                  <Button onClick={exportSelection} busy={busyExport}>
+                    Exporter la sélection (.xlsx)
+                  </Button>
+                  <p className="mt-1.5 text-xs text-ink-mut">
+                    Fichier Excel formaté : uniquement les {selection.length} sociétés retenues.
+                  </p>
+                </div>
               </div>
               <div className="ml-auto flex items-end gap-3">
                 <Field

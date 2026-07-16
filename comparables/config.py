@@ -10,10 +10,12 @@ class Settings(BaseSettings):
     # Hypotheses financieres
     tax_rate: float = 0.25                 # IS pour le desendettement (Hamada)
     beta_period: str = "5y"                # historique pour la regression du beta
-    beta_frequency: str = "1mo"            # "1mo" (mensuel) ou "1wk" (hebdo)
+    beta_frequency: str = "1wk"            # "1wk" (hebdo, defaut) ou "1mo" (mensuel) - cf. benchmark CIQ
     min_beta_obs: int = 24                 # nb minimum de points de rendement (mensuel)
     min_beta_obs_weekly: int = 52          # seuil hebdo : 24 pts hebdo = ~6 mois, trop bruite
     beta_min_r2: float = 0.10              # R2 sous ce seuil : beta affiche mais exclu des stats
+    beta_max_zero_share: float = 0.15      # part de rendements titre nuls au-dela : alerte illiquidite
+    unlever_floor_net_debt: bool = False   # planche la dette nette a 0 dans Hamada (tresorerie nette)
 
     base_currency: str = "EUR"             # devise de reference pour les visuels
     benchmark_unique: Optional[str] = None # ex: "^STOXX" pour des betas comparables

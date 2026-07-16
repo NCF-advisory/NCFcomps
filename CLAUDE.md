@@ -26,6 +26,26 @@ Contraintes structurantes (décidées avec l'utilisateur) :
 - **Gestion des dépendances** : `uv` + `pyproject.toml`.
 - **Tests** : pytest. **Lint** : ruff.
 
+## Rôles des modèles (orchestration Fable → Opus)
+
+Le travail sur ce dépôt suit une répartition **chef d'orchestre / développeur** :
+
+- **Chef d'orchestre = le modèle principal de la session (Fable).** Il lit la demande,
+  explore le code, planifie, découpe en tâches et coordonne — mais **n'écrit pas le code
+  lui-même**. Il garde la vue d'ensemble et relit le résultat.
+- **Développeur = le sous-agent `developpeur` (Opus 4.8, `.claude/agents/developpeur.md`).**
+  Toute **implémentation** (écriture ou modification de code, débogage, refactor, écriture
+  de tests, exécution de `pytest`/`ruff`) lui est **déléguée** via l'outil Agent.
+- Le chef d'orchestre délègue par tâche claire et autonome (fichiers concernés, but,
+  contraintes), puis relit le diff renvoyé. Plusieurs `developpeur` peuvent tourner en
+  parallèle sur des tâches indépendantes.
+- **Exceptions** (le chef d'orchestre agit directement, sans déléguer) : question de pure
+  compréhension, lecture/explication de code, retouche d'une seule ligne triviale, commande
+  git ou de lecture. Inutile de lancer un sous-agent pour cela.
+
+Le modèle principal est fixé à **Fable** dans `.claude/settings.local.json` (réglage
+personnel, non versionné) ; le sous-agent développeur est versionné pour toute l'équipe.
+
 ## Architecture (vue d'ensemble)
 
 ```
@@ -173,6 +193,11 @@ européenne payante **sans rien réécrire**.
   seuil de points par fréquence (`MIN_BETA_OBS_WEEKLY=52`) ; mapping d'indices élargi à
   Copenhague/Helsinki/Oslo/Lisbonne/Dublin/Toronto/Sydney/Tokyo/Hong Kong/Singapour
   (symboles validés contre l'API) ; suffixe inconnu signalé `(defaut)` dans `index_used`.
+- **[FAIT 2026-07-06] Config bêta par défaut : 5 ans hebdomadaire.** Suite au benchmark CIQ
+  (`benchmarks/beta_ciq/report.md`), `beta_frequency` par défaut passe de « 1mo » à « 1wk »
+  (`beta_period` reste « 5y »). Seuils inchangés (`MIN_BETA_OBS_WEEKLY=52`, `beta_min_r2`,
+  `beta_max_zero_share`), appliqués au chemin hebdo. Le mensuel reste sélectionnable (UI
+  Streamlit + site) ; seul le défaut change.
 - **[FAIT 2026-06-11] Recherche intelligente d'activité (cessions FR).** Le texte libre
   (« conseil en informatique ») est interprété par `fr/activites.py` : mots-clés élargis
   (synonymes) combinés en OU sur le BODACC + codes NAF cibles via la nomenclature INSEE

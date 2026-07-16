@@ -66,6 +66,9 @@ def test_build_record_derives_and_unlevers(monkeypatch):
     # cours stock == cours indice -> beta ~ 1.0, R2 ~ 1.0
     assert rec.beta_regression is not None and np.isfinite(rec.beta_regression)
     assert rec.beta_unlevered is not None and np.isfinite(rec.beta_unlevered)
+    # Beta desendette ajuste = 0,67 x desendette + 0,33.
+    assert rec.beta_unlevered_adjusted is not None
+    assert abs(rec.beta_unlevered_adjusted - (0.67 * rec.beta_unlevered + 0.33)) < 1e-9
 
 
 def test_build_record_survives_price_failure(monkeypatch):
@@ -230,6 +233,49 @@ def test_build_record_seuil_hebdo(monkeypatch):
 
     rec_m = pipeline.build_record("WK", tax_rate=0.25, period="5y", frequency="1mo")
     assert rec_m.beta_regression is not None         # 39 >= 24 : accepte en mensuel
+
+
+def test_build_record_floor_net_debt_desendettement(monkeypatch):
+    """Tresorerie nette (dette nette < 0) : sans plancher, beta_u > beta_l ; avec plancher,
+    beta_u = beta_l. Le gearing AFFICHE reste le vrai gearing negatif dans les deux cas."""
+    rec_in = CompanyRecord(ticker="CASHRICH", market_cap=100.0,
+                           total_debt=0.0, total_cash=40.0)      # dette nette = -40
+    _patch_sources(monkeypatch, FakeSource(record=rec_in),
+                   FakeSource(prices=_price_series(20)))
+
+    rec = pipeline.build_record("CASHRICH", tax_rate=0.25, period="5y",
+                                frequency="1mo", floor_net_debt=False)
+    assert rec.net_debt == -40.0
+    assert abs(rec.gearing - (-0.40)) < 1e-9                     # vrai gearing negatif
+    assert rec.beta_regression is not None
+    assert rec.beta_unlevered > rec.beta_regression             # denominateur < 1
+
+    rec_f = pipeline.build_record("CASHRICH", tax_rate=0.25, period="5y",
+                                  frequency="1mo", floor_net_debt=True)
+    assert abs(rec_f.gearing - (-0.40)) < 1e-9                   # gearing affiche inchange
+    assert abs(rec_f.beta_unlevered - rec_f.beta_regression) < 1e-9   # dette nette bornee a 0
+
+
+def test_build_record_floor_net_debt_defaut_settings(monkeypatch):
+    """floor_net_debt=None -> lit settings.unlever_floor_net_debt."""
+    monkeypatch.setattr(pipeline.settings, "unlever_floor_net_debt", True)
+    rec_in = CompanyRecord(ticker="CASH2", market_cap=100.0, total_debt=0.0, total_cash=40.0)
+    _patch_sources(monkeypatch, FakeSource(record=rec_in),
+                   FakeSource(prices=_price_series(21)))
+    rec = pipeline.build_record("CASH2", tax_rate=0.25, period="5y", frequency="1mo")
+    assert abs(rec.beta_unlevered - rec.beta_regression) < 1e-9  # plancher applique via settings
+
+
+def test_build_record_remplit_fenetre_et_diagnostics(monkeypatch):
+    """La regression renseigne fenetre effective (start/end), ecart-type et part de nuls."""
+    rec_in = CompanyRecord(ticker="WIN", market_cap=100.0)
+    _patch_sources(monkeypatch, FakeSource(record=rec_in),
+                   FakeSource(prices=_price_series(22, n=60)))    # 2018-01-01 .. 2022-12-01
+    rec = pipeline.build_record("WIN", tax_rate=0.25, period="5y", frequency="1mo")
+    assert rec.beta_start == "2018-02-01"                        # 1er rendement (2e cours)
+    assert rec.beta_end == "2022-12-01"
+    assert rec.beta_std_err is not None
+    assert rec.zero_return_share is not None
 
 
 def test_build_record_signale_indice_par_defaut(monkeypatch):

@@ -8,9 +8,11 @@ from __future__ import annotations
 
 import math
 import time
+from datetime import date
 
 from fastapi.testclient import TestClient
 
+from backend import filenames
 from backend.main import create_app
 from comparables import pipeline
 from comparables.config import settings
@@ -105,20 +107,33 @@ def test_record_avec_inf_serialise_en_none(monkeypatch):
 
 def test_resolve_names(monkeypatch):
     from backend.routers import comparables as router_mod
-    monkeypatch.setattr(router_mod.yahoo, "best_symbol",
-                        lambda name: {"symbol": "MC.PA", "name": "LVMH", "exchange": "PAR"})
+    monkeypatch.setattr(
+        router_mod.yahoo, "resolve_candidates",
+        lambda name: {"query": name,
+                      "match": {"symbol": "MC.PA", "name": "LVMH", "exchange": "PAR"},
+                      "alternatives": [{"symbol": "LVMHF", "name": "LVMH", "exchange": "PNK"}]})
     client = _client(monkeypatch)
     r = client.post("/api/comparables/resolve", json={"names": ["LVMH"]})
     assert r.status_code == 200
-    assert r.json()["results"][0]["match"]["symbol"] == "MC.PA"
+    res = r.json()["results"][0]
+    assert res["match"]["symbol"] == "MC.PA"
+    assert res["alternatives"][0]["symbol"] == "LVMHF"
 
 
 def test_export_excel(monkeypatch):
+    class FixedDate:
+        @staticmethod
+        def today():
+            return date(2026, 7, 6)
+
+    monkeypatch.setattr(filenames, "date", FixedDate)
     client = _client(monkeypatch)
     r = client.post("/api/comparables/export",
-                    json={"records": [{"ticker": "WMS", "market_cap": 1e9}]})
+                    json={"records": [{"ticker": "WMS", "market_cap": 1e9}],
+                          "libelle": "Acier"})
     assert r.status_code == 200
     assert r.headers["content-type"].startswith("application/vnd.openxmlformats")
+    assert 'filename="Beta_Acier_06072026.xlsx"' in r.headers["content-disposition"]
     assert r.content[:2] == b"PK"                    # signature zip d'un .xlsx
 
 
@@ -147,4 +162,31 @@ def test_stats_excluent_les_betas_faible_r2(monkeypatch):
     assert s["n_retained"] == 2 and s["n_excluded_low_r2"] == 1
     assert abs(s["mean_levered"] - 1.0) < 1e-9
     assert abs(s["mean_adjusted"] - 1.0) < 1e-9              # Blume(1.0) = 1.0
+    assert abs(s["mean_unlevered"] - 0.8) < 1e-9            # (0.9 + 0.7) / 2
+    assert abs(s["mean_unlevered_adjusted"] - (0.67 * 0.8 + 0.33)) < 1e-9   # 0,67 x desend. + 0,33
     assert s["min_r2"] == 0.10
+    # Le seuil d'illiquidite accompagne la synthese (meme canal que min_r2, pour le front).
+    assert s["max_zero_share"] == settings.beta_max_zero_share
+
+
+def test_floor_net_debt_via_api(monkeypatch):
+    """Le flag `floor_net_debt` du body borne la dette nette a 0 dans le desendettement :
+    une societe en tresorerie nette ressort alors avec beta desendette = beta endette."""
+    rec = CompanyRecord(ticker="CASH", market_cap=100.0, total_debt=0.0, total_cash=40.0)
+
+    def fund_for(ticker: str):
+        return FakeSource(record=rec.model_copy(update={"ticker": ticker}))
+
+    monkeypatch.setattr(pipeline, "fundamentals_source_for", fund_for)
+    monkeypatch.setattr(pipeline, "price_source_for",
+                        lambda ticker: FakeSource(prices=_price_series(7)))
+    client = _client(monkeypatch)
+
+    r = client.post("/api/comparables/jobs",
+                    json={"tickers": ["CASH"], "floor_net_debt": True})
+    assert r.status_code == 202
+    assert r.json()["params"]["floor_net_debt"] is True
+    done = _wait_done(client, f"/api/comparables/jobs/{r.json()['id']}")
+    rec_out = done["records"][0]
+    assert rec_out["net_debt"] == -40.0                      # gearing/dette affiches inchanges
+    assert abs(rec_out["beta_unlevered"] - rec_out["beta_regression"]) < 1e-9

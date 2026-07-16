@@ -122,6 +122,9 @@ export default function SecteursPage() {
                     <Th tip="Bêta désendetté (Hamada) : médiane, puis fourchette Q1–Q3 et effectif">
                       β désend.
                     </Th>
+                    <Th tip="Bêta désendetté sectoriel Damodaran (Global) de l'industrie dominante du secteur — étalon de fiabilité">
+                      β Damodaran
+                    </Th>
                     <Th tip="Valeur d'entreprise / EBITDA : médiane et fourchette Q1–Q3">VE/EBITDA</Th>
                     <Th tip="Valeur d'entreprise / chiffre d'affaires">VE/CA</Th>
                     <Th tip="Cours / bénéfice (12 derniers mois)">PER</Th>
@@ -147,7 +150,7 @@ export default function SecteursPage() {
                   })}
                   {sorted.length === 0 && (
                     <tr>
-                      <td colSpan={7} className="px-3 py-4 text-center text-ink-mut">
+                      <td colSpan={8} className="px-3 py-4 text-center text-ink-mut">
                         Aucun secteur ne correspond à « {filter} ».
                       </td>
                     </tr>
@@ -190,6 +193,21 @@ function FragmentRow({
           <span className="ml-1 text-[0.7rem] text-ink-mut">({s.n_records} pts)</span>
         </td>
         <MetricCell stat={s.metrics.beta_unlevered} kind="beta" />
+        <td className="tabular px-3 py-2 text-right whitespace-nowrap">
+          {s.damodaran?.unlevered_beta != null ? (
+            <>
+              {fmtBeta(s.damodaran.unlevered_beta)}
+              <span
+                className="ml-1 text-[0.7rem] text-ink-mut"
+                title={`Damodaran ${s.damodaran.industry}${s.damodaran.n_firms ? ` · ${s.damodaran.n_firms} sociétés` : ""}`}
+              >
+                ({s.damodaran.industry})
+              </span>
+            </>
+          ) : (
+            ND
+          )}
+        </td>
         <MetricCell stat={s.metrics.ev_ebitda} kind="mult" />
         <MetricCell stat={s.metrics.ev_sales} kind="mult" />
         <MetricCell stat={s.metrics.pe_trailing} kind="mult" />
@@ -199,7 +217,7 @@ function FragmentRow({
       </tr>
       {open && (
         <tr>
-          <td colSpan={7} className="border-b border-hairline bg-paper-deep/20 p-0">
+          <td colSpan={8} className="border-b border-hairline bg-paper-deep/20 p-0">
             {loadingDetail ? (
               <div className="flex items-center gap-2 px-4 py-3 text-sm text-ink-mut">
                 <Spinner /> Chargement du détail…

@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
+from comparables import damodaran
 from comparables.config import settings
 from comparables.fr.models import Cession
 from comparables.models import CompanyRecord
@@ -222,8 +223,21 @@ def sector_aggregates(db_path: Optional[str] = None) -> list[dict]:
             "n_companies": len(b["tickers"]),
             "last_used": b["last_used"] or None,
             "metrics": metrics,
+            # Etalon Damodaran : industrie dominante du secteur (vote des industries Yahoo)
+            # -> beta desendette sectoriel. None si aucune industrie ne se rattache.
+            "damodaran": _damodaran_for_bucket(b["records"]),
         })
     return out
+
+
+def _damodaran_for_bucket(records: list[dict]) -> Optional[dict]:
+    """Benchmark Damodaran d'un seau sectoriel : industrie dominante + beta desendette."""
+    industry = damodaran.suggest_industry([rec.get("industry") for rec in records])
+    bench = damodaran.lookup(industry) if industry else None
+    if not bench:
+        return None
+    return {"industry": industry, "unlevered_beta": bench["unlevered_beta"],
+            "unlevered_beta_cash": bench["unlevered_beta_cash"], "n_firms": bench["n_firms"]}
 
 
 def sector_records(sector: str, db_path: Optional[str] = None) -> list[dict]:

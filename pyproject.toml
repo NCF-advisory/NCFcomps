@@ -24,7 +24,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "ruff>=0.5", "httpx>=0.27"]
+# xlrd : lecture des .xls Damodaran, uniquement pour `python -m comparables.damodaran refresh`
+# (le runtime lit le snapshot CSV embarque, sans xlrd).
+dev = ["pytest>=8.0", "ruff>=0.5", "httpx>=0.27", "xlrd>=2.0"]
 ocr = ["pytesseract>=0.3", "pdf2image>=1.17"]
 
 [tool.pytest.ini_options]

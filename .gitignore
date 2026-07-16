@@ -20,3 +20,8 @@ frontend/.next/
 frontend/next-env.d.ts
 frontend/.env*.local
 .playwright-mcp/
+# Claude Code — réglages personnels (le modèle principal, etc.)
+.claude/settings.local.json
+# Classeurs de travail internes (exports CIQ, etc.) et cache du benchmark bêtas
+AmeliorationBeta/
+benchmarks/beta_ciq/.cache/

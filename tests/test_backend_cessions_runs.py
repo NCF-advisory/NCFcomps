@@ -2,9 +2,11 @@
 from __future__ import annotations
 
 import time
+from datetime import date
 
 from fastapi.testclient import TestClient
 
+from backend import filenames
 from backend.main import create_app
 from comparables.config import settings
 from comparables.fr import pipeline as fr_pipeline
@@ -112,7 +114,13 @@ def _records_json() -> list[dict]:
 
 
 def test_runs_cycle_complet(tmp_path, monkeypatch):
+    class FixedDate:
+        @staticmethod
+        def today():
+            return date(2026, 7, 6)
+
     monkeypatch.setattr(settings, "history_db_path", str(tmp_path / "history.sqlite"))
+    monkeypatch.setattr(filenames, "date", FixedDate)
     client = _client(monkeypatch)
 
     # Sauvegarde
@@ -134,6 +142,7 @@ def test_runs_cycle_complet(tmp_path, monkeypatch):
     # Ré-export Excel
     x = client.get(f"/api/runs/{run_id}/export")
     assert x.status_code == 200 and x.content[:2] == b"PK"
+    assert 'filename="Beta_Test_06072026.xlsx"' in x.headers["content-disposition"]
 
     # Suppression
     assert client.delete(f"/api/runs/{run_id}").status_code == 204

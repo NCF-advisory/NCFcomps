@@ -7,9 +7,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import Response
 
 from backend import security
+from backend.filenames import comparables_excel_filename
 from backend.jobs import Job, manager
 from backend.schemas import ComparablesJobRequest, RecordsPayload, ResolveRequest
-from comparables import pipeline
+from comparables import damodaran, pipeline
 from comparables.config import settings
 from comparables.export.excel import BETA_QUALITY_FIELDS, STATS_FIELDS, build_excel_bytes
 from comparables.finance.beta import reliable_beta, sample_summary
@@ -41,11 +42,18 @@ def _stats(records: list[CompanyRecord]) -> dict[str, dict[str, float]]:
 
 
 def _beta_summary(records: list[CompanyRecord]) -> dict | None:
-    """Synthèse bêta de la sélection : β moyen retenu endetté, ajusté (Blume), désendetté."""
-    return sample_summary(
+    """Synthèse bêta de la sélection : β moyen retenu endetté, ajusté (Blume), désendetté.
+
+    Porte aussi le seuil d'illiquidité (`max_zero_share`, issu des settings) pour que le
+    front signale les bêtas peu fiables avec le même seuil que le serveur — même canal que
+    `min_r2`, mais injecté ici pour garder `sample_summary` (cœur financier) pur."""
+    summary = sample_summary(
         ((r.beta_regression, r.r2, r.beta_unlevered) for r in records),
         settings.beta_min_r2,
     )
+    if summary is not None:
+        summary["max_zero_share"] = settings.beta_max_zero_share
+    return summary
 
 
 def _coverage(rec: CompanyRecord) -> str:
@@ -66,12 +74,26 @@ def sanitize(d: dict) -> dict:
             for k, v in d.items()}
 
 
+def _damodaran_block(records: list[CompanyRecord]) -> dict:
+    """Etalon Damodaran : industrie suggeree (vote des industries Yahoo de l'echantillon)
+    + son benchmark (beta desendette sectoriel). L'utilisateur peut changer d'industrie
+    cote interface ; la liste complete est servie par /api/damodaran/industries."""
+    suggested = damodaran.suggest_industry([r.industry for r in records])
+    return {
+        "region": "Global",
+        "as_of": damodaran.as_of(),
+        "suggested_industry": suggested,
+        "benchmark": damodaran.lookup(suggested) if suggested else None,
+    }
+
+
 def _records_payload(records: list[CompanyRecord]) -> dict:
     return {
         "records": [sanitize(r.model_dump()) for r in records],
         "coverage": {r.ticker: _coverage(r) for r in records},
         "stats": _stats(records),
         "beta_summary": _beta_summary(records),
+        "damodaran": _damodaran_block(records),
     }
 
 
@@ -86,6 +108,8 @@ def create_job(body: ComparablesJobRequest,
         "tax_rate": settings.tax_rate if body.tax_rate is None else body.tax_rate,
         "period": body.period or settings.beta_period,
         "frequency": body.frequency or settings.beta_frequency,
+        "floor_net_debt": (settings.unlever_floor_net_debt
+                           if body.floor_net_debt is None else body.floor_net_debt),
     }
 
     def fn(job: Job) -> list[CompanyRecord]:
@@ -97,6 +121,7 @@ def create_job(body: ComparablesJobRequest,
         return pipeline.build_comparables(tickers, tax_rate=params["tax_rate"],
                                           period=params["period"],
                                           frequency=params["frequency"],
+                                          floor_net_debt=params["floor_net_debt"],
                                           progress=on_progress)
 
     job = manager.submit("comparables", user, fn, params=params)
@@ -126,20 +151,24 @@ def stats_for_selection(body: RecordsPayload,
 @router.post("/resolve")
 def resolve_names(body: ResolveRequest,
                   user: str = Depends(security.current_user)) -> dict:
-    """Nom de société -> meilleur ticker Yahoo (place principale privilégiée)."""
+    """Nom de société -> meilleur ticker Yahoo + alternatives (place principale privilégiée).
+
+    Chaque résultat : {query, match (meilleur candidat ou None), alternatives (suivants)}
+    pour permettre à l'utilisateur de corriger un choix ambigu côté interface."""
     results = []
     for name in body.names:
         try:
-            match = yahoo.best_symbol(name)
+            results.append(yahoo.resolve_candidates(name))
         except Exception:
-            match = None
-        results.append({"query": name, "match": match})
+            results.append({"query": name, "match": None, "alternatives": []})
     return {"results": results}
 
 
 @router.post("/export")
 def export_excel(body: RecordsPayload,
                  user: str = Depends(security.current_user)) -> Response:
-    data = build_excel_bytes(body.records)
+    libelle = body.libelle or "Échantillon"
+    data = build_excel_bytes(body.records, libelle=libelle)
+    filename = comparables_excel_filename(libelle)
     return Response(content=data, media_type=EXCEL_MEDIA_TYPE,
-                    headers={"Content-Disposition": 'attachment; filename="comparables.xlsx"'})
+                    headers={"Content-Disposition": f'attachment; filename="{filename}"'})

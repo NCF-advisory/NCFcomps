@@ -38,7 +38,7 @@ with st.sidebar:
         raw = st.text_area("Tickers (un par ligne)", DEFAULT_TICKERS, height=170)
     tax = st.number_input("Taux d'IS", 0.0, 0.60, settings.tax_rate, 0.01)
     period = st.selectbox("Période du bêta", ["2y", "3y", "5y", "10y"], index=2)
-    frequency = st.selectbox("Fréquence", ["1mo", "1wk"], index=0)
+    frequency = st.selectbox("Fréquence", ["1wk", "1mo"], index=0)
     run = st.button("Lancer le calcul", type="primary")
 
 # Calcul -> on memorise le resultat en session pour qu'il survive aux reruns (ex: bouton Enregistrer)
@@ -125,9 +125,11 @@ if present:
 # Export Excel + historisation
 col_dl, col_save = st.columns(2)
 with col_dl:
+    _tk = st.session_state["params"]["tickers"]
+    _libelle = ", ".join(_tk[:4]) + ("…" if len(_tk) > 4 else "")
     st.download_button(
         "📥 Télécharger l'Excel",
-        data=build_excel_bytes(records),
+        data=build_excel_bytes(records, libelle=_libelle or "Échantillon"),
         file_name="comparables_boursiers.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )

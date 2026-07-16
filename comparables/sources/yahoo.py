@@ -5,6 +5,7 @@ retraites ; acces non officiel (scraping) susceptible de casser. Voir CLAUDE.md.
 """
 from __future__ import annotations
 import logging
+import re
 import time
 import unicodedata
 from typing import Callable, Optional, TypeVar
@@ -25,14 +26,37 @@ _SEARCH_HEADERS = {"User-Agent": "Mozilla/5.0"}
 # Places privilegiees (cotation principale) par ordre de preference ; les autres
 # (cross-listings, OTC, GDR : MUN, DUS, STU, PNK, IOB, CXE/DXE...) sont depriorisees.
 _EXCHANGE_PRIORITY = ("PAR", "AMS", "BRU", "EBR", "LIS", "MIL", "MTA", "MCE", "MAD",
-                      "NMS", "NGM", "NCM", "NYQ", "ASE", "PCX", "LSE", "GER",
+                      "NMS", "NGM", "NCM", "NYQ", "ASE", "PCX", "TOR", "LSE", "GER",
                       "SWX", "EBS", "VIE", "STO", "CPH", "HEL", "OSL")
+# Places SECONDAIRES (regionales allemandes, parquet Francfort) : sous la cotation
+# principale (GER = Xetra). OTC / pink sheets / cross-listings : tout en bas (une
+# cotation OTC n'a ni la liquidite ni la devise locale qu'on veut pour un beta).
+_SECONDARY_EXCHANGES = frozenset({"FRA", "MUN", "STU", "DUS", "HAM", "HAN", "BER"})
+_OTC_EXCHANGES = frozenset({"PNK", "PINX", "OTC", "OBB", "OOTC", "IOB", "DXE", "CXE", "NEO"})
+
+# Formes juridiques retirees AVANT la recherche (elles degradent la pertinence Yahoo
+# et font remonter les ADR/OTC) : « Voestalpine AG » -> « Voestalpine ».
+_LEGAL_FORMS = frozenset({
+    "ag", "se", "sa", "spa", "sas", "nv", "ab", "asa", "as", "oyj", "oy", "plc", "llc",
+    "inc", "incorporated", "corp", "corporation", "co", "company", "ltd", "limited",
+    "holding", "holdings", "group", "groupe", "gmbh", "kgaa", "sca", "aktiengesellschaft",
+})
+
+
+# Translitteration allemande : Yahoo indexe les umlauts en oe/ae/ue (« Klöckner » ->
+# « Kloeckner »), pas en o/a/u. A appliquer AVANT le retrait generique des accents
+# (sinon « ö » -> « o » et la recherche « Klockner » ne ramene rien).
+_GERMAN_TRANSLIT = str.maketrans({
+    "ä": "ae", "ö": "oe", "ü": "ue", "Ä": "Ae", "Ö": "Oe", "Ü": "Ue", "ß": "ss",
+})
 
 
 def _normalize_query(query: str) -> str:
-    """Yahoo gère mal accents et apostrophes (« L'Oréal » -> introuvable) : on les retire."""
-    q = unicodedata.normalize("NFKD", query)
-    q = "".join(c for c in q if not unicodedata.combining(c))   # retire les accents
+    """Yahoo gère mal accents et apostrophes (« L'Oréal » -> introuvable) : on les retire.
+    Les umlauts allemands sont translittérés en oe/ae/ue/ss (graphie indexée par Yahoo)."""
+    q = query.translate(_GERMAN_TRANSLIT)                    # ö->oe (allemand) AVANT le strip
+    q = unicodedata.normalize("NFKD", q)
+    q = "".join(c for c in q if not unicodedata.combining(c))   # retire les accents restants
     return q.replace("'", "").replace("’", "").strip()      # retire les apostrophes
 
 
@@ -56,21 +80,173 @@ def _rank(candidates: list[dict]) -> list[dict]:
     return [c for _, c in sorted(enumerate(candidates), key=score)]
 
 
+def _strip_legal_forms(name: str) -> str:
+    """Retire les formes juridiques (« Voestalpine AG » -> « Voestalpine ») et le « & ».
+
+    Elles degradent la pertinence de la recherche Yahoo et font remonter les cotations
+    ADR/OTC. On garde le nom original si tout serait retire (ex. nom = « Holding »)."""
+    kept = [t for t in name.replace("&", " ").split()
+            if re.sub(r"[^a-z0-9]", "", t.lower()) not in _LEGAL_FORMS]   # « S.A. » -> « sa »
+    return " ".join(kept) if kept else name
+
+
+def _exchange_tier(exchange: str) -> int:
+    """Niveau de place : 0 principale, 1 secondaire (regionale DE), 2 inconnue, 3 OTC."""
+    if exchange in _EXCHANGE_PRIORITY:
+        return 0
+    if exchange in _SECONDARY_EXCHANGES:
+        return 1
+    if exchange in _OTC_EXCHANGES:
+        return 3
+    return 2
+
+
+def _isin_like(symbol: str) -> bool:
+    """Symbole de type ISIN (« AT0000A3A9Z9.VI ») : ligne technique, depriorisee
+    face au ticker propre de la meme societe (« VOE.VI »)."""
+    root = symbol.split(".")[0]
+    return bool(re.fullmatch(r"[A-Z]{2}[0-9A-Z]{9,}", root))
+
+
+def _tokens(text: str) -> list[str]:
+    """Tokens alphanumeriques significatifs (sans accents, formes juridiques, casse)."""
+    return re.findall(r"[a-z0-9]+", _normalize_query(_strip_legal_forms(text)).lower())
+
+
+def _name_match(query: str, name: str) -> tuple[bool, float]:
+    """(passe la porte ?, score [0..1]) entre la requete et le nom du candidat.
+
+    Couverture des deux cotes : le candidat couvre-t-il la requete (query_cov) ET sans
+    tokens parasites en plus (cand_cov) ? cand_cov elimine les trackers/certificats
+    (« RBI OETrackX3 voestalpine » : 1 token utile noye dans 3 parasites) et la porte
+    elimine les autres societes (« AG » -> First Majestic Silver)."""
+    q, c = set(_tokens(query)), set(_tokens(name))
+    if not q or not c:
+        return (False, 0.0)
+    overlap = q & c
+    query_cov = len(overlap) / len(q)        # le candidat contient-il ce que je cherche ?
+    cand_cov = len(overlap) / len(c)          # ... sans bruit (tracker, autre entite) ?
+    passes = query_cov >= 0.6 and cand_cov >= 0.5
+    return (passes, query_cov * cand_cov)
+
+
+def _score_candidates(query: str, candidates: list[dict]) -> list[dict]:
+    """Classe les candidats par : bonne societe (nom) -> place principale -> ticker propre.
+
+    Cle de tri (croissante) : (porte de ressemblance, niveau de place, penalite ISIN,
+    -ressemblance, ordre Yahoo). La porte passe AVANT la place : une cotation principale
+    d'une AUTRE societe (ou un tracker) ne doit jamais battre la bonne societe."""
+    scored = []
+    for i, c in enumerate(candidates):
+        passes, score = _name_match(query, c.get("name", ""))
+        key = (
+            0 if passes else 1,
+            _exchange_tier(c.get("exchange", "")),
+            1 if _isin_like(c.get("symbol", "")) else 0,
+            -round(score, 3),
+            i,
+        )
+        scored.append((key, c))
+    return [c for _, c in sorted(scored, key=lambda x: x[0])]
+
+
 def search_symbol(query: str) -> list[dict]:
-    """Recherche un nom de societe -> liste de candidats {symbol, name, exchange}, classes."""
+    """Recherche un nom de societe -> candidats {symbol, name, exchange} classes (meilleur d'abord).
+
+    La requete envoyee a Yahoo est nettoyee des formes juridiques ; le classement, lui,
+    note la ressemblance au nom ORIGINAL (place principale + ticker propre privilegies)."""
     if not query or not query.strip():
         return []
     session = cache.get_session()
     resp = session.get(SEARCH_URL, headers=_SEARCH_HEADERS, timeout=20,
-                       params={"q": _normalize_query(query), "quotesCount": 8, "newsCount": 0})
+                       params={"q": _normalize_query(_strip_legal_forms(query)),
+                               "quotesCount": 10, "newsCount": 0})
     resp.raise_for_status()
-    return _rank(_parse_search(resp.json()))
+    return _score_candidates(query, _parse_search(resp.json()))
 
 
 def best_symbol(query: str) -> Optional[dict]:
     """Meilleur ticker pour un nom de societe (place principale privilegiee), ou None."""
     cands = search_symbol(query)
     return cands[0] if cands else None
+
+
+# Places allemandes (Xetra + parquets regionaux) : la cotation principale est Xetra (.DE).
+_GERMAN_VENUES = _SECONDARY_EXCHANGES | {"GER"}
+_MAX_PRIMARY_PROBES = 3
+
+
+def _needs_primary_probe(candidate: dict) -> bool:
+    """Le meilleur candidat est-il douteux : place non principale (tier >= 1) ou symbole ISIN ?
+
+    C'est le seul cas ou l'on sonde (les cotations principales propres ne coutent aucun appel)."""
+    return (_exchange_tier(candidate.get("exchange", "")) >= 1
+            or _isin_like(candidate.get("symbol", "")))
+
+
+def _primary_guesses(candidates: list[dict]) -> list[dict]:
+    """Tickers de place principale a sonder, reconstruits depuis les racines des candidats.
+
+    Yahoo masque souvent la cotation Xetra (.DE) / Vienne (.VI) dans la recherche par nom :
+    on la reconstruit (racine partagee + suffixe du marche d'origine deduit des places des
+    candidats), a charge ensuite de la VALIDER (_symbol_trades) avant de l'adopter."""
+    exchanges = {c.get("exchange", "") for c in candidates}
+    if "VIE" in exchanges:
+        suffix, primary = ".VI", "VIE"
+    elif exchanges & _GERMAN_VENUES:
+        suffix, primary = ".DE", "GER"
+    else:
+        return []
+    out: list[dict] = []
+    seen: set[str] = set()
+    for c in candidates:
+        root = c.get("symbol", "").split(".")[0]
+        if root.isalpha() and 2 <= len(root) <= 4 and root not in seen:
+            seen.add(root)
+            out.append({"symbol": root + suffix, "name": c.get("name", ""), "exchange": primary})
+    return out[:_MAX_PRIMARY_PROBES]
+
+
+def _symbol_trades(symbol: str) -> bool:
+    """Le symbole existe-t-il et cote-t-il (appel leger 5 jours) ? Filet : jamais d'exception."""
+    try:
+        h = yf.Ticker(symbol).history(period="5d", interval="1d")
+        return h is not None and len(h) > 0
+    except Exception:
+        return False
+
+
+def resolve_candidates(query: str, limit: int = 6) -> dict:
+    """Resolution d'un nom : {query, match (meilleur), alternatives (suivants)}.
+
+    Quand le meilleur candidat est douteux (place secondaire/OTC ou ISIN), on tente de
+    reconstruire et de VALIDER la cotation principale (.DE/.VI, absente de la recherche
+    Yahoo par nom) ; validee, elle passe en tete. Les cas propres ne coutent aucun appel."""
+    cands = search_symbol(query)
+    if cands and _needs_primary_probe(cands[0]):
+        existing = {c["symbol"] for c in cands}
+        for guess in _primary_guesses(cands):
+            if guess["symbol"] not in existing and _symbol_trades(guess["symbol"]):
+                cands = [guess, *cands]      # place principale validee -> en tete
+                break
+    return {
+        "query": query,
+        "match": cands[0] if cands else None,
+        "alternatives": cands[1:limit],
+    }
+
+
+def _is_fetchable_symbol(ticker: Optional[str]) -> bool:
+    """Vrai si `ticker` ressemble a un symbole Yahoo (pas d'espace interne).
+
+    Un libelle multi-mots saisi comme ticker (« VOESTALPINE AG ») serait decoupe
+    par yfinance en plusieurs symboles et ramenerait les cours d'une AUTRE societe
+    (« AG » = First Majestic Silver) : on refuse net plutot que de renvoyer une
+    donnee silencieusement fausse. Pour rechercher par nom, passer par best_symbol()."""
+    if not ticker:
+        return False
+    t = ticker.strip()
+    return bool(t) and not any(c.isspace() for c in t)
 
 
 def _with_retry(fn: Callable[[], T], what: str) -> Optional[T]:
@@ -181,6 +357,8 @@ class YahooSource(DataSource):
     provides_prices = True
 
     def fetch_fundamentals(self, ticker: str) -> Optional[CompanyRecord]:
+        if not _is_fetchable_symbol(ticker):     # libelle multi-mots saisi comme ticker
+            return None
         cached = cache.load_cached_fundamentals(ticker)
         if cached is not None:
             return cached
@@ -191,6 +369,7 @@ class YahooSource(DataSource):
             name=_val(info, "longName", "shortName"),
             country=_val(info, "country"),
             sector=_val(info, "sector"),
+            industry=_val(info, "industry", "industryDisp"),   # ex. « Steel » -> Damodaran
             currency=_val(info, "currency"),
             market_cap=_val(info, "marketCap"),
             enterprise_value=_val(info, "enterpriseValue"),
@@ -217,6 +396,8 @@ class YahooSource(DataSource):
         return rec
 
     def fetch_prices(self, ticker: str, period: str, interval: str) -> Optional[pd.Series]:
+        if not _is_fetchable_symbol(ticker):     # « VOESTALPINE AG » -> yfinance ramene « AG »
+            return None
         cached = cache.load_cached_prices(ticker, period, interval)
         if cached is not None:
             return cached

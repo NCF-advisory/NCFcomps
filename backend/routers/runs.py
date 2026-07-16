@@ -9,6 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import Response
 
 from backend import security
+from backend.filenames import comparables_excel_filename
 from backend.schemas import SaveRunRequest
 from comparables import store
 from comparables.export.excel import build_excel_bytes
@@ -67,7 +68,8 @@ def export_run(run_id: int, user: str = Depends(security.current_user)) -> Respo
         records = store.load_run(run_id)
         if not records:
             raise HTTPException(status_code=404, detail="Analyse inconnue.")
-        data = build_excel_bytes(records)
-        filename = f"comparables_run_{run_id}.xlsx"
+        label = next((r["label"] for r in store.list_runs() if r["id"] == run_id), None)
+        data = build_excel_bytes(records, libelle=label or "Échantillon")
+        filename = comparables_excel_filename(label)
     return Response(content=data, media_type=EXCEL_MEDIA_TYPE,
                     headers={"Content-Disposition": f'attachment; filename="{filename}"'})

@@ -5,6 +5,7 @@ export type CompanyRecord = {
   name: string | null;
   country: string | null;
   sector: string | null;
+  industry: string | null;
   currency: string | null;
   source: string | null;
   market_cap: number | null;
@@ -20,8 +21,13 @@ export type CompanyRecord = {
   beta_regression: number | null;
   r2: number | null;
   n_obs: number | null;
+  beta_std_err: number | null;
+  zero_return_share: number | null;
+  beta_start: string | null;
+  beta_end: string | null;
   gearing: number | null;
   beta_unlevered: number | null;
+  beta_unlevered_adjusted: number | null;
   ev_sales: number | null;
   ev_ebitda: number | null;
   ev_ebit: number | null;
@@ -36,12 +42,23 @@ export type StatsMap = Record<string, FieldStats>;
 /** Synthèse bêta de la sélection : retenu = R² >= min_r2 (sinon affiché mais exclu). */
 export type BetaSummary = {
   min_r2: number;
+  /** Seuil d'illiquidité (part de rendements nuls) au-delà duquel le bêta est signalé. */
+  max_zero_share: number;
   n_retained: number;
   n_excluded_low_r2: number;
   mean_levered: number | null;
   median_levered: number | null;
   mean_adjusted: number | null;
   mean_unlevered: number | null;
+  mean_unlevered_adjusted: number | null;
+};
+
+/** Résolution d'un nom de société → ticker(s) Yahoo (meilleur + alternatives). */
+export type TickerCandidate = { symbol: string; name: string; exchange: string };
+export type ResolvedName = {
+  query: string;
+  match: TickerCandidate | null;
+  alternatives: TickerCandidate[];
 };
 
 export type JobBase = {
@@ -55,11 +72,31 @@ export type JobBase = {
   created_at: string;
 };
 
+/** Bêta désendetté sectoriel Damodaran (étalon externe de fiabilité). */
+export type DamodaranIndustry = {
+  region: string;
+  industry: string;
+  n_firms: number | null;
+  beta: number | null;
+  de_ratio: number | null;
+  tax_rate: number | null;
+  unlevered_beta: number | null;
+  unlevered_beta_cash: number | null;
+  as_of: string | null;
+};
+export type DamodaranBlock = {
+  region: string;
+  as_of: string | null;
+  suggested_industry: string | null;
+  benchmark: DamodaranIndustry | null;
+};
+
 export type ComparablesJob = JobBase & {
   records?: CompanyRecord[];
   coverage?: Record<string, "ok" | "partielle" | "vide">;
   stats?: StatsMap;
   beta_summary?: BetaSummary | null;
+  damodaran?: DamodaranBlock | null;
 };
 
 export type Cession = {
@@ -146,12 +183,20 @@ export type MetricStat = {
 };
 
 /** Métriques agrégées d'un secteur : clé = nom du champ CompanyRecord. */
+/** Étalon Damodaran rattaché à un secteur (industrie dominante + bêta désendetté). */
+export type SectorDamodaran = {
+  industry: string;
+  unlevered_beta: number | null;
+  unlevered_beta_cash: number | null;
+  n_firms: number | null;
+};
 export type SectorAggregate = {
   sector: string;
   n_records: number;
   n_companies: number;
   last_used: string | null;
   metrics: Record<string, MetricStat>;
+  damodaran: SectorDamodaran | null;
 };
 
 export type SectorRecord = {
@@ -214,6 +259,7 @@ export const api = {
     tax_rate?: number;
     period?: string;
     frequency?: string;
+    floor_net_debt?: boolean;
   }) => request<ComparablesJob>("/api/comparables/jobs", { method: "POST", body: JSON.stringify(body) }),
   comparablesJob: (id: string) => request<ComparablesJob>(`/api/comparables/jobs/${id}`),
   statsFor: (records: CompanyRecord[]) =>
@@ -222,7 +268,7 @@ export const api = {
       { method: "POST", body: JSON.stringify({ records }) },
     ),
   resolveNames: (names: string[]) =>
-    request<{ results: { query: string; match: { symbol: string; name: string; exchange: string } | null }[] }>(
+    request<{ results: ResolvedName[] }>(
       "/api/comparables/resolve",
       { method: "POST", body: JSON.stringify({ names }) },
     ),
@@ -247,6 +293,12 @@ export const api = {
       body: JSON.stringify({ cessions, label, params }),
     }),
 
+  // Damodaran (étalon sectoriel)
+  damodaranIndustries: (region = "Global") =>
+    request<{ region: string; as_of: string | null; industries: DamodaranIndustry[] }>(
+      `/api/damodaran/industries?region=${encodeURIComponent(region)}`,
+    ),
+
   // Runs
   listRuns: () => request<{ runs: RunSummary[] }>("/api/runs"),
   saveRun: (records: CompanyRecord[], label?: string, params?: Record<string, unknown>) =>
@@ -269,21 +321,40 @@ export const api = {
 };
 
 /** Télécharge un .xlsx produit par l'API (POST records ou GET run). */
-export async function downloadExcel(records: CompanyRecord[], filename = "comparables.xlsx") {
+const BAD_FILENAME_CHARS = /[<>:"/\\|?*\x00-\x1f]+/g;
+const SPACES = /\s+/g;
+
+export function comparablesExcelFilename(libelle?: string, now = new Date()) {
+  let label = (libelle?.trim() || "Échantillon").replace(SPACES, "_");
+  label = label.replace(BAD_FILENAME_CHARS, "").replace(/^[._ ]+|[._ ]+$/g, "");
+  if (!label) label = "Échantillon";
+  const day = String(now.getDate()).padStart(2, "0");
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const year = String(now.getFullYear());
+  return `Beta_${label}_${day}${month}${year}.xlsx`;
+}
+
+export async function downloadExcel(
+  records: CompanyRecord[],
+  libelle?: string,
+) {
+  const payload: { records: CompanyRecord[]; libelle?: string } = { records };
+  if (libelle && libelle.trim()) payload.libelle = libelle.trim();
   const res = await fetch("/api/comparables/export", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ records }),
+    body: JSON.stringify(payload),
   });
   if (!res.ok) throw new ApiError(res.status, "Export impossible.");
-  triggerDownload(await res.blob(), filename);
+  triggerDownload(await res.blob(), comparablesExcelFilename(libelle));
 }
 
 export async function downloadRunExcel(runId: number, kind: RunKind = "comparables") {
   const res = await fetch(`/api/runs/${runId}/export`);
   if (!res.ok) throw new ApiError(res.status, "Export impossible.");
   const prefix = kind === "cessions" ? "cessions_fr_run" : "comparables_run";
-  triggerDownload(await res.blob(), `${prefix}_${runId}.xlsx`);
+  const filename = filenameFromContentDisposition(res.headers.get("content-disposition"));
+  triggerDownload(await res.blob(), filename ?? `${prefix}_${runId}.xlsx`);
 }
 
 /** Télécharge le .xlsx des cessions sélectionnées. */
@@ -304,6 +375,11 @@ function triggerDownload(blob: Blob, filename: string) {
   a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+function filenameFromContentDisposition(header: string | null) {
+  const match = header?.match(/filename="([^"]+)"/);
+  return match?.[1];
 }
 
 /** Boucle d'attente d'un job (poll ~0,8 s) avec rappel de progression. */

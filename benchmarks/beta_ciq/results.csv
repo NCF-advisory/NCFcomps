@@ -1,0 +1,630 @@
+fichier,label,ticker_ciq,ticker_yahoo,societe,config,indice,n_points,beta,r2,beta_ciq,delta_ciq,r2_ciq
+BETA 27032026.xlsx,Materiaux de construction (US),NYSE:MWA,MWA,"Mueller Water Products, Inc.",CIQ 5a quotidien,^GSPC,1254,0.9893,0.3014,0.9065,0.0828,0.252
+BETA 27032026.xlsx,Materiaux de construction (US),NYSE:MWA,MWA,"Mueller Water Products, Inc.",CIQ 5a quotidien,^STOXX,1222,0.6989,0.1035,0.9065,-0.2076,0.252
+BETA 27032026.xlsx,Materiaux de construction (US),NYSE:MWA,MWA,"Mueller Water Products, Inc.",5a hebdo,^GSPC,260,1.0896,0.3049,0.9065,0.1831,0.252
+BETA 27032026.xlsx,Materiaux de construction (US),NYSE:MWA,MWA,"Mueller Water Products, Inc.",5a hebdo,^STOXX,260,1.1064,0.2228,0.9065,0.1999,0.252
+BETA 27032026.xlsx,Materiaux de construction (US),NYSE:MWA,MWA,"Mueller Water Products, Inc.",2a hebdo,^GSPC,104,1.1334,0.2389,0.9065,0.2269,0.252
+BETA 27032026.xlsx,Materiaux de construction (US),NYSE:MWA,MWA,"Mueller Water Products, Inc.",2a hebdo,^STOXX,104,1.0822,0.1661,0.9065,0.1757,0.252
+BETA 27032026.xlsx,Materiaux de construction (US),NYSE:MWA,MWA,"Mueller Water Products, Inc.",Outil defaut (5a mensuel),^GSPC,60,1.1516,0.3599,0.9065,0.2451,0.252
+BETA 27032026.xlsx,Materiaux de construction (US),NYSE:MWA,MWA,"Mueller Water Products, Inc.",Yahoo publie (indicatif),-,,1.027,,0.9065,,
+BETA 27032026.xlsx,Materiaux de construction (US),NASDAQGM:OFLX,OFLX,"Omega Flex, Inc.",CIQ 5a quotidien,^GSPC,1254,0.854,0.134,0.772,0.082,0.1092
+BETA 27032026.xlsx,Materiaux de construction (US),NASDAQGM:OFLX,OFLX,"Omega Flex, Inc.",CIQ 5a quotidien,^STOXX,1222,0.6404,0.0525,0.772,-0.1316,0.1092
+BETA 27032026.xlsx,Materiaux de construction (US),NASDAQGM:OFLX,OFLX,"Omega Flex, Inc.",5a hebdo,^GSPC,260,0.8369,0.126,0.772,0.0649,0.1092
+BETA 27032026.xlsx,Materiaux de construction (US),NASDAQGM:OFLX,OFLX,"Omega Flex, Inc.",5a hebdo,^STOXX,260,0.8298,0.0878,0.772,0.0578,0.1092
+BETA 27032026.xlsx,Materiaux de construction (US),NASDAQGM:OFLX,OFLX,"Omega Flex, Inc.",2a hebdo,^GSPC,104,1.0203,0.1619,0.772,0.2483,0.1092
+BETA 27032026.xlsx,Materiaux de construction (US),NASDAQGM:OFLX,OFLX,"Omega Flex, Inc.",2a hebdo,^STOXX,104,1.0618,0.1337,0.772,0.2897,0.1092
+BETA 27032026.xlsx,Materiaux de construction (US),NASDAQGM:OFLX,OFLX,"Omega Flex, Inc.",Outil defaut (5a mensuel),^GSPC,60,0.5128,0.082,0.772,-0.2592,0.1092
+BETA 27032026.xlsx,Materiaux de construction (US),NASDAQGM:OFLX,OFLX,"Omega Flex, Inc.",Yahoo publie (indicatif),-,,0.456,,0.772,,
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:SAVE,SAVE.PA,Savencia SA,CIQ 5a quotidien,^GSPC,1243,0.0989,0.0065,0.2655,-0.1665,0.0336
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:SAVE,SAVE.PA,Savencia SA,CIQ 5a quotidien,^STOXX,1256,0.2732,0.0351,0.2655,0.0077,0.0336
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:SAVE,SAVE.PA,Savencia SA,CIQ 5a quotidien,^FCHI,1280,0.2295,0.0337,0.2655,-0.0359,0.0336
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:SAVE,SAVE.PA,Savencia SA,5a hebdo,^GSPC,260,0.1404,0.0126,0.2655,-0.125,0.0336
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:SAVE,SAVE.PA,Savencia SA,5a hebdo,^STOXX,260,0.2077,0.0196,0.2655,-0.0578,0.0336
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:SAVE,SAVE.PA,Savencia SA,5a hebdo,^FCHI,260,0.237,0.0356,0.2655,-0.0284,0.0336
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:SAVE,SAVE.PA,Savencia SA,2a hebdo,^GSPC,103,0.2498,0.026,0.2655,-0.0157,0.0336
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:SAVE,SAVE.PA,Savencia SA,2a hebdo,^STOXX,103,0.1631,0.0086,0.2655,-0.1024,0.0336
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:SAVE,SAVE.PA,Savencia SA,2a hebdo,^FCHI,103,0.2504,0.0283,0.2655,-0.0151,0.0336
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:SAVE,SAVE.PA,Savencia SA,Outil defaut (5a mensuel),^FCHI,60,0.2217,0.0262,0.2655,-0.0438,0.0336
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:SAVE,SAVE.PA,Savencia SA,Yahoo publie (indicatif),-,,0.287,,0.2655,,
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:BN,BN.PA,Danone SA,CIQ 5a quotidien,^GSPC,1243,0.0384,0.0012,0.4364,-0.398,0.1083
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:BN,BN.PA,Danone SA,CIQ 5a quotidien,^STOXX,1256,0.4301,0.1081,0.4364,-0.0062,0.1083
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:BN,BN.PA,Danone SA,CIQ 5a quotidien,^FCHI,1280,0.4009,0.1269,0.4364,-0.0355,0.1083
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:BN,BN.PA,Danone SA,5a hebdo,^GSPC,260,-0.0144,0.0002,0.4364,-0.4508,0.1083
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:BN,BN.PA,Danone SA,5a hebdo,^STOXX,260,0.4183,0.1058,0.4364,-0.0181,0.1083
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:BN,BN.PA,Danone SA,5a hebdo,^FCHI,260,0.3487,0.1025,0.4364,-0.0877,0.1083
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:BN,BN.PA,Danone SA,2a hebdo,^GSPC,103,-0.1813,0.0266,0.4364,-0.6177,0.1083
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:BN,BN.PA,Danone SA,2a hebdo,^STOXX,103,0.2532,0.0402,0.4364,-0.1831,0.1083
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:BN,BN.PA,Danone SA,2a hebdo,^FCHI,103,0.1722,0.026,0.4364,-0.2641,0.1083
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:BN,BN.PA,Danone SA,Outil defaut (5a mensuel),^FCHI,60,0.399,0.1123,0.4364,-0.0374,0.1083
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ENXTPA:BN,BN.PA,Danone SA,Yahoo publie (indicatif),-,,0.193,,0.4364,,
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,DB:SMB,SMB.DE,Schwaelbchen Molkerei Jakob Berz AG,Yahoo publie (indicatif),-,,,,0.0845,,
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ISE:GL9,GL9.IR,Glanbia Plc,CIQ 5a quotidien,^GSPC,1235,0.1208,0.0054,0.4735,-0.3527,0.057
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ISE:GL9,GL9.IR,Glanbia Plc,CIQ 5a quotidien,^STOXX,1248,0.4622,0.0553,0.4735,-0.0112,0.057
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ISE:GL9,GL9.IR,Glanbia Plc,CIQ 5a quotidien,^ISEQ,1271,0.3899,0.0726,0.4735,-0.0836,0.057
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ISE:GL9,GL9.IR,Glanbia Plc,5a hebdo,^GSPC,260,0.263,0.0237,0.4735,-0.2105,0.057
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ISE:GL9,GL9.IR,Glanbia Plc,5a hebdo,^STOXX,260,0.4682,0.0534,0.4735,-0.0053,0.057
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ISE:GL9,GL9.IR,Glanbia Plc,5a hebdo,^ISEQ,260,0.3647,0.0618,0.4735,-0.1088,0.057
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ISE:GL9,GL9.IR,Glanbia Plc,2a hebdo,^GSPC,103,0.3392,0.0261,0.4735,-0.1343,0.057
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ISE:GL9,GL9.IR,Glanbia Plc,2a hebdo,^STOXX,103,0.6714,0.0794,0.4735,0.1979,0.057
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ISE:GL9,GL9.IR,Glanbia Plc,2a hebdo,^ISEQ,103,0.3749,0.038,0.4735,-0.0986,0.057
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ISE:GL9,GL9.IR,Glanbia Plc,Outil defaut (5a mensuel),^ISEQ,60,0.5146,0.1197,0.4735,0.0411,0.057
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ISE:GL9,GL9.IR,Glanbia Plc,Yahoo publie (indicatif),-,,0.51,,0.4735,,
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,SWX:EMMN,EMMN.SW,Emmi AG,CIQ 5a quotidien,^GSPC,1222,0.158,0.0189,0.3465,-0.1885,0.0595
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,SWX:EMMN,EMMN.SW,Emmi AG,CIQ 5a quotidien,^STOXX,1256,0.4154,0.0917,0.3465,0.0689,0.0595
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,SWX:EMMN,EMMN.SW,Emmi AG,CIQ 5a quotidien,^SSMI,1249,0.5583,0.147,0.3465,0.2118,0.0595
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,SWX:EMMN,EMMN.SW,Emmi AG,5a hebdo,^GSPC,260,0.287,0.066,0.3465,-0.0594,0.0595
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,SWX:EMMN,EMMN.SW,Emmi AG,5a hebdo,^STOXX,260,0.415,0.0978,0.3465,0.0685,0.0595
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,SWX:EMMN,EMMN.SW,Emmi AG,5a hebdo,^SSMI,260,0.5417,0.1718,0.3465,0.1952,0.0595
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,SWX:EMMN,EMMN.SW,Emmi AG,2a hebdo,^GSPC,103,0.1254,0.0152,0.3465,-0.2211,0.0595
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,SWX:EMMN,EMMN.SW,Emmi AG,2a hebdo,^STOXX,103,0.4137,0.1285,0.3465,0.0672,0.0595
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,SWX:EMMN,EMMN.SW,Emmi AG,2a hebdo,^SSMI,103,0.4269,0.1687,0.3465,0.0804,0.0595
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,SWX:EMMN,EMMN.SW,Emmi AG,Outil defaut (5a mensuel),^SSMI,60,0.5418,0.161,0.3465,0.1953,0.0595
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,SWX:EMMN,EMMN.SW,Emmi AG,Yahoo publie (indicatif),-,,0.353,,0.3465,,
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,NZSE:FCG,FCG.NZ,Fonterra Co-operative Group Limited,CIQ 5a quotidien,^GSPC,1213,0.0969,0.0031,0.1562,-0.0593,0.0065
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,NZSE:FCG,FCG.NZ,Fonterra Co-operative Group Limited,CIQ 5a quotidien,^STOXX,1227,0.0164,0.0001,0.1562,-0.1398,0.0065
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,NZSE:FCG,FCG.NZ,Fonterra Co-operative Group Limited,5a hebdo,^GSPC,260,0.2174,0.0116,0.1562,0.0613,0.0065
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,NZSE:FCG,FCG.NZ,Fonterra Co-operative Group Limited,5a hebdo,^STOXX,260,0.162,0.0046,0.1562,0.0058,0.0065
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,NZSE:FCG,FCG.NZ,Fonterra Co-operative Group Limited,2a hebdo,^GSPC,103,0.182,0.0074,0.1562,0.0258,0.0065
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,NZSE:FCG,FCG.NZ,Fonterra Co-operative Group Limited,2a hebdo,^STOXX,103,0.3351,0.0195,0.1562,0.1789,0.0065
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,NZSE:FCG,FCG.NZ,Fonterra Co-operative Group Limited,Outil defaut (5a mensuel),^GSPC,60,0.0479,0.0005,0.1562,-0.1083,0.0065
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,NZSE:FCG,FCG.NZ,Fonterra Co-operative Group Limited,Yahoo publie (indicatif),-,,0.197,,0.1562,,
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ASX:BGA,BGA.AX,Bega Cheese Limited,CIQ 5a quotidien,^GSPC,1227,0.0382,0.0005,1.0432,-1.005,0.186
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ASX:BGA,BGA.AX,Bega Cheese Limited,CIQ 5a quotidien,^STOXX,1238,0.2412,0.0137,1.0432,-0.8019,0.186
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ASX:BGA,BGA.AX,Bega Cheese Limited,CIQ 5a quotidien,^AXJO,1263,0.893,0.1518,1.0432,-0.1502,0.186
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ASX:BGA,BGA.AX,Bega Cheese Limited,5a hebdo,^GSPC,260,0.2191,0.0136,1.0432,-0.8241,0.186
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ASX:BGA,BGA.AX,Bega Cheese Limited,5a hebdo,^STOXX,260,0.4624,0.0431,1.0432,-0.5808,0.186
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ASX:BGA,BGA.AX,Bega Cheese Limited,5a hebdo,^AXJO,260,0.8129,0.0983,1.0432,-0.2302,0.186
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ASX:BGA,BGA.AX,Bega Cheese Limited,2a hebdo,^GSPC,103,0.3458,0.0401,1.0432,-0.6974,0.186
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ASX:BGA,BGA.AX,Bega Cheese Limited,2a hebdo,^STOXX,103,0.5458,0.0777,1.0432,-0.4973,0.186
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ASX:BGA,BGA.AX,Bega Cheese Limited,2a hebdo,^AXJO,103,0.9265,0.1459,1.0432,-0.1166,0.186
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ASX:BGA,BGA.AX,Bega Cheese Limited,Outil defaut (5a mensuel),^AXJO,60,0.8026,0.1128,1.0432,-0.2405,0.186
+BETA FLO 27042026.xlsx,Agroalimentaire / fromages,ASX:BGA,BGA.AX,Bega Cheese Limited,Yahoo publie (indicatif),-,,0.62,,1.0432,,
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GEBN,GEBN.SW,Geberit AG,CIQ 5a quotidien,^GSPC,1222,0.4337,0.0989,0.941,-0.5074,0.32
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GEBN,GEBN.SW,Geberit AG,CIQ 5a quotidien,^STOXX,1256,1.0129,0.3739,0.941,0.0719,0.32
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GEBN,GEBN.SW,Geberit AG,CIQ 5a quotidien,^SSMI,1249,1.0425,0.3524,0.941,0.1014,0.32
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GEBN,GEBN.SW,Geberit AG,5a hebdo,^GSPC,261,0.7945,0.2566,0.941,-0.1465,0.32
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GEBN,GEBN.SW,Geberit AG,5a hebdo,^STOXX,261,1.2194,0.4285,0.941,0.2784,0.32
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GEBN,GEBN.SW,Geberit AG,5a hebdo,^SSMI,261,1.1894,0.4251,0.941,0.2483,0.32
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GEBN,GEBN.SW,Geberit AG,2a hebdo,^GSPC,104,0.4874,0.1117,0.941,-0.4536,0.32
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GEBN,GEBN.SW,Geberit AG,2a hebdo,^STOXX,104,0.9752,0.3404,0.941,0.0342,0.32
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GEBN,GEBN.SW,Geberit AG,2a hebdo,^SSMI,104,0.8868,0.3601,0.941,-0.0543,0.32
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GEBN,GEBN.SW,Geberit AG,Outil defaut (5a mensuel),^SSMI,60,1.3239,0.514,0.941,0.3829,0.32
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GEBN,GEBN.SW,Geberit AG,Yahoo publie (indicatif),-,,1.042,,0.941,,
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WLK,WLK,Westlake Corporation,CIQ 5a quotidien,^GSPC,1254,1.0869,0.2492,1.0041,0.0828,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WLK,WLK,Westlake Corporation,CIQ 5a quotidien,^STOXX,1222,0.8633,0.1072,1.0041,-0.1408,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WLK,WLK,Westlake Corporation,5a hebdo,^GSPC,261,1.0234,0.1963,1.0041,0.0194,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WLK,WLK,Westlake Corporation,5a hebdo,^STOXX,261,1.1543,0.177,1.0041,0.1503,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WLK,WLK,Westlake Corporation,2a hebdo,^GSPC,104,0.9547,0.1208,1.0041,-0.0494,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WLK,WLK,Westlake Corporation,2a hebdo,^STOXX,104,1.1945,0.144,1.0041,0.1904,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WLK,WLK,Westlake Corporation,Outil defaut (5a mensuel),^GSPC,60,0.7691,0.111,1.0041,-0.235,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WLK,WLK,Westlake Corporation,Yahoo publie (indicatif),-,,0.616,,1.0041,,
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WMS,WMS,"Advanced Drainage Systems, Inc.",CIQ 5a quotidien,^GSPC,1254,1.3369,0.2897,1.0041,0.3328,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WMS,WMS,"Advanced Drainage Systems, Inc.",CIQ 5a quotidien,^STOXX,1222,0.9885,0.1093,1.0041,-0.0156,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WMS,WMS,"Advanced Drainage Systems, Inc.",5a hebdo,^GSPC,261,1.4789,0.3348,1.0041,0.4748,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WMS,WMS,"Advanced Drainage Systems, Inc.",5a hebdo,^STOXX,261,1.262,0.1728,1.0041,0.2579,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WMS,WMS,"Advanced Drainage Systems, Inc.",2a hebdo,^GSPC,104,1.2525,0.2501,1.0041,0.2484,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WMS,WMS,"Advanced Drainage Systems, Inc.",2a hebdo,^STOXX,104,1.3318,0.2153,1.0041,0.3277,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WMS,WMS,"Advanced Drainage Systems, Inc.",Outil defaut (5a mensuel),^GSPC,60,1.3754,0.273,1.0041,0.3713,0.2189
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),NYSE:WMS,WMS,"Advanced Drainage Systems, Inc.",Yahoo publie (indicatif),-,,1.262,,1.0041,,
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GF,GF.SW,Georg Fischer AG,CIQ 5a quotidien,^GSPC,1222,0.6199,0.1344,1.2294,-0.6096,0.3844
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GF,GF.SW,Georg Fischer AG,CIQ 5a quotidien,^STOXX,1256,1.2964,0.4092,1.2294,0.067,0.3844
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GF,GF.SW,Georg Fischer AG,CIQ 5a quotidien,^SSMI,1249,1.1599,0.2913,1.2294,-0.0695,0.3844
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GF,GF.SW,Georg Fischer AG,5a hebdo,^GSPC,261,0.8897,0.2502,1.2294,-0.3397,0.3844
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GF,GF.SW,Georg Fischer AG,5a hebdo,^STOXX,261,1.3713,0.4213,1.2294,0.1419,0.3844
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GF,GF.SW,Georg Fischer AG,5a hebdo,^SSMI,261,1.117,0.2915,1.2294,-0.1124,0.3844
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GF,GF.SW,Georg Fischer AG,2a hebdo,^GSPC,104,0.8025,0.1859,1.2294,-0.4269,0.3844
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GF,GF.SW,Georg Fischer AG,2a hebdo,^STOXX,104,1.2284,0.3317,1.2294,-0.0011,0.3844
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GF,GF.SW,Georg Fischer AG,2a hebdo,^SSMI,104,0.9087,0.2323,1.2294,-0.3207,0.3844
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GF,GF.SW,Georg Fischer AG,Outil defaut (5a mensuel),^SSMI,60,1.1864,0.2963,1.2294,-0.043,0.3844
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),SWX:GF,GF.SW,Georg Fischer AG,Yahoo publie (indicatif),-,,,,1.2294,,
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),ENXTAM:AALB,AALB.AS,Aalberts N.V.,CIQ 5a quotidien,^GSPC,1243,0.6901,0.1286,1.5502,-0.8602,0.446
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),ENXTAM:AALB,AALB.AS,Aalberts N.V.,CIQ 5a quotidien,^STOXX,1256,1.5804,0.4639,1.5502,0.0302,0.446
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),ENXTAM:AALB,AALB.AS,Aalberts N.V.,CIQ 5a quotidien,^AEX,1280,1.2921,0.3848,1.5502,-0.2581,0.446
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),ENXTAM:AALB,AALB.AS,Aalberts N.V.,5a hebdo,^GSPC,261,1.0135,0.2453,1.5502,-0.5367,0.446
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),ENXTAM:AALB,AALB.AS,Aalberts N.V.,5a hebdo,^STOXX,261,1.6636,0.4685,1.5502,0.1134,0.446
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),ENXTAM:AALB,AALB.AS,Aalberts N.V.,5a hebdo,^AEX,261,1.4102,0.4077,1.5502,-0.14,0.446
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),ENXTAM:AALB,AALB.AS,Aalberts N.V.,2a hebdo,^GSPC,104,1.0442,0.2348,1.5502,-0.506,0.446
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),ENXTAM:AALB,AALB.AS,Aalberts N.V.,2a hebdo,^STOXX,104,1.4185,0.33,1.5502,-0.1317,0.446
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),ENXTAM:AALB,AALB.AS,Aalberts N.V.,2a hebdo,^AEX,104,1.2967,0.3015,1.5502,-0.2535,0.446
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),ENXTAM:AALB,AALB.AS,Aalberts N.V.,Outil defaut (5a mensuel),^AEX,60,1.4013,0.4016,1.5502,-0.1489,0.446
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),ENXTAM:AALB,AALB.AS,Aalberts N.V.,Yahoo publie (indicatif),-,,1.313,,1.5502,,
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),LSE:GEN,GEN.L,Genuit Group plc,CIQ 5a quotidien,^GSPC,1228,0.5301,0.0722,1.056,-0.526,0.1544
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),LSE:GEN,GEN.L,Genuit Group plc,CIQ 5a quotidien,^STOXX,1236,1.1143,0.228,1.056,0.0583,0.1544
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),LSE:GEN,GEN.L,Genuit Group plc,CIQ 5a quotidien,^FTSE,1260,1.0398,0.1562,1.056,-0.0162,0.1544
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),LSE:GEN,GEN.L,Genuit Group plc,5a hebdo,^GSPC,261,0.9315,0.1857,1.056,-0.1246,0.1544
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),LSE:GEN,GEN.L,Genuit Group plc,5a hebdo,^STOXX,261,1.4942,0.3387,1.056,0.4381,0.1544
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),LSE:GEN,GEN.L,Genuit Group plc,5a hebdo,^FTSE,261,1.4205,0.2414,1.056,0.3645,0.1544
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),LSE:GEN,GEN.L,Genuit Group plc,2a hebdo,^GSPC,104,0.8268,0.1492,1.056,-0.2292,0.1544
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),LSE:GEN,GEN.L,Genuit Group plc,2a hebdo,^STOXX,104,1.4703,0.3592,1.056,0.4142,0.1544
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),LSE:GEN,GEN.L,Genuit Group plc,2a hebdo,^FTSE,104,1.7457,0.3872,1.056,0.6897,0.1544
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),LSE:GEN,GEN.L,Genuit Group plc,Outil defaut (5a mensuel),^FTSE,60,2.1055,0.3353,1.056,1.0494,0.1544
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),LSE:GEN,GEN.L,Genuit Group plc,Yahoo publie (indicatif),-,,1.463,,1.056,,
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),WBAG:WIE,WIE.VI,Wienerberger AG,CIQ 5a quotidien,^GSPC,1233,0.579,0.0925,1.3556,-0.7767,0.3495
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),WBAG:WIE,WIE.VI,Wienerberger AG,CIQ 5a quotidien,^STOXX,1253,1.3555,0.3521,1.3556,-0.0001,0.3495
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),WBAG:WIE,WIE.VI,Wienerberger AG,CIQ 5a quotidien,^ATX,1269,1.1278,0.4376,1.3556,-0.2278,0.3495
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),WBAG:WIE,WIE.VI,Wienerberger AG,5a hebdo,^GSPC,261,0.7977,0.1671,1.3556,-0.558,0.3495
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),WBAG:WIE,WIE.VI,Wienerberger AG,5a hebdo,^STOXX,261,1.4202,0.3755,1.3556,0.0646,0.3495
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),WBAG:WIE,WIE.VI,Wienerberger AG,5a hebdo,^ATX,261,1.1365,0.4546,1.3556,-0.2192,0.3495
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),WBAG:WIE,WIE.VI,Wienerberger AG,2a hebdo,^GSPC,104,0.9905,0.1965,1.3556,-0.3652,0.3495
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),WBAG:WIE,WIE.VI,Wienerberger AG,2a hebdo,^STOXX,104,1.467,0.3282,1.3556,0.1113,0.3495
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),WBAG:WIE,WIE.VI,Wienerberger AG,2a hebdo,^ATX,104,1.443,0.492,1.3556,0.0874,0.3495
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),WBAG:WIE,WIE.VI,Wienerberger AG,Outil defaut (5a mensuel),^ATX,60,1.2694,0.511,1.3556,-0.0863,0.3495
+BETA flo 25032026.xlsx,Materiaux de construction (mixte),WBAG:WIE,WIE.VI,Wienerberger AG,Yahoo publie (indicatif),-,,1.208,,1.3556,,
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:SAP,SAP.DE,SAP,CIQ 5a quotidien,^GSPC,1236,0.4774,0.0848,1.0203,-0.543,0.2685
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:SAP,SAP.DE,SAP,CIQ 5a quotidien,^STOXX,1255,1.0189,0.2691,1.0203,-0.0015,0.2685
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:SAP,SAP.DE,SAP,CIQ 5a quotidien,^GDAXI,1273,0.9862,0.3696,1.0203,-0.0342,0.2685
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:SAP,SAP.DE,SAP,5a hebdo,^GSPC,261,0.7158,0.1898,1.0203,-0.3045,0.2685
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:SAP,SAP.DE,SAP,5a hebdo,^STOXX,261,0.9733,0.249,1.0203,-0.0471,0.2685
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:SAP,SAP.DE,SAP,5a hebdo,^GDAXI,261,0.9713,0.3407,1.0203,-0.0491,0.2685
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:SAP,SAP.DE,SAP,2a hebdo,^GSPC,104,0.7805,0.1692,1.0203,-0.2398,0.2685
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:SAP,SAP.DE,SAP,2a hebdo,^STOXX,104,0.9361,0.181,1.0203,-0.0842,0.2685
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:SAP,SAP.DE,SAP,2a hebdo,^GDAXI,104,1.0,0.2991,1.0203,-0.0204,0.2685
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:SAP,SAP.DE,SAP,Outil defaut (5a mensuel),^GDAXI,59,1.1394,0.4246,1.0203,0.1191,0.2685
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:SAP,SAP.DE,SAP,Yahoo publie (indicatif),-,,0.743,,1.0203,,
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:CRM,CRM,SalesForce,CIQ 5a quotidien,^GSPC,1253,1.2534,0.3278,1.1681,0.0853,0.2769
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:CRM,CRM,SalesForce,CIQ 5a quotidien,^STOXX,1221,0.5747,0.0478,1.1681,-0.5933,0.2769
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:CRM,CRM,SalesForce,5a hebdo,^GSPC,261,1.4053,0.3756,1.1681,0.2372,0.2769
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:CRM,CRM,SalesForce,5a hebdo,^STOXX,261,0.9946,0.1336,1.1681,-0.1735,0.2769
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:CRM,CRM,SalesForce,2a hebdo,^GSPC,104,1.1197,0.2437,1.1681,-0.0484,0.2769
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:CRM,CRM,SalesForce,2a hebdo,^STOXX,104,0.6027,0.0525,1.1681,-0.5654,0.2769
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:CRM,CRM,SalesForce,Outil defaut (5a mensuel),^GSPC,59,1.1822,0.2651,1.1681,0.0142,0.2769
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:CRM,CRM,SalesForce,Yahoo publie (indicatif),-,,1.178,,1.1681,,
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:NOW,NOW,ServiceNow,CIQ 5a quotidien,^GSPC,1253,1.4741,0.3275,1.3883,0.0859,0.289
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:NOW,NOW,ServiceNow,CIQ 5a quotidien,^STOXX,1221,0.5618,0.0329,1.3883,-0.8265,0.289
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:NOW,NOW,ServiceNow,5a hebdo,^GSPC,261,1.5364,0.3407,1.3883,0.1481,0.289
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:NOW,NOW,ServiceNow,5a hebdo,^STOXX,261,0.8723,0.078,1.3883,-0.5159,0.289
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:NOW,NOW,ServiceNow,2a hebdo,^GSPC,104,1.2584,0.1747,1.3883,-0.1298,0.289
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:NOW,NOW,ServiceNow,2a hebdo,^STOXX,104,0.248,0.005,1.3883,-1.1403,0.289
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:NOW,NOW,ServiceNow,Outil defaut (5a mensuel),^GSPC,59,0.9533,0.1633,1.3883,-0.4349,0.289
+Beta 01072026 Liste software.xlsx,Logiciels,NYSE:NOW,NOW,ServiceNow,Yahoo publie (indicatif),-,,0.959,,1.3883,,
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PTC,PTC,PTC,CIQ 5a quotidien,^GSPC,1253,1.0364,0.327,0.9517,0.0847,0.272
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PTC,PTC,PTC,CIQ 5a quotidien,^STOXX,1221,0.602,0.0762,0.9517,-0.3497,0.272
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PTC,PTC,PTC,5a hebdo,^GSPC,261,0.9706,0.2989,0.9517,0.0189,0.272
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PTC,PTC,PTC,5a hebdo,^STOXX,261,0.9841,0.2181,0.9517,0.0324,0.272
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PTC,PTC,PTC,2a hebdo,^GSPC,104,0.9018,0.2294,0.9517,-0.0499,0.272
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PTC,PTC,PTC,2a hebdo,^STOXX,104,0.7377,0.1142,0.9517,-0.214,0.272
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PTC,PTC,PTC,Outil defaut (5a mensuel),^GSPC,59,0.9996,0.3311,0.9517,0.0479,0.272
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PTC,PTC,PTC,Yahoo publie (indicatif),-,,0.994,,0.9517,,
+Beta 01072026 Liste software.xlsx,Logiciels,LSE:SGE,SGE.L,The Sage Group,CIQ 5a quotidien,^GSPC,1227,0.3274,0.0475,0.7221,-0.3947,0.15
+Beta 01072026 Liste software.xlsx,Logiciels,LSE:SGE,SGE.L,The Sage Group,CIQ 5a quotidien,^STOXX,1236,0.6349,0.1248,0.7221,-0.0872,0.15
+Beta 01072026 Liste software.xlsx,Logiciels,LSE:SGE,SGE.L,The Sage Group,CIQ 5a quotidien,^FTSE,1260,0.5546,0.076,0.7221,-0.1675,0.15
+Beta 01072026 Liste software.xlsx,Logiciels,LSE:SGE,SGE.L,The Sage Group,5a hebdo,^GSPC,261,0.5674,0.1425,0.7221,-0.1547,0.15
+Beta 01072026 Liste software.xlsx,Logiciels,LSE:SGE,SGE.L,The Sage Group,5a hebdo,^STOXX,261,0.7432,0.1736,0.7221,0.0211,0.15
+Beta 01072026 Liste software.xlsx,Logiciels,LSE:SGE,SGE.L,The Sage Group,5a hebdo,^FTSE,261,0.673,0.1118,0.7221,-0.0491,0.15
+Beta 01072026 Liste software.xlsx,Logiciels,LSE:SGE,SGE.L,The Sage Group,2a hebdo,^GSPC,104,0.4509,0.0674,0.7221,-0.2712,0.15
+Beta 01072026 Liste software.xlsx,Logiciels,LSE:SGE,SGE.L,The Sage Group,2a hebdo,^STOXX,104,0.51,0.0641,0.7221,-0.2121,0.15
+Beta 01072026 Liste software.xlsx,Logiciels,LSE:SGE,SGE.L,The Sage Group,2a hebdo,^FTSE,104,0.6324,0.0767,0.7221,-0.0898,0.15
+Beta 01072026 Liste software.xlsx,Logiciels,LSE:SGE,SGE.L,The Sage Group,Outil defaut (5a mensuel),^FTSE,59,0.2449,0.0084,0.7221,-0.4772,0.15
+Beta 01072026 Liste software.xlsx,Logiciels,LSE:SGE,SGE.L,The Sage Group,Yahoo publie (indicatif),-,,0.301,,0.7221,,
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:NEM,NEM.DE,Nemetschek,CIQ 5a quotidien,^GSPC,1236,0.7514,0.1056,1.2495,-0.4981,0.2044
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:NEM,NEM.DE,Nemetschek,CIQ 5a quotidien,^STOXX,1255,1.252,0.2072,1.2495,0.0025,0.2044
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:NEM,NEM.DE,Nemetschek,CIQ 5a quotidien,^GDAXI,1273,1.0914,0.23,1.2495,-0.1581,0.2044
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:NEM,NEM.DE,Nemetschek,5a hebdo,^GSPC,261,1.2367,0.2825,1.2495,-0.0128,0.2044
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:NEM,NEM.DE,Nemetschek,5a hebdo,^STOXX,261,1.2683,0.2109,1.2495,0.0188,0.2044
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:NEM,NEM.DE,Nemetschek,5a hebdo,^GDAXI,261,1.1076,0.2209,1.2495,-0.1419,0.2044
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:NEM,NEM.DE,Nemetschek,2a hebdo,^GSPC,104,0.9224,0.1704,1.2495,-0.3271,0.2044
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:NEM,NEM.DE,Nemetschek,2a hebdo,^STOXX,104,0.9892,0.1458,1.2495,-0.2603,0.2044
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:NEM,NEM.DE,Nemetschek,2a hebdo,^GDAXI,104,1.0825,0.2528,1.2495,-0.167,0.2044
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:NEM,NEM.DE,Nemetschek,Outil defaut (5a mensuel),^GDAXI,59,0.7369,0.1018,1.2495,-0.5126,0.2044
+Beta 01072026 Liste software.xlsx,Logiciels,XTRA:NEM,NEM.DE,Nemetschek,Yahoo publie (indicatif),-,,0.515,,1.2495,,
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PEGA,PEGA,Pegasystems,CIQ 5a quotidien,^GSPC,1253,1.3789,0.2055,1.2933,0.0856,0.1807
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PEGA,PEGA,Pegasystems,CIQ 5a quotidien,^STOXX,1221,0.7113,0.0382,1.2933,-0.582,0.1807
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PEGA,PEGA,Pegasystems,5a hebdo,^GSPC,261,1.4403,0.2139,1.2933,0.147,0.1807
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PEGA,PEGA,Pegasystems,5a hebdo,^STOXX,261,1.1362,0.0945,1.2933,-0.1571,0.1807
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PEGA,PEGA,Pegasystems,2a hebdo,^GSPC,104,1.2383,0.144,1.2933,-0.055,0.1807
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PEGA,PEGA,Pegasystems,2a hebdo,^STOXX,104,0.7758,0.042,1.2933,-0.5175,0.1807
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PEGA,PEGA,Pegasystems,Outil defaut (5a mensuel),^GSPC,59,0.8771,0.0949,1.2933,-0.4162,0.1807
+Beta 01072026 Liste software.xlsx,Logiciels,NASDAQGS:PEGA,PEGA,Pegasystems,Yahoo publie (indicatif),-,,0.869,,1.2933,,
+Beta 01072026 Liste software.xlsx,Logiciels,SWX:TEMN,TEMN.SW,Temenos,CIQ 5a quotidien,^GSPC,1221,0.6019,0.0567,1.1133,-0.5114,0.1327
+Beta 01072026 Liste software.xlsx,Logiciels,SWX:TEMN,TEMN.SW,Temenos,CIQ 5a quotidien,^STOXX,1255,1.1768,0.15,1.1133,0.0635,0.1327
+Beta 01072026 Liste software.xlsx,Logiciels,SWX:TEMN,TEMN.SW,Temenos,CIQ 5a quotidien,^SSMI,1253,1.0341,0.1045,1.1133,-0.0792,0.1327
+Beta 01072026 Liste software.xlsx,Logiciels,SWX:TEMN,TEMN.SW,Temenos,5a hebdo,^GSPC,261,0.8124,0.1027,1.1133,-0.3009,0.1327
+Beta 01072026 Liste software.xlsx,Logiciels,SWX:TEMN,TEMN.SW,Temenos,5a hebdo,^STOXX,261,1.0935,0.132,1.1133,-0.0199,0.1327
+Beta 01072026 Liste software.xlsx,Logiciels,SWX:TEMN,TEMN.SW,Temenos,5a hebdo,^SSMI,261,0.8563,0.0837,1.1133,-0.2571,0.1327
+Beta 01072026 Liste software.xlsx,Logiciels,SWX:TEMN,TEMN.SW,Temenos,2a hebdo,^GSPC,104,0.6953,0.0861,1.1133,-0.4181,0.1327
+Beta 01072026 Liste software.xlsx,Logiciels,SWX:TEMN,TEMN.SW,Temenos,2a hebdo,^STOXX,104,0.7727,0.0791,1.1133,-0.3406,0.1327
+Beta 01072026 Liste software.xlsx,Logiciels,SWX:TEMN,TEMN.SW,Temenos,2a hebdo,^SSMI,104,0.3643,0.0215,1.1133,-0.749,0.1327
+Beta 01072026 Liste software.xlsx,Logiciels,SWX:TEMN,TEMN.SW,Temenos,Outil defaut (5a mensuel),^SSMI,59,1.2041,0.1791,1.1133,0.0908,0.1327
+Beta 01072026 Liste software.xlsx,Logiciels,SWX:TEMN,TEMN.SW,Temenos,Yahoo publie (indicatif),-,,0.584,,1.1133,,
+Beta 01072026 Liste software.xlsx,Logiciels,TSX:KXS,KXS.TO,Kinaxis,CIQ 5a quotidien,^GSPC,1226,0.8378,0.1673,0.8509,-0.0131,0.1693
+Beta 01072026 Liste software.xlsx,Logiciels,TSX:KXS,KXS.TO,Kinaxis,CIQ 5a quotidien,^STOXX,1223,0.496,0.0401,0.8509,-0.355,0.1693
+Beta 01072026 Liste software.xlsx,Logiciels,TSX:KXS,KXS.TO,Kinaxis,CIQ 5a quotidien,^GSPTSE,1253,0.9104,0.1202,0.8509,0.0595,0.1693
+Beta 01072026 Liste software.xlsx,Logiciels,TSX:KXS,KXS.TO,Kinaxis,5a hebdo,^GSPC,261,0.7303,0.1384,0.8509,-0.1206,0.1693
+Beta 01072026 Liste software.xlsx,Logiciels,TSX:KXS,KXS.TO,Kinaxis,5a hebdo,^STOXX,261,0.6385,0.0751,0.8509,-0.2125,0.1693
+Beta 01072026 Liste software.xlsx,Logiciels,TSX:KXS,KXS.TO,Kinaxis,5a hebdo,^GSPTSE,261,0.8475,0.1174,0.8509,-0.0034,0.1693
+Beta 01072026 Liste software.xlsx,Logiciels,TSX:KXS,KXS.TO,Kinaxis,2a hebdo,^GSPC,104,0.3594,0.033,0.8509,-0.4915,0.1693
+Beta 01072026 Liste software.xlsx,Logiciels,TSX:KXS,KXS.TO,Kinaxis,2a hebdo,^STOXX,104,0.2376,0.0107,0.8509,-0.6133,0.1693
+Beta 01072026 Liste software.xlsx,Logiciels,TSX:KXS,KXS.TO,Kinaxis,2a hebdo,^GSPTSE,104,0.5585,0.0486,0.8509,-0.2924,0.1693
+Beta 01072026 Liste software.xlsx,Logiciels,TSX:KXS,KXS.TO,Kinaxis,Outil defaut (5a mensuel),^GSPTSE,59,0.7558,0.0915,0.8509,-0.0951,0.1693
+Beta 01072026 Liste software.xlsx,Logiciels,TSX:KXS,KXS.TO,Kinaxis,Yahoo publie (indicatif),-,,0.756,,0.8509,,
+Beta 01072026 Liste software.xlsx,Logiciels,ENXTPA:74SW,74SW.PA,Axway (74Software),CIQ 5a quotidien,^GSPC,1241,0.1758,0.0107,0.3279,-0.1522,0.0263
+Beta 01072026 Liste software.xlsx,Logiciels,ENXTPA:74SW,74SW.PA,Axway (74Software),CIQ 5a quotidien,^STOXX,1255,0.3272,0.0263,0.3279,-0.0008,0.0263
+Beta 01072026 Liste software.xlsx,Logiciels,ENXTPA:74SW,74SW.PA,Axway (74Software),CIQ 5a quotidien,^FCHI,1279,0.2573,0.022,0.3279,-0.0707,0.0263
+Beta 01072026 Liste software.xlsx,Logiciels,ENXTPA:74SW,74SW.PA,Axway (74Software),5a hebdo,^GSPC,261,0.5234,0.0708,0.3279,0.1955,0.0263
+Beta 01072026 Liste software.xlsx,Logiciels,ENXTPA:74SW,74SW.PA,Axway (74Software),5a hebdo,^STOXX,261,0.5792,0.0615,0.3279,0.2513,0.0263
+Beta 01072026 Liste software.xlsx,Logiciels,ENXTPA:74SW,74SW.PA,Axway (74Software),5a hebdo,^FCHI,261,0.4347,0.0482,0.3279,0.1067,0.0263
+Beta 01072026 Liste software.xlsx,Logiciels,ENXTPA:74SW,74SW.PA,Axway (74Software),2a hebdo,^GSPC,104,0.5804,0.0654,0.3279,0.2524,0.0263
+Beta 01072026 Liste software.xlsx,Logiciels,ENXTPA:74SW,74SW.PA,Axway (74Software),2a hebdo,^STOXX,104,0.7252,0.0759,0.3279,0.3972,0.0263
+Beta 01072026 Liste software.xlsx,Logiciels,ENXTPA:74SW,74SW.PA,Axway (74Software),2a hebdo,^FCHI,104,0.6461,0.0764,0.3279,0.3181,0.0263
+Beta 01072026 Liste software.xlsx,Logiciels,ENXTPA:74SW,74SW.PA,Axway (74Software),Outil defaut (5a mensuel),^FCHI,59,0.3564,0.0218,0.3279,0.0285,0.0263
+Beta 01072026 Liste software.xlsx,Logiciels,ENXTPA:74SW,74SW.PA,Axway (74Software),Yahoo publie (indicatif),-,,0.657,,0.3279,,
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:WLN,WLN.PA,Worldline SA,CIQ 5a quotidien,^GSPC,1241,0.7297,0.0376,1.557,-0.8273,0.093
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:WLN,WLN.PA,Worldline SA,CIQ 5a quotidien,^STOXX,1255,1.5665,0.1197,1.557,0.0095,0.093
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:WLN,WLN.PA,Worldline SA,CIQ 5a quotidien,^FCHI,1279,1.2677,0.1079,1.557,-0.2893,0.093
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:WLN,WLN.PA,Worldline SA,5a hebdo,^GSPC,260,1.0675,0.0856,1.557,-0.4895,0.093
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:WLN,WLN.PA,Worldline SA,5a hebdo,^STOXX,260,1.5852,0.1343,1.557,0.0281,0.093
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:WLN,WLN.PA,Worldline SA,5a hebdo,^FCHI,260,1.2911,0.124,1.557,-0.2659,0.093
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:WLN,WLN.PA,Worldline SA,2a hebdo,^GSPC,103,0.7971,0.0315,1.557,-0.7599,0.093
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:WLN,WLN.PA,Worldline SA,2a hebdo,^STOXX,103,1.6253,0.098,1.557,0.0683,0.093
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:WLN,WLN.PA,Worldline SA,2a hebdo,^FCHI,103,1.3868,0.0905,1.557,-0.1703,0.093
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:WLN,WLN.PA,Worldline SA,Outil defaut (5a mensuel),^FCHI,60,1.5818,0.1582,1.557,0.0248,0.093
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:WLN,WLN.PA,Worldline SA,Yahoo publie (indicatif),-,,1.798,,1.557,,
+Beta 29062026 FLO.xlsx,Paiements / fintech,BIT:NEXI,NEXI.MI,Nexi S.p.A.,CIQ 5a quotidien,^GSPC,1232,0.6935,0.1075,1.3146,-0.621,0.2667
+Beta 29062026 FLO.xlsx,Paiements / fintech,BIT:NEXI,NEXI.MI,Nexi S.p.A.,CIQ 5a quotidien,^STOXX,1251,1.3334,0.2759,1.3146,0.0188,0.2667
+Beta 29062026 FLO.xlsx,Paiements / fintech,BIT:NEXI,NEXI.MI,Nexi S.p.A.,CIQ 5a quotidien,FTSEMIB.MI,1269,1.0135,0.2712,1.3146,-0.3011,0.2667
+Beta 29062026 FLO.xlsx,Paiements / fintech,BIT:NEXI,NEXI.MI,Nexi S.p.A.,5a hebdo,^GSPC,260,1.0582,0.213,1.3146,-0.2564,0.2667
+Beta 29062026 FLO.xlsx,Paiements / fintech,BIT:NEXI,NEXI.MI,Nexi S.p.A.,5a hebdo,^STOXX,260,1.4193,0.2724,1.3146,0.1048,0.2667
+Beta 29062026 FLO.xlsx,Paiements / fintech,BIT:NEXI,NEXI.MI,Nexi S.p.A.,5a hebdo,FTSEMIB.MI,260,1.1286,0.2977,1.3146,-0.186,0.2667
+Beta 29062026 FLO.xlsx,Paiements / fintech,BIT:NEXI,NEXI.MI,Nexi S.p.A.,2a hebdo,^GSPC,103,1.0142,0.1746,1.3146,-0.3004,0.2667
+Beta 29062026 FLO.xlsx,Paiements / fintech,BIT:NEXI,NEXI.MI,Nexi S.p.A.,2a hebdo,^STOXX,103,1.5389,0.3004,1.3146,0.2243,0.2667
+Beta 29062026 FLO.xlsx,Paiements / fintech,BIT:NEXI,NEXI.MI,Nexi S.p.A.,2a hebdo,FTSEMIB.MI,103,1.2045,0.3177,1.3146,-0.11,0.2667
+Beta 29062026 FLO.xlsx,Paiements / fintech,BIT:NEXI,NEXI.MI,Nexi S.p.A.,Outil defaut (5a mensuel),FTSEMIB.MI,60,1.0915,0.2958,1.3146,-0.223,0.2667
+Beta 29062026 FLO.xlsx,Paiements / fintech,BIT:NEXI,NEXI.MI,Nexi S.p.A.,Yahoo publie (indicatif),-,,1.076,,1.3146,,
+Beta 29062026 FLO.xlsx,Paiements / fintech,LSE:CABP,CABP.L,CAB Payments Holdings,CIQ 5a quotidien,^GSPC,734,0.5125,0.0103,0.5533,-0.0408,0.0144
+Beta 29062026 FLO.xlsx,Paiements / fintech,LSE:CABP,CABP.L,CAB Payments Holdings,CIQ 5a quotidien,^STOXX,734,1.028,0.0291,0.5533,0.4747,0.0144
+Beta 29062026 FLO.xlsx,Paiements / fintech,LSE:CABP,CABP.L,CAB Payments Holdings,CIQ 5a quotidien,^FTSE,752,1.1258,0.0283,0.5533,0.5725,0.0144
+Beta 29062026 FLO.xlsx,Paiements / fintech,LSE:CABP,CABP.L,CAB Payments Holdings,5a hebdo,^GSPC,155,1.1791,0.0427,0.5533,0.6258,0.0144
+Beta 29062026 FLO.xlsx,Paiements / fintech,LSE:CABP,CABP.L,CAB Payments Holdings,5a hebdo,^STOXX,155,1.4897,0.0515,0.5533,0.9365,0.0144
+Beta 29062026 FLO.xlsx,Paiements / fintech,LSE:CABP,CABP.L,CAB Payments Holdings,5a hebdo,^FTSE,155,1.4527,0.0411,0.5533,0.8994,0.0144
+Beta 29062026 FLO.xlsx,Paiements / fintech,LSE:CABP,CABP.L,CAB Payments Holdings,2a hebdo,^GSPC,103,0.4761,0.016,0.5533,-0.0772,0.0144
+Beta 29062026 FLO.xlsx,Paiements / fintech,LSE:CABP,CABP.L,CAB Payments Holdings,2a hebdo,^STOXX,103,1.0682,0.0603,0.5533,0.5149,0.0144
+Beta 29062026 FLO.xlsx,Paiements / fintech,LSE:CABP,CABP.L,CAB Payments Holdings,2a hebdo,^FTSE,103,0.7993,0.0263,0.5533,0.246,0.0144
+Beta 29062026 FLO.xlsx,Paiements / fintech,LSE:CABP,CABP.L,CAB Payments Holdings,Outil defaut (5a mensuel),^FTSE,35,2.1932,0.0843,0.5533,1.6399,0.0144
+Beta 29062026 FLO.xlsx,Paiements / fintech,LSE:CABP,CABP.L,CAB Payments Holdings,Yahoo publie (indicatif),-,,1.495,,0.5533,,
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:FOUR,FOUR,"Shift4 Payments, Inc.",CIQ 5a quotidien,^GSPC,1253,1.6796,0.2508,1.5952,0.0844,0.2277
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:FOUR,FOUR,"Shift4 Payments, Inc.",CIQ 5a quotidien,^STOXX,1221,1.0469,0.0673,1.5952,-0.5482,0.2277
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:FOUR,FOUR,"Shift4 Payments, Inc.",5a hebdo,^GSPC,260,1.6083,0.2258,1.5952,0.0131,0.2277
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:FOUR,FOUR,"Shift4 Payments, Inc.",5a hebdo,^STOXX,260,1.6272,0.1643,1.5952,0.032,0.2277
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:FOUR,FOUR,"Shift4 Payments, Inc.",2a hebdo,^GSPC,103,1.5103,0.1924,1.5952,-0.0848,0.2277
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:FOUR,FOUR,"Shift4 Payments, Inc.",2a hebdo,^STOXX,103,1.162,0.0851,1.5952,-0.4331,0.2277
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:FOUR,FOUR,"Shift4 Payments, Inc.",Outil defaut (5a mensuel),^GSPC,60,1.38,0.1895,1.5952,-0.2151,0.2277
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:FOUR,FOUR,"Shift4 Payments, Inc.",Yahoo publie (indicatif),-,,1.4,,1.5952,,
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:XYZ,XYZ,"Block, Inc.",CIQ 5a quotidien,^GSPC,1253,2.2696,0.412,2.1828,0.0868,0.3923
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:XYZ,XYZ,"Block, Inc.",CIQ 5a quotidien,^STOXX,1221,1.4502,0.1168,2.1828,-0.7326,0.3923
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:XYZ,XYZ,"Block, Inc.",5a hebdo,^GSPC,260,2.2734,0.4083,2.1828,0.0906,0.3923
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:XYZ,XYZ,"Block, Inc.",5a hebdo,^STOXX,260,1.9523,0.2141,2.1828,-0.2305,0.3923
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:XYZ,XYZ,"Block, Inc.",2a hebdo,^GSPC,103,1.5783,0.2315,2.1828,-0.6045,0.3923
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:XYZ,XYZ,"Block, Inc.",2a hebdo,^STOXX,103,0.8701,0.0526,2.1828,-1.3127,0.3923
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:XYZ,XYZ,"Block, Inc.",Outil defaut (5a mensuel),^GSPC,60,2.5075,0.4971,2.1828,0.3247,0.3923
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:XYZ,XYZ,"Block, Inc.",Yahoo publie (indicatif),-,,2.541,,2.1828,,
+Beta 29062026 FLO.xlsx,Paiements / fintech,NASDAQGS:FISV,FI,"Fiserv, Inc.",Yahoo publie (indicatif),-,,,,0.742,,
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:GPN,GPN,Global Payments Inc.,CIQ 5a quotidien,^GSPC,1253,1.2061,0.311,1.1209,0.0852,0.2696
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:GPN,GPN,Global Payments Inc.,CIQ 5a quotidien,^STOXX,1221,0.7846,0.0915,1.1209,-0.3362,0.2696
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:GPN,GPN,Global Payments Inc.,5a hebdo,^GSPC,260,1.1575,0.2688,1.1209,0.0366,0.2696
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:GPN,GPN,Global Payments Inc.,5a hebdo,^STOXX,260,1.0049,0.1441,1.1209,-0.1159,0.2696
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:GPN,GPN,Global Payments Inc.,2a hebdo,^GSPC,103,1.2528,0.2531,1.1209,0.1319,0.2696
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:GPN,GPN,Global Payments Inc.,2a hebdo,^STOXX,103,0.8451,0.0861,1.1209,-0.2758,0.2696
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:GPN,GPN,Global Payments Inc.,Outil defaut (5a mensuel),^GSPC,60,0.7731,0.1543,1.1209,-0.3478,0.2696
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:GPN,GPN,Global Payments Inc.,Yahoo publie (indicatif),-,,0.769,,1.1209,,
+Beta 29062026 FLO.xlsx,Paiements / fintech,NASDAQGS:PYPL,PYPL,Payal Holding Inc.,CIQ 5a quotidien,^GSPC,1253,1.4218,0.3286,1.3359,0.0859,0.2941
+Beta 29062026 FLO.xlsx,Paiements / fintech,NASDAQGS:PYPL,PYPL,Payal Holding Inc.,CIQ 5a quotidien,^STOXX,1221,0.8459,0.081,1.3359,-0.49,0.2941
+Beta 29062026 FLO.xlsx,Paiements / fintech,NASDAQGS:PYPL,PYPL,Payal Holding Inc.,5a hebdo,^GSPC,260,1.4209,0.311,1.3359,0.085,0.2941
+Beta 29062026 FLO.xlsx,Paiements / fintech,NASDAQGS:PYPL,PYPL,Payal Holding Inc.,5a hebdo,^STOXX,260,1.244,0.1695,1.3359,-0.0919,0.2941
+Beta 29062026 FLO.xlsx,Paiements / fintech,NASDAQGS:PYPL,PYPL,Payal Holding Inc.,2a hebdo,^GSPC,103,1.1759,0.2506,1.3359,-0.16,0.2941
+Beta 29062026 FLO.xlsx,Paiements / fintech,NASDAQGS:PYPL,PYPL,Payal Holding Inc.,2a hebdo,^STOXX,103,0.6597,0.0589,1.3359,-0.6762,0.2941
+Beta 29062026 FLO.xlsx,Paiements / fintech,NASDAQGS:PYPL,PYPL,Payal Holding Inc.,Outil defaut (5a mensuel),^GSPC,60,1.3108,0.3125,1.3359,-0.0251,0.2941
+Beta 29062026 FLO.xlsx,Paiements / fintech,NASDAQGS:PYPL,PYPL,Payal Holding Inc.,Yahoo publie (indicatif),-,,1.332,,1.3359,,
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:VYX,VYX,NCR Voyix Corporation,CIQ 5a quotidien,^GSPC,1253,1.4326,0.2629,1.3483,0.0843,0.2065
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:VYX,VYX,NCR Voyix Corporation,CIQ 5a quotidien,^STOXX,1221,0.9772,0.0847,1.3483,-0.3711,0.2065
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:VYX,VYX,NCR Voyix Corporation,5a hebdo,^GSPC,260,1.4597,0.2752,1.3483,0.1114,0.2065
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:VYX,VYX,NCR Voyix Corporation,5a hebdo,^STOXX,260,1.4032,0.1808,1.3483,0.0549,0.2065
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:VYX,VYX,NCR Voyix Corporation,2a hebdo,^GSPC,103,1.5808,0.2459,1.3483,0.2325,0.2065
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:VYX,VYX,NCR Voyix Corporation,2a hebdo,^STOXX,103,1.1491,0.0971,1.3483,-0.1992,0.2065
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:VYX,VYX,NCR Voyix Corporation,Outil defaut (5a mensuel),^GSPC,60,1.3729,0.3206,1.3483,0.0246,0.2065
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:VYX,VYX,NCR Voyix Corporation,Yahoo publie (indicatif),-,,1.493,,1.3483,,
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:ALHYP,ALHYP.PA,Hipay Group SA,CIQ 5a quotidien,^GSPC,1241,0.4254,0.0142,0.8105,-0.3851,0.0361
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:ALHYP,ALHYP.PA,Hipay Group SA,CIQ 5a quotidien,^STOXX,1255,0.8156,0.0369,0.8105,0.0051,0.0361
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:ALHYP,ALHYP.PA,Hipay Group SA,CIQ 5a quotidien,^FCHI,1279,0.7104,0.038,0.8105,-0.1001,0.0361
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:ALHYP,ALHYP.PA,Hipay Group SA,5a hebdo,^GSPC,260,0.9058,0.053,0.8105,0.0953,0.0361
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:ALHYP,ALHYP.PA,Hipay Group SA,5a hebdo,^STOXX,260,1.102,0.0558,0.8105,0.2915,0.0361
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:ALHYP,ALHYP.PA,Hipay Group SA,5a hebdo,^FCHI,260,0.9901,0.0627,0.8105,0.1796,0.0361
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:ALHYP,ALHYP.PA,Hipay Group SA,2a hebdo,^GSPC,103,0.972,0.0979,0.8105,0.1615,0.0361
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:ALHYP,ALHYP.PA,Hipay Group SA,2a hebdo,^STOXX,103,0.8885,0.0611,0.8105,0.078,0.0361
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:ALHYP,ALHYP.PA,Hipay Group SA,2a hebdo,^FCHI,103,0.8129,0.065,0.8105,0.0024,0.0361
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:ALHYP,ALHYP.PA,Hipay Group SA,Outil defaut (5a mensuel),^FCHI,60,1.5869,0.1248,0.8105,0.7764,0.0361
+Beta 29062026 FLO.xlsx,Paiements / fintech,ENXTPA:ALHYP,ALHYP.PA,Hipay Group SA,Yahoo publie (indicatif),-,,1.181,,0.8105,,
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:CPAY,CPAY,"FleetCor Technologies, Inc.",CIQ 5a quotidien,^GSPC,1253,1.1799,0.3803,1.0939,0.0861,0.3245
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:CPAY,CPAY,"FleetCor Technologies, Inc.",CIQ 5a quotidien,^STOXX,1221,0.7595,0.1097,1.0939,-0.3344,0.3245
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:CPAY,CPAY,"FleetCor Technologies, Inc.",5a hebdo,^GSPC,260,1.1689,0.3492,1.0939,0.0751,0.3245
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:CPAY,CPAY,"FleetCor Technologies, Inc.",5a hebdo,^STOXX,260,1.2886,0.3017,1.0939,0.1948,0.3245
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:CPAY,CPAY,"FleetCor Technologies, Inc.",2a hebdo,^GSPC,103,1.3355,0.3709,1.0939,0.2417,0.3245
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:CPAY,CPAY,"FleetCor Technologies, Inc.",2a hebdo,^STOXX,103,1.2665,0.2492,1.0939,0.1726,0.3245
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:CPAY,CPAY,"FleetCor Technologies, Inc.",Outil defaut (5a mensuel),^GSPC,60,0.8865,0.2389,1.0939,-0.2073,0.3245
+Beta 29062026 FLO.xlsx,Paiements / fintech,NYSE:CPAY,CPAY,"FleetCor Technologies, Inc.",Yahoo publie (indicatif),-,,0.881,,1.0939,,
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:FGR,FGR.PA,Eiffage SA,CIQ 5a quotidien,^GSPC,1244,0.3288,0.062,0.4131,-0.0843,0.0745
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:FGR,FGR.PA,Eiffage SA,CIQ 5a quotidien,^STOXX,1258,0.9749,0.3715,0.4131,0.5618,0.0745
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:FGR,FGR.PA,Eiffage SA,CIQ 5a quotidien,^FCHI,1281,0.8957,0.4244,0.4131,0.4826,0.0745
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:FGR,FGR.PA,Eiffage SA,5a hebdo,^GSPC,261,0.3856,0.0747,0.4131,-0.0275,0.0745
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:FGR,FGR.PA,Eiffage SA,5a hebdo,^STOXX,261,0.9934,0.3362,0.4131,0.5803,0.0745
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:FGR,FGR.PA,Eiffage SA,5a hebdo,^FCHI,261,0.9321,0.4177,0.4131,0.519,0.0745
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:FGR,FGR.PA,Eiffage SA,2a hebdo,^GSPC,104,0.1726,0.0101,0.4131,-0.2405,0.0745
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:FGR,FGR.PA,Eiffage SA,2a hebdo,^STOXX,104,1.0647,0.252,0.4131,0.6516,0.0745
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:FGR,FGR.PA,Eiffage SA,2a hebdo,^FCHI,104,1.0177,0.3383,0.4131,0.6046,0.0745
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:FGR,FGR.PA,Eiffage SA,Outil defaut (5a mensuel),^FCHI,60,0.8027,0.297,0.4131,0.3896,0.0745
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:FGR,FGR.PA,Eiffage SA,Yahoo publie (indicatif),-,,0.725,,0.4131,,
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:EN,EN.PA,Bouygues SA,CIQ 5a quotidien,^GSPC,1244,0.2367,0.0406,0.3273,-0.0906,0.0576
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:EN,EN.PA,Bouygues SA,CIQ 5a quotidien,^STOXX,1258,0.7249,0.2619,0.3273,0.3976,0.0576
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:EN,EN.PA,Bouygues SA,CIQ 5a quotidien,^FCHI,1281,0.6735,0.3058,0.3273,0.3462,0.0576
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:EN,EN.PA,Bouygues SA,5a hebdo,^GSPC,261,0.3646,0.0843,0.3273,0.0373,0.0576
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:EN,EN.PA,Bouygues SA,5a hebdo,^STOXX,261,0.8031,0.2774,0.3273,0.4758,0.0576
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:EN,EN.PA,Bouygues SA,5a hebdo,^FCHI,261,0.7791,0.3684,0.3273,0.4518,0.0576
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:EN,EN.PA,Bouygues SA,2a hebdo,^GSPC,104,0.1993,0.0186,0.3273,-0.128,0.0576
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:EN,EN.PA,Bouygues SA,2a hebdo,^STOXX,104,0.7526,0.1749,0.3273,0.4253,0.0576
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:EN,EN.PA,Bouygues SA,2a hebdo,^FCHI,104,0.8709,0.3442,0.3273,0.5436,0.0576
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:EN,EN.PA,Bouygues SA,Outil defaut (5a mensuel),^FCHI,60,0.672,0.2354,0.3273,0.3447,0.0576
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:EN,EN.PA,Bouygues SA,Yahoo publie (indicatif),-,,0.693,,0.3273,,
+Beta Flo 021225.xlsx,BTP / construction,XTRA:HOT,HOT.DE,HOCHTIEF Aktiengesellschaft,CIQ 5a quotidien,^GSPC,1238,0.4972,0.078,0.5575,-0.0604,0.0835
+Beta Flo 021225.xlsx,BTP / construction,XTRA:HOT,HOT.DE,HOCHTIEF Aktiengesellschaft,CIQ 5a quotidien,^STOXX,1258,1.1787,0.3027,0.5575,0.6211,0.0835
+Beta Flo 021225.xlsx,BTP / construction,XTRA:HOT,HOT.DE,HOCHTIEF Aktiengesellschaft,CIQ 5a quotidien,^GDAXI,1274,1.0568,0.3512,0.5575,0.4992,0.0835
+Beta Flo 021225.xlsx,BTP / construction,XTRA:HOT,HOT.DE,HOCHTIEF Aktiengesellschaft,5a hebdo,^GSPC,261,0.6809,0.1421,0.5575,0.1233,0.0835
+Beta Flo 021225.xlsx,BTP / construction,XTRA:HOT,HOT.DE,HOCHTIEF Aktiengesellschaft,5a hebdo,^STOXX,261,1.1831,0.2909,0.5575,0.6255,0.0835
+Beta Flo 021225.xlsx,BTP / construction,XTRA:HOT,HOT.DE,HOCHTIEF Aktiengesellschaft,5a hebdo,^GDAXI,261,1.0986,0.3455,0.5575,0.541,0.0835
+Beta Flo 021225.xlsx,BTP / construction,XTRA:HOT,HOT.DE,HOCHTIEF Aktiengesellschaft,2a hebdo,^GSPC,104,0.8261,0.142,0.5575,0.2686,0.0835
+Beta Flo 021225.xlsx,BTP / construction,XTRA:HOT,HOT.DE,HOCHTIEF Aktiengesellschaft,2a hebdo,^STOXX,104,1.379,0.2606,0.5575,0.8215,0.0835
+Beta Flo 021225.xlsx,BTP / construction,XTRA:HOT,HOT.DE,HOCHTIEF Aktiengesellschaft,2a hebdo,^GDAXI,104,1.2918,0.3359,0.5575,0.7343,0.0835
+Beta Flo 021225.xlsx,BTP / construction,XTRA:HOT,HOT.DE,HOCHTIEF Aktiengesellschaft,Outil defaut (5a mensuel),^GDAXI,60,0.7612,0.1838,0.5575,0.2037,0.0835
+Beta Flo 021225.xlsx,BTP / construction,XTRA:HOT,HOT.DE,HOCHTIEF Aktiengesellschaft,Yahoo publie (indicatif),-,,0.806,,0.5575,,
+Beta Flo 021225.xlsx,BTP / construction,WBAG:STR,STR.VI,Strabag SE,CIQ 5a quotidien,^GSPC,1234,0.2923,0.0263,0.369,-0.0767,0.0341
+Beta Flo 021225.xlsx,BTP / construction,WBAG:STR,STR.VI,Strabag SE,CIQ 5a quotidien,^STOXX,1255,0.7565,0.1219,0.369,0.3876,0.0341
+Beta Flo 021225.xlsx,BTP / construction,WBAG:STR,STR.VI,Strabag SE,CIQ 5a quotidien,^ATX,1270,0.6484,0.157,0.369,0.2794,0.0341
+Beta Flo 021225.xlsx,BTP / construction,WBAG:STR,STR.VI,Strabag SE,5a hebdo,^GSPC,261,0.2832,0.024,0.369,-0.0858,0.0341
+Beta Flo 021225.xlsx,BTP / construction,WBAG:STR,STR.VI,Strabag SE,5a hebdo,^STOXX,261,0.7696,0.1204,0.369,0.4006,0.0341
+Beta Flo 021225.xlsx,BTP / construction,WBAG:STR,STR.VI,Strabag SE,5a hebdo,^ATX,261,0.6587,0.1714,0.369,0.2897,0.0341
+Beta Flo 021225.xlsx,BTP / construction,WBAG:STR,STR.VI,Strabag SE,2a hebdo,^GSPC,104,0.3507,0.0174,0.369,-0.0183,0.0341
+Beta Flo 021225.xlsx,BTP / construction,WBAG:STR,STR.VI,Strabag SE,2a hebdo,^STOXX,104,1.2458,0.1443,0.369,0.8769,0.0341
+Beta Flo 021225.xlsx,BTP / construction,WBAG:STR,STR.VI,Strabag SE,2a hebdo,^ATX,104,1.1935,0.2219,0.369,0.8245,0.0341
+Beta Flo 021225.xlsx,BTP / construction,WBAG:STR,STR.VI,Strabag SE,Outil defaut (5a mensuel),^ATX,60,0.3554,0.0626,0.369,-0.0135,0.0341
+Beta Flo 021225.xlsx,BTP / construction,WBAG:STR,STR.VI,Strabag SE,Yahoo publie (indicatif),-,,0.439,,0.369,,
+Beta Flo 021225.xlsx,BTP / construction,OM:SKA B,SKA-B.ST,Skanska AB (publ),CIQ 5a quotidien,^GSPC,1221,0.4608,0.0847,0.6018,-0.141,0.1
+Beta Flo 021225.xlsx,BTP / construction,OM:SKA B,SKA-B.ST,Skanska AB (publ),CIQ 5a quotidien,^STOXX,1246,1.1656,0.3675,0.6018,0.5638,0.1
+Beta Flo 021225.xlsx,BTP / construction,OM:SKA B,SKA-B.ST,Skanska AB (publ),CIQ 5a quotidien,^OMX,1256,1.0294,0.4006,0.6018,0.4277,0.1
+Beta Flo 021225.xlsx,BTP / construction,OM:SKA B,SKA-B.ST,Skanska AB (publ),5a hebdo,^GSPC,261,0.6692,0.1638,0.6018,0.0674,0.1
+Beta Flo 021225.xlsx,BTP / construction,OM:SKA B,SKA-B.ST,Skanska AB (publ),5a hebdo,^STOXX,261,1.1222,0.3125,0.6018,0.5205,0.1
+Beta Flo 021225.xlsx,BTP / construction,OM:SKA B,SKA-B.ST,Skanska AB (publ),5a hebdo,^OMX,261,1.0335,0.4088,0.6018,0.4318,0.1
+Beta Flo 021225.xlsx,BTP / construction,OM:SKA B,SKA-B.ST,Skanska AB (publ),2a hebdo,^GSPC,104,0.7273,0.2363,0.6018,0.1255,0.1
+Beta Flo 021225.xlsx,BTP / construction,OM:SKA B,SKA-B.ST,Skanska AB (publ),2a hebdo,^STOXX,104,0.9657,0.2743,0.6018,0.3639,0.1
+Beta Flo 021225.xlsx,BTP / construction,OM:SKA B,SKA-B.ST,Skanska AB (publ),2a hebdo,^OMX,104,0.8144,0.3088,0.6018,0.2127,0.1
+Beta Flo 021225.xlsx,BTP / construction,OM:SKA B,SKA-B.ST,Skanska AB (publ),Outil defaut (5a mensuel),^OMX,60,1.1155,0.3908,0.6018,0.5137,0.1
+Beta Flo 021225.xlsx,BTP / construction,OM:SKA B,SKA-B.ST,Skanska AB (publ),Yahoo publie (indicatif),-,,0.853,,0.6018,,
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:DG,DG.PA,Vinci SA,CIQ 5a quotidien,^GSPC,1244,0.3266,0.0666,0.4072,-0.0805,0.0796
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:DG,DG.PA,Vinci SA,CIQ 5a quotidien,^STOXX,1258,1.0093,0.4344,0.4072,0.6021,0.0796
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:DG,DG.PA,Vinci SA,CIQ 5a quotidien,^FCHI,1281,0.9436,0.5145,0.4072,0.5365,0.0796
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:DG,DG.PA,Vinci SA,5a hebdo,^GSPC,261,0.4751,0.1274,0.4072,0.0679,0.0796
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:DG,DG.PA,Vinci SA,5a hebdo,^STOXX,261,1.0538,0.4252,0.4072,0.6467,0.0796
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:DG,DG.PA,Vinci SA,5a hebdo,^FCHI,261,1.0063,0.5472,0.4072,0.5991,0.0796
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:DG,DG.PA,Vinci SA,2a hebdo,^GSPC,104,0.31,0.0507,0.4072,-0.0972,0.0796
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:DG,DG.PA,Vinci SA,2a hebdo,^STOXX,104,0.9372,0.3053,0.4072,0.53,0.0796
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:DG,DG.PA,Vinci SA,2a hebdo,^FCHI,104,0.9618,0.4725,0.4072,0.5547,0.0796
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:DG,DG.PA,Vinci SA,Outil defaut (5a mensuel),^FCHI,60,0.9272,0.481,0.4072,0.52,0.0796
+Beta Flo 021225.xlsx,BTP / construction,ENXTPA:DG,DG.PA,Vinci SA,Yahoo publie (indicatif),-,,0.747,,0.4072,,
+Beta Flo 021225.xlsx,BTP / construction,OM:PEAB B,PEAB-B.ST,Peab AB (publ),CIQ 5a quotidien,^GSPC,1221,0.5418,0.0884,0.6687,-0.1269,0.0989
+Beta Flo 021225.xlsx,BTP / construction,OM:PEAB B,PEAB-B.ST,Peab AB (publ),CIQ 5a quotidien,^STOXX,1246,1.1996,0.2933,0.6687,0.5309,0.0989
+Beta Flo 021225.xlsx,BTP / construction,OM:PEAB B,PEAB-B.ST,Peab AB (publ),CIQ 5a quotidien,^OMX,1256,1.0599,0.3196,0.6687,0.3912,0.0989
+Beta Flo 021225.xlsx,BTP / construction,OM:PEAB B,PEAB-B.ST,Peab AB (publ),5a hebdo,^GSPC,261,0.701,0.1409,0.6687,0.0323,0.0989
+Beta Flo 021225.xlsx,BTP / construction,OM:PEAB B,PEAB-B.ST,Peab AB (publ),5a hebdo,^STOXX,261,1.294,0.3257,0.6687,0.6254,0.0989
+Beta Flo 021225.xlsx,BTP / construction,OM:PEAB B,PEAB-B.ST,Peab AB (publ),5a hebdo,^OMX,261,1.0937,0.3588,0.6687,0.425,0.0989
+Beta Flo 021225.xlsx,BTP / construction,OM:PEAB B,PEAB-B.ST,Peab AB (publ),2a hebdo,^GSPC,104,0.6027,0.1032,0.6687,-0.0659,0.0989
+Beta Flo 021225.xlsx,BTP / construction,OM:PEAB B,PEAB-B.ST,Peab AB (publ),2a hebdo,^STOXX,104,1.1257,0.2371,0.6687,0.457,0.0989
+Beta Flo 021225.xlsx,BTP / construction,OM:PEAB B,PEAB-B.ST,Peab AB (publ),2a hebdo,^OMX,104,0.9748,0.2814,0.6687,0.3061,0.0989
+Beta Flo 021225.xlsx,BTP / construction,OM:PEAB B,PEAB-B.ST,Peab AB (publ),Outil defaut (5a mensuel),^OMX,60,1.3354,0.375,0.6687,0.6668,0.0989
+Beta Flo 021225.xlsx,BTP / construction,OM:PEAB B,PEAB-B.ST,Peab AB (publ),Yahoo publie (indicatif),-,,1.318,,0.6687,,
+Beta Flo 021225.xlsx,BTP / construction,OB:AFG,AFG.OL,AF Gruppen ASA,CIQ 5a quotidien,^GSPC,1221,0.1952,0.0185,0.3906,-0.1954,0.0533
+Beta Flo 021225.xlsx,BTP / construction,OB:AFG,AFG.OL,AF Gruppen ASA,CIQ 5a quotidien,^STOXX,1249,0.4427,0.0645,0.3906,0.0521,0.0533
+Beta Flo 021225.xlsx,BTP / construction,OB:AFG,AFG.OL,AF Gruppen ASA,CIQ 5a quotidien,^OSEAX,1243,0.4523,0.0806,0.3906,0.0617,0.0533
+Beta Flo 021225.xlsx,BTP / construction,OB:AFG,AFG.OL,AF Gruppen ASA,5a hebdo,^GSPC,261,0.3598,0.0816,0.3906,-0.0308,0.0533
+Beta Flo 021225.xlsx,BTP / construction,OB:AFG,AFG.OL,AF Gruppen ASA,5a hebdo,^STOXX,261,0.4961,0.1051,0.3906,0.1055,0.0533
+Beta Flo 021225.xlsx,BTP / construction,OB:AFG,AFG.OL,AF Gruppen ASA,5a hebdo,^OSEAX,261,0.5594,0.1456,0.3906,0.1688,0.0533
+Beta Flo 021225.xlsx,BTP / construction,OB:AFG,AFG.OL,AF Gruppen ASA,2a hebdo,^GSPC,104,0.5064,0.1183,0.3906,0.1157,0.0533
+Beta Flo 021225.xlsx,BTP / construction,OB:AFG,AFG.OL,AF Gruppen ASA,2a hebdo,^STOXX,104,0.6346,0.1224,0.3906,0.2439,0.0533
+Beta Flo 021225.xlsx,BTP / construction,OB:AFG,AFG.OL,AF Gruppen ASA,2a hebdo,^OSEAX,104,0.5647,0.1074,0.3906,0.1741,0.0533
+Beta Flo 021225.xlsx,BTP / construction,OB:AFG,AFG.OL,AF Gruppen ASA,Outil defaut (5a mensuel),^OSEAX,60,0.6855,0.1519,0.3906,0.2949,0.0533
+Beta Flo 021225.xlsx,BTP / construction,OB:AFG,AFG.OL,AF Gruppen ASA,Yahoo publie (indicatif),-,,0.586,,0.3906,,
+Beta Flo 021225.xlsx,BTP / construction,LSE:KLR,KLR.L,Keller Group plc,CIQ 5a quotidien,^GSPC,1228,0.4081,0.0457,0.5212,-0.1131,0.0635
+Beta Flo 021225.xlsx,BTP / construction,LSE:KLR,KLR.L,Keller Group plc,CIQ 5a quotidien,^STOXX,1237,0.83,0.1307,0.5212,0.3088,0.0635
+Beta Flo 021225.xlsx,BTP / construction,LSE:KLR,KLR.L,Keller Group plc,CIQ 5a quotidien,^FTSE,1259,0.8297,0.1078,0.5212,0.3085,0.0635
+Beta Flo 021225.xlsx,BTP / construction,LSE:KLR,KLR.L,Keller Group plc,5a hebdo,^GSPC,261,0.504,0.0723,0.5212,-0.0172,0.0635
+Beta Flo 021225.xlsx,BTP / construction,LSE:KLR,KLR.L,Keller Group plc,5a hebdo,^STOXX,261,0.8443,0.1376,0.5212,0.3231,0.0635
+Beta Flo 021225.xlsx,BTP / construction,LSE:KLR,KLR.L,Keller Group plc,5a hebdo,^FTSE,261,0.8437,0.1118,0.5212,0.3225,0.0635
+Beta Flo 021225.xlsx,BTP / construction,LSE:KLR,KLR.L,Keller Group plc,2a hebdo,^GSPC,104,0.622,0.0882,0.5212,0.1008,0.0635
+Beta Flo 021225.xlsx,BTP / construction,LSE:KLR,KLR.L,Keller Group plc,2a hebdo,^STOXX,104,0.9474,0.1347,0.5212,0.4262,0.0635
+Beta Flo 021225.xlsx,BTP / construction,LSE:KLR,KLR.L,Keller Group plc,2a hebdo,^FTSE,104,0.9902,0.1082,0.5212,0.469,0.0635
+Beta Flo 021225.xlsx,BTP / construction,LSE:KLR,KLR.L,Keller Group plc,Outil defaut (5a mensuel),^FTSE,60,1.2332,0.1523,0.5212,0.7121,0.0635
+Beta Flo 021225.xlsx,BTP / construction,LSE:KLR,KLR.L,Keller Group plc,Yahoo publie (indicatif),-,,1.028,,0.5212,,
+Beta Flo 021225.xlsx,BTP / construction,LSE:NCC,NCC.L,NCC Group plc,CIQ 5a quotidien,^GSPC,1228,0.3223,0.0226,0.4321,-0.1098,0.0366
+Beta Flo 021225.xlsx,BTP / construction,LSE:NCC,NCC.L,NCC Group plc,CIQ 5a quotidien,^STOXX,1237,0.794,0.0936,0.4321,0.3618,0.0366
+Beta Flo 021225.xlsx,BTP / construction,LSE:NCC,NCC.L,NCC Group plc,CIQ 5a quotidien,^FTSE,1259,0.8266,0.083,0.4321,0.3945,0.0366
+Beta Flo 021225.xlsx,BTP / construction,LSE:NCC,NCC.L,NCC Group plc,5a hebdo,^GSPC,261,0.4395,0.0408,0.4321,0.0074,0.0366
+Beta Flo 021225.xlsx,BTP / construction,LSE:NCC,NCC.L,NCC Group plc,5a hebdo,^STOXX,261,0.7148,0.0732,0.4321,0.2827,0.0366
+Beta Flo 021225.xlsx,BTP / construction,LSE:NCC,NCC.L,NCC Group plc,5a hebdo,^FTSE,261,0.6494,0.0492,0.4321,0.2173,0.0366
+Beta Flo 021225.xlsx,BTP / construction,LSE:NCC,NCC.L,NCC Group plc,2a hebdo,^GSPC,104,0.4293,0.0541,0.4321,-0.0028,0.0366
+Beta Flo 021225.xlsx,BTP / construction,LSE:NCC,NCC.L,NCC Group plc,2a hebdo,^STOXX,104,0.7606,0.1117,0.4321,0.3285,0.0366
+Beta Flo 021225.xlsx,BTP / construction,LSE:NCC,NCC.L,NCC Group plc,2a hebdo,^FTSE,104,0.8642,0.1061,0.4321,0.4321,0.0366
+Beta Flo 021225.xlsx,BTP / construction,LSE:NCC,NCC.L,NCC Group plc,Outil defaut (5a mensuel),^FTSE,60,1.1466,0.095,0.4321,0.7145,0.0366
+Beta Flo 021225.xlsx,BTP / construction,LSE:NCC,NCC.L,NCC Group plc,Yahoo publie (indicatif),-,,0.641,,0.4321,,
+Beta VFLO 0603.xlsx,Services informatiques,LSE:CCC,CCC.L,Computacenter plc,CIQ 5a quotidien,^GSPC,1228,0.4605,0.0739,0.9473,-0.4867,0.1653
+Beta VFLO 0603.xlsx,Services informatiques,LSE:CCC,CCC.L,Computacenter plc,CIQ 5a quotidien,^STOXX,1236,1.0185,0.25,0.9473,0.0712,0.1653
+Beta VFLO 0603.xlsx,Services informatiques,LSE:CCC,CCC.L,Computacenter plc,CIQ 5a quotidien,^FTSE,1260,0.9344,0.1683,0.9473,-0.0129,0.1653
+Beta VFLO 0603.xlsx,Services informatiques,LSE:CCC,CCC.L,Computacenter plc,5a hebdo,^GSPC,260,0.6479,0.1324,0.9473,-0.2994,0.1653
+Beta VFLO 0603.xlsx,Services informatiques,LSE:CCC,CCC.L,Computacenter plc,5a hebdo,^STOXX,260,1.101,0.2651,0.9473,0.1537,0.1653
+Beta VFLO 0603.xlsx,Services informatiques,LSE:CCC,CCC.L,Computacenter plc,5a hebdo,^FTSE,260,1.0505,0.1893,0.9473,0.1033,0.1653
+Beta VFLO 0603.xlsx,Services informatiques,LSE:CCC,CCC.L,Computacenter plc,2a hebdo,^GSPC,104,0.5261,0.074,0.9473,-0.4212,0.1653
+Beta VFLO 0603.xlsx,Services informatiques,LSE:CCC,CCC.L,Computacenter plc,2a hebdo,^STOXX,104,0.962,0.1774,0.9473,0.0147,0.1653
+Beta VFLO 0603.xlsx,Services informatiques,LSE:CCC,CCC.L,Computacenter plc,2a hebdo,^FTSE,104,0.8596,0.1082,0.9473,-0.0877,0.1653
+Beta VFLO 0603.xlsx,Services informatiques,LSE:CCC,CCC.L,Computacenter plc,Outil defaut (5a mensuel),^FTSE,60,1.0057,0.1407,0.9473,0.0584,0.1653
+Beta VFLO 0603.xlsx,Services informatiques,LSE:CCC,CCC.L,Computacenter plc,Yahoo publie (indicatif),-,,0.931,,0.9473,,
+Beta VFLO 0603.xlsx,Services informatiques,ENXTBR:ECONB,ECONB.BR,Econocom Group SE,CIQ 5a quotidien,^GSPC,1243,0.1357,0.0047,0.6933,-0.5575,0.0835
+Beta VFLO 0603.xlsx,Services informatiques,ENXTBR:ECONB,ECONB.BR,Econocom Group SE,CIQ 5a quotidien,^STOXX,1256,0.6929,0.0842,0.6933,-0.0004,0.0835
+Beta VFLO 0603.xlsx,Services informatiques,ENXTBR:ECONB,ECONB.BR,Econocom Group SE,CIQ 5a quotidien,^BFX,1280,0.6214,0.0727,0.6933,-0.0718,0.0835
+Beta VFLO 0603.xlsx,Services informatiques,ENXTBR:ECONB,ECONB.BR,Econocom Group SE,5a hebdo,^GSPC,260,0.129,0.0064,0.6933,-0.5643,0.0835
+Beta VFLO 0603.xlsx,Services informatiques,ENXTBR:ECONB,ECONB.BR,Econocom Group SE,5a hebdo,^STOXX,260,0.5175,0.071,0.6933,-0.1758,0.0835
+Beta VFLO 0603.xlsx,Services informatiques,ENXTBR:ECONB,ECONB.BR,Econocom Group SE,5a hebdo,^BFX,260,0.5523,0.0875,0.6933,-0.141,0.0835
+Beta VFLO 0603.xlsx,Services informatiques,ENXTBR:ECONB,ECONB.BR,Econocom Group SE,2a hebdo,^GSPC,104,0.0564,0.0018,0.6933,-0.6369,0.0835
+Beta VFLO 0603.xlsx,Services informatiques,ENXTBR:ECONB,ECONB.BR,Econocom Group SE,2a hebdo,^STOXX,104,0.3146,0.0409,0.6933,-0.3787,0.0835
+Beta VFLO 0603.xlsx,Services informatiques,ENXTBR:ECONB,ECONB.BR,Econocom Group SE,2a hebdo,^BFX,104,0.23,0.0219,0.6933,-0.4632,0.0835
+Beta VFLO 0603.xlsx,Services informatiques,ENXTBR:ECONB,ECONB.BR,Econocom Group SE,Outil defaut (5a mensuel),^BFX,60,0.9433,0.2389,0.6933,0.2501,0.0835
+Beta VFLO 0603.xlsx,Services informatiques,ENXTBR:ECONB,ECONB.BR,Econocom Group SE,Yahoo publie (indicatif),-,,0.774,,0.6933,,
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:CDW,CDW,CDW Corporation,CIQ 5a quotidien,^GSPC,1254,1.0887,0.4177,1.0036,0.0851,0.3487
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:CDW,CDW,CDW Corporation,CIQ 5a quotidien,^STOXX,1222,0.6521,0.1027,1.0036,-0.3514,0.3487
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:CDW,CDW,CDW Corporation,5a hebdo,^GSPC,260,1.0767,0.387,1.0036,0.0732,0.3487
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:CDW,CDW,CDW Corporation,5a hebdo,^STOXX,260,0.9658,0.2159,1.0036,-0.0377,0.3487
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:CDW,CDW,CDW Corporation,2a hebdo,^GSPC,104,1.2032,0.3339,1.0036,0.1997,0.3487
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:CDW,CDW,CDW Corporation,2a hebdo,^STOXX,104,1.1256,0.2095,1.0036,0.1221,0.3487
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:CDW,CDW,CDW Corporation,Outil defaut (5a mensuel),^GSPC,60,1.0434,0.3742,1.0036,0.0399,0.3487
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:CDW,CDW,CDW Corporation,Yahoo publie (indicatif),-,,0.962,,1.0036,,
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:PLUS,PLUS,ePlus inc.,CIQ 5a quotidien,^GSPC,1254,1.0644,0.257,0.9778,0.0866,0.214
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:PLUS,PLUS,ePlus inc.,CIQ 5a quotidien,^STOXX,1222,0.672,0.0696,0.9778,-0.3058,0.214
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:PLUS,PLUS,ePlus inc.,5a hebdo,^GSPC,260,1.0018,0.222,0.9778,0.024,0.214
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:PLUS,PLUS,ePlus inc.,5a hebdo,^STOXX,260,0.8351,0.1069,0.9778,-0.1428,0.214
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:PLUS,PLUS,ePlus inc.,2a hebdo,^GSPC,104,1.0511,0.203,0.9778,0.0733,0.214
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:PLUS,PLUS,ePlus inc.,2a hebdo,^STOXX,104,0.8375,0.0924,0.9778,-0.1403,0.214
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:PLUS,PLUS,ePlus inc.,Outil defaut (5a mensuel),^GSPC,60,1.0015,0.1773,0.9778,0.0237,0.214
+Beta VFLO 0603.xlsx,Services informatiques,NASDAQGS:PLUS,PLUS,ePlus inc.,Yahoo publie (indicatif),-,,1.018,,0.9778,,
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:KD,KD,"Kyndryl Holdings, Inc.",CIQ 5a quotidien,^GSPC,1094,1.3348,0.1559,1.1789,0.1559,0.1303
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:KD,KD,"Kyndryl Holdings, Inc.",CIQ 5a quotidien,^STOXX,1065,0.9417,0.0517,1.1789,-0.2372,0.1303
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:KD,KD,"Kyndryl Holdings, Inc.",5a hebdo,^GSPC,228,1.4818,0.1674,1.1789,0.3028,0.1303
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:KD,KD,"Kyndryl Holdings, Inc.",5a hebdo,^STOXX,228,1.2731,0.0855,1.1789,0.0941,0.1303
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:KD,KD,"Kyndryl Holdings, Inc.",2a hebdo,^GSPC,104,1.6777,0.1899,1.1789,0.4987,0.1303
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:KD,KD,"Kyndryl Holdings, Inc.",2a hebdo,^STOXX,104,1.1239,0.0611,1.1789,-0.0551,0.1303
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:KD,KD,"Kyndryl Holdings, Inc.",Outil defaut (5a mensuel),^GSPC,53,1.9806,0.2601,1.1789,0.8016,0.1303
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:KD,KD,"Kyndryl Holdings, Inc.",Yahoo publie (indicatif),-,,1.737,,1.1789,,
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DXC,DXC,DXC Technology Company,CIQ 5a quotidien,^GSPC,1254,1.279,0.235,1.1944,0.0846,0.2086
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DXC,DXC,DXC Technology Company,CIQ 5a quotidien,^STOXX,1222,0.9961,0.0961,1.1944,-0.1983,0.2086
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DXC,DXC,DXC Technology Company,5a hebdo,^GSPC,260,1.2496,0.2362,1.1944,0.0552,0.2086
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DXC,DXC,DXC Technology Company,5a hebdo,^STOXX,260,1.3265,0.1846,1.1944,0.1321,0.2086
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DXC,DXC,DXC Technology Company,2a hebdo,^GSPC,104,0.9537,0.1593,1.1944,-0.2407,0.2086
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DXC,DXC,DXC Technology Company,2a hebdo,^STOXX,104,0.7219,0.0655,1.1944,-0.4725,0.2086
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DXC,DXC,DXC Technology Company,Outil defaut (5a mensuel),^GSPC,60,1.0288,0.195,1.1944,-0.1656,0.2086
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DXC,DXC,DXC Technology Company,Yahoo publie (indicatif),-,,0.82,,1.1944,,
+Beta VFLO 0603.xlsx,Services informatiques,ENXTPA:ATO,ATO.PA,Atos SE,CIQ 5a quotidien,^GSPC,1243,-1.4991,0.0,1.4956,-2.9946,0.0265
+Beta VFLO 0603.xlsx,Services informatiques,ENXTPA:ATO,ATO.PA,Atos SE,CIQ 5a quotidien,^STOXX,1256,-16.3496,0.0035,1.4956,-17.8451,0.0265
+Beta VFLO 0603.xlsx,Services informatiques,ENXTPA:ATO,ATO.PA,Atos SE,CIQ 5a quotidien,^FCHI,1280,-16.6016,0.005,1.4956,-18.0972,0.0265
+Beta VFLO 0603.xlsx,Services informatiques,ENXTPA:ATO,ATO.PA,Atos SE,5a hebdo,^GSPC,260,-6.4631,0.0031,1.4956,-7.9586,0.0265
+Beta VFLO 0603.xlsx,Services informatiques,ENXTPA:ATO,ATO.PA,Atos SE,5a hebdo,^STOXX,260,-2.2871,0.0003,1.4956,-3.7826,0.0265
+Beta VFLO 0603.xlsx,Services informatiques,ENXTPA:ATO,ATO.PA,Atos SE,5a hebdo,^FCHI,260,-2.2461,0.0004,1.4956,-3.7416,0.0265
+Beta VFLO 0603.xlsx,Services informatiques,ENXTPA:ATO,ATO.PA,Atos SE,2a hebdo,^GSPC,104,-21.4055,0.0119,1.4956,-22.9011,0.0265
+Beta VFLO 0603.xlsx,Services informatiques,ENXTPA:ATO,ATO.PA,Atos SE,2a hebdo,^STOXX,104,-10.7812,0.0022,1.4956,-12.2768,0.0265
+Beta VFLO 0603.xlsx,Services informatiques,ENXTPA:ATO,ATO.PA,Atos SE,2a hebdo,^FCHI,104,-8.1804,0.0018,1.4956,-9.676,0.0265
+Beta VFLO 0603.xlsx,Services informatiques,ENXTPA:ATO,ATO.PA,Atos SE,Outil defaut (5a mensuel),^FCHI,60,-38.1712,0.0045,1.4956,-39.6668,0.0265
+Beta VFLO 0603.xlsx,Services informatiques,ENXTPA:ATO,ATO.PA,Atos SE,Yahoo publie (indicatif),-,,1.552,,1.4956,,
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:UIS,UIS,Unisys Corporation,CIQ 5a quotidien,^GSPC,1254,1.5182,0.1447,1.4318,0.0864,0.1307
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:UIS,UIS,Unisys Corporation,CIQ 5a quotidien,^STOXX,1222,1.1297,0.0546,1.4318,-0.3021,0.1307
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:UIS,UIS,Unisys Corporation,5a hebdo,^GSPC,260,1.2265,0.0792,1.4318,-0.2053,0.1307
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:UIS,UIS,Unisys Corporation,5a hebdo,^STOXX,260,1.4114,0.0727,1.4318,-0.0204,0.1307
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:UIS,UIS,Unisys Corporation,2a hebdo,^GSPC,104,1.9555,0.201,1.4318,0.5238,0.1307
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:UIS,UIS,Unisys Corporation,2a hebdo,^STOXX,104,1.7169,0.1111,1.4318,0.2851,0.1307
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:UIS,UIS,Unisys Corporation,Outil defaut (5a mensuel),^GSPC,60,1.4328,0.099,1.4318,0.0011,0.1307
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:UIS,UIS,Unisys Corporation,Yahoo publie (indicatif),-,,1.875,,1.4318,,
+Beta VFLO 0603.xlsx,Services informatiques,TSE:7752,7752.T,"Ricoh Company, Ltd.",CIQ 5a quotidien,^GSPC,1177,0.0769,0.0018,0.76,-0.683,0.1429
+Beta VFLO 0603.xlsx,Services informatiques,TSE:7752,7752.T,"Ricoh Company, Ltd.",CIQ 5a quotidien,^STOXX,1184,0.359,0.0269,0.76,-0.4009,0.1429
+Beta VFLO 0603.xlsx,Services informatiques,TSE:7752,7752.T,"Ricoh Company, Ltd.",CIQ 5a quotidien,^N225,1221,0.7892,0.3034,0.76,0.0293,0.1429
+Beta VFLO 0603.xlsx,Services informatiques,TSE:7752,7752.T,"Ricoh Company, Ltd.",5a hebdo,^GSPC,260,0.2428,0.0186,0.76,-0.5171,0.1429
+Beta VFLO 0603.xlsx,Services informatiques,TSE:7752,7752.T,"Ricoh Company, Ltd.",5a hebdo,^STOXX,260,0.4055,0.036,0.76,-0.3545,0.1429
+Beta VFLO 0603.xlsx,Services informatiques,TSE:7752,7752.T,"Ricoh Company, Ltd.",5a hebdo,^N225,260,0.6983,0.2142,0.76,-0.0616,0.1429
+Beta VFLO 0603.xlsx,Services informatiques,TSE:7752,7752.T,"Ricoh Company, Ltd.",2a hebdo,^GSPC,104,0.564,0.0817,0.76,-0.196,0.1429
+Beta VFLO 0603.xlsx,Services informatiques,TSE:7752,7752.T,"Ricoh Company, Ltd.",2a hebdo,^STOXX,104,0.7448,0.1021,0.76,-0.0151,0.1429
+Beta VFLO 0603.xlsx,Services informatiques,TSE:7752,7752.T,"Ricoh Company, Ltd.",2a hebdo,^N225,104,0.6824,0.2434,0.76,-0.0776,0.1429
+Beta VFLO 0603.xlsx,Services informatiques,TSE:7752,7752.T,"Ricoh Company, Ltd.",Outil defaut (5a mensuel),^N225,60,0.5106,0.1563,0.76,-0.2493,0.1429
+Beta VFLO 0603.xlsx,Services informatiques,TSE:7752,7752.T,"Ricoh Company, Ltd.",Yahoo publie (indicatif),-,,0.253,,0.76,,
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DBD,DBD,"Diebold Nixdorf, Incorporated",CIQ 5a quotidien,^GSPC,641,1.1039,0.1724,0.4502,0.6536,0.0683
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DBD,DBD,"Diebold Nixdorf, Incorporated",CIQ 5a quotidien,^STOXX,621,0.7982,0.0581,0.4502,0.348,0.0683
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DBD,DBD,"Diebold Nixdorf, Incorporated",5a hebdo,^GSPC,133,1.0975,0.1819,0.4502,0.6472,0.0683
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DBD,DBD,"Diebold Nixdorf, Incorporated",5a hebdo,^STOXX,133,1.3054,0.1844,0.4502,0.8551,0.0683
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DBD,DBD,"Diebold Nixdorf, Incorporated",2a hebdo,^GSPC,104,1.1769,0.2243,0.4502,0.7267,0.0683
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DBD,DBD,"Diebold Nixdorf, Incorporated",2a hebdo,^STOXX,104,1.2783,0.1897,0.4502,0.8281,0.0683
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DBD,DBD,"Diebold Nixdorf, Incorporated",Outil defaut (5a mensuel),^GSPC,31,1.4778,0.2209,0.4502,1.0275,0.0683
+Beta VFLO 0603.xlsx,Services informatiques,NYSE:DBD,DBD,"Diebold Nixdorf, Incorporated",Yahoo publie (indicatif),-,,1.112,,0.4502,,
+Beta_ACIER_COSTE_240626.xlsx,Acier,WBAG:VOE,VOE.VI,Voestalpine AG,CIQ 5a quotidien,^GSPC,1232,0.5466,0.0793,1.4105,-0.8639,0.3613
+Beta_ACIER_COSTE_240626.xlsx,Acier,WBAG:VOE,VOE.VI,Voestalpine AG,CIQ 5a quotidien,^STOXX,1252,1.4124,0.3659,1.4105,0.0019,0.3613
+Beta_ACIER_COSTE_240626.xlsx,Acier,WBAG:VOE,VOE.VI,Voestalpine AG,CIQ 5a quotidien,^ATX,1269,1.1623,0.4486,1.4105,-0.2482,0.3613
+Beta_ACIER_COSTE_240626.xlsx,Acier,WBAG:VOE,VOE.VI,Voestalpine AG,5a hebdo,^GSPC,261,0.7282,0.1334,1.4105,-0.6823,0.3613
+Beta_ACIER_COSTE_240626.xlsx,Acier,WBAG:VOE,VOE.VI,Voestalpine AG,5a hebdo,^STOXX,261,1.3534,0.3274,1.4105,-0.0571,0.3613
+Beta_ACIER_COSTE_240626.xlsx,Acier,WBAG:VOE,VOE.VI,Voestalpine AG,5a hebdo,^ATX,261,1.1156,0.4251,1.4105,-0.2949,0.3613
+Beta_ACIER_COSTE_240626.xlsx,Acier,WBAG:VOE,VOE.VI,Voestalpine AG,2a hebdo,^GSPC,104,0.8407,0.1424,1.4105,-0.5698,0.3613
+Beta_ACIER_COSTE_240626.xlsx,Acier,WBAG:VOE,VOE.VI,Voestalpine AG,2a hebdo,^STOXX,104,1.5836,0.3767,1.4105,0.1731,0.3613
+Beta_ACIER_COSTE_240626.xlsx,Acier,WBAG:VOE,VOE.VI,Voestalpine AG,2a hebdo,^ATX,104,1.3114,0.427,1.4105,-0.0991,0.3613
+Beta_ACIER_COSTE_240626.xlsx,Acier,WBAG:VOE,VOE.VI,Voestalpine AG,Outil defaut (5a mensuel),^ATX,60,1.6054,0.513,1.4105,0.1949,0.3613
+Beta_ACIER_COSTE_240626.xlsx,Acier,WBAG:VOE,VOE.VI,Voestalpine AG,Yahoo publie (indicatif),-,,1.853,,1.4105,,
+Beta_ACIER_COSTE_240626.xlsx,Acier,XTRA:KCO,KCO.DE,Klöckner & Co SE,CIQ 5a quotidien,^GSPC,1236,0.4493,0.0347,1.1842,-0.735,0.1692
+Beta_ACIER_COSTE_240626.xlsx,Acier,XTRA:KCO,KCO.DE,Klöckner & Co SE,CIQ 5a quotidien,^STOXX,1255,1.1887,0.1719,1.1842,0.0045,0.1692
+Beta_ACIER_COSTE_240626.xlsx,Acier,XTRA:KCO,KCO.DE,Klöckner & Co SE,CIQ 5a quotidien,^GDAXI,1273,0.9827,0.1713,1.1842,-0.2016,0.1692
+Beta_ACIER_COSTE_240626.xlsx,Acier,XTRA:KCO,KCO.DE,Klöckner & Co SE,5a hebdo,^GSPC,261,0.6508,0.0697,1.1842,-0.5334,0.1692
+Beta_ACIER_COSTE_240626.xlsx,Acier,XTRA:KCO,KCO.DE,Klöckner & Co SE,5a hebdo,^STOXX,261,1.0627,0.132,1.1842,-0.1215,0.1692
+Beta_ACIER_COSTE_240626.xlsx,Acier,XTRA:KCO,KCO.DE,Klöckner & Co SE,5a hebdo,^GDAXI,261,0.8249,0.1091,1.1842,-0.3594,0.1692
+Beta_ACIER_COSTE_240626.xlsx,Acier,XTRA:KCO,KCO.DE,Klöckner & Co SE,2a hebdo,^GSPC,104,0.3658,0.0166,1.1842,-0.8185,0.1692
+Beta_ACIER_COSTE_240626.xlsx,Acier,XTRA:KCO,KCO.DE,Klöckner & Co SE,2a hebdo,^STOXX,104,1.0881,0.1096,1.1842,-0.0962,0.1692
+Beta_ACIER_COSTE_240626.xlsx,Acier,XTRA:KCO,KCO.DE,Klöckner & Co SE,2a hebdo,^GDAXI,104,0.9058,0.1095,1.1842,-0.2785,0.1692
+Beta_ACIER_COSTE_240626.xlsx,Acier,XTRA:KCO,KCO.DE,Klöckner & Co SE,Outil defaut (5a mensuel),^GDAXI,60,0.9974,0.1229,1.1842,-0.1868,0.1692
+Beta_ACIER_COSTE_240626.xlsx,Acier,XTRA:KCO,KCO.DE,Klöckner & Co SE,Yahoo publie (indicatif),-,,1.229,,1.1842,,
+Beta_ACIER_COSTE_240626.xlsx,Acier,ENXTPA:JCQ,JCQ.PA,Jacquet Metals,CIQ 5a quotidien,^GSPC,1241,0.3978,0.0422,1.0217,-0.6239,0.1942
+Beta_ACIER_COSTE_240626.xlsx,Acier,ENXTPA:JCQ,JCQ.PA,Jacquet Metals,CIQ 5a quotidien,^STOXX,1255,1.0276,0.1985,1.0217,0.0059,0.1942
+Beta_ACIER_COSTE_240626.xlsx,Acier,ENXTPA:JCQ,JCQ.PA,Jacquet Metals,CIQ 5a quotidien,^FCHI,1279,0.8575,0.1903,1.0217,-0.1642,0.1942
+Beta_ACIER_COSTE_240626.xlsx,Acier,ENXTPA:JCQ,JCQ.PA,Jacquet Metals,5a hebdo,^GSPC,261,0.5901,0.082,1.0217,-0.4316,0.1942
+Beta_ACIER_COSTE_240626.xlsx,Acier,ENXTPA:JCQ,JCQ.PA,Jacquet Metals,5a hebdo,^STOXX,261,1.0709,0.1918,1.0217,0.0492,0.1942
+Beta_ACIER_COSTE_240626.xlsx,Acier,ENXTPA:JCQ,JCQ.PA,Jacquet Metals,5a hebdo,^FCHI,261,0.9244,0.1993,1.0217,-0.0973,0.1942
+Beta_ACIER_COSTE_240626.xlsx,Acier,ENXTPA:JCQ,JCQ.PA,Jacquet Metals,2a hebdo,^GSPC,104,0.4567,0.0432,1.0217,-0.565,0.1942
+Beta_ACIER_COSTE_240626.xlsx,Acier,ENXTPA:JCQ,JCQ.PA,Jacquet Metals,2a hebdo,^STOXX,104,0.9549,0.1409,1.0217,-0.0668,0.1942
+Beta_ACIER_COSTE_240626.xlsx,Acier,ENXTPA:JCQ,JCQ.PA,Jacquet Metals,2a hebdo,^FCHI,104,0.7409,0.1091,1.0217,-0.2808,0.1942
+Beta_ACIER_COSTE_240626.xlsx,Acier,ENXTPA:JCQ,JCQ.PA,Jacquet Metals,Outil defaut (5a mensuel),^FCHI,60,1.0194,0.2609,1.0217,-0.0023,0.1942
+Beta_ACIER_COSTE_240626.xlsx,Acier,ENXTPA:JCQ,JCQ.PA,Jacquet Metals,Yahoo publie (indicatif),-,,0.957,,1.0217,,
+Beta_ACIER_COSTE_240626.xlsx,Acier,NYSE:RS,RS,Reliance Inc.,CIQ 5a quotidien,^GSPC,1253,0.8342,0.2589,0.7497,0.0845,0.2048
+Beta_ACIER_COSTE_240626.xlsx,Acier,NYSE:RS,RS,Reliance Inc.,CIQ 5a quotidien,^STOXX,1221,0.644,0.106,0.7497,-0.1057,0.2048
+Beta_ACIER_COSTE_240626.xlsx,Acier,NYSE:RS,RS,Reliance Inc.,5a hebdo,^GSPC,261,0.8043,0.233,0.7497,0.0546,0.2048
+Beta_ACIER_COSTE_240626.xlsx,Acier,NYSE:RS,RS,Reliance Inc.,5a hebdo,^STOXX,261,0.7312,0.1368,0.7497,-0.0185,0.2048
+Beta_ACIER_COSTE_240626.xlsx,Acier,NYSE:RS,RS,Reliance Inc.,2a hebdo,^GSPC,104,0.8284,0.2518,0.7497,0.0787,0.2048
+Beta_ACIER_COSTE_240626.xlsx,Acier,NYSE:RS,RS,Reliance Inc.,2a hebdo,^STOXX,104,0.6535,0.1168,0.7497,-0.0962,0.2048
+Beta_ACIER_COSTE_240626.xlsx,Acier,NYSE:RS,RS,Reliance Inc.,Outil defaut (5a mensuel),^GSPC,60,0.9441,0.288,0.7497,0.1944,0.2048
+Beta_ACIER_COSTE_240626.xlsx,Acier,NYSE:RS,RS,Reliance Inc.,Yahoo publie (indicatif),-,,0.962,,0.7497,,
+Beta_ACIER_COSTE_240626.xlsx,Acier,TSX:RUS,RUS.TO,Russel Metals,CIQ 5a quotidien,^GSPC,1226,0.7761,0.2506,0.7821,-0.006,0.236
+Beta_ACIER_COSTE_240626.xlsx,Acier,TSX:RUS,RUS.TO,Russel Metals,CIQ 5a quotidien,^STOXX,1223,0.7061,0.1432,0.7821,-0.0761,0.236
+Beta_ACIER_COSTE_240626.xlsx,Acier,TSX:RUS,RUS.TO,Russel Metals,CIQ 5a quotidien,^GSPTSE,1253,1.1416,0.3288,0.7821,0.3595,0.236
+Beta_ACIER_COSTE_240626.xlsx,Acier,TSX:RUS,RUS.TO,Russel Metals,5a hebdo,^GSPC,261,0.7835,0.2396,0.7821,0.0013,0.236
+Beta_ACIER_COSTE_240626.xlsx,Acier,TSX:RUS,RUS.TO,Russel Metals,5a hebdo,^STOXX,261,0.8564,0.2034,0.7821,0.0743,0.236
+Beta_ACIER_COSTE_240626.xlsx,Acier,TSX:RUS,RUS.TO,Russel Metals,5a hebdo,^GSPTSE,261,1.0414,0.2669,0.7821,0.2593,0.236
+Beta_ACIER_COSTE_240626.xlsx,Acier,TSX:RUS,RUS.TO,Russel Metals,2a hebdo,^GSPC,104,0.8256,0.2759,0.7821,0.0434,0.236
+Beta_ACIER_COSTE_240626.xlsx,Acier,TSX:RUS,RUS.TO,Russel Metals,2a hebdo,^STOXX,104,0.6484,0.1269,0.7821,-0.1337,0.236
+Beta_ACIER_COSTE_240626.xlsx,Acier,TSX:RUS,RUS.TO,Russel Metals,2a hebdo,^GSPTSE,104,0.8787,0.1904,0.7821,0.0965,0.236
+Beta_ACIER_COSTE_240626.xlsx,Acier,TSX:RUS,RUS.TO,Russel Metals,Outil defaut (5a mensuel),^GSPTSE,60,1.1125,0.2837,0.7821,0.3303,0.236
+Beta_ACIER_COSTE_240626.xlsx,Acier,TSX:RUS,RUS.TO,Russel Metals,Yahoo publie (indicatif),-,,1.097,,0.7821,,
+Beta_ACIER_COSTE_240626.xlsx,Acier,BME:ACX,ACX.MC,Acerinox,CIQ 5a quotidien,^GSPC,1240,0.5628,0.107,1.2765,-0.7137,0.3769
+Beta_ACIER_COSTE_240626.xlsx,Acier,BME:ACX,ACX.MC,Acerinox,CIQ 5a quotidien,^STOXX,1255,1.2949,0.3925,1.2765,0.0184,0.3769
+Beta_ACIER_COSTE_240626.xlsx,Acier,BME:ACX,ACX.MC,Acerinox,CIQ 5a quotidien,^IBEX,1277,1.0088,0.3274,1.2765,-0.2677,0.3769
+Beta_ACIER_COSTE_240626.xlsx,Acier,BME:ACX,ACX.MC,Acerinox,5a hebdo,^GSPC,261,0.8146,0.2201,1.2765,-0.462,0.3769
+Beta_ACIER_COSTE_240626.xlsx,Acier,BME:ACX,ACX.MC,Acerinox,5a hebdo,^STOXX,261,1.2235,0.3527,1.2765,-0.053,0.3769
+Beta_ACIER_COSTE_240626.xlsx,Acier,BME:ACX,ACX.MC,Acerinox,5a hebdo,^IBEX,261,0.8912,0.2586,1.2765,-0.3853,0.3769
+Beta_ACIER_COSTE_240626.xlsx,Acier,BME:ACX,ACX.MC,Acerinox,2a hebdo,^GSPC,104,0.9969,0.3049,1.2765,-0.2797,0.3769
+Beta_ACIER_COSTE_240626.xlsx,Acier,BME:ACX,ACX.MC,Acerinox,2a hebdo,^STOXX,104,1.349,0.4163,1.2765,0.0724,0.3769
+Beta_ACIER_COSTE_240626.xlsx,Acier,BME:ACX,ACX.MC,Acerinox,2a hebdo,^IBEX,104,1.0106,0.317,1.2765,-0.266,0.3769
+Beta_ACIER_COSTE_240626.xlsx,Acier,BME:ACX,ACX.MC,Acerinox,Outil defaut (5a mensuel),^IBEX,60,1.2615,0.4272,1.2765,-0.0151,0.3769
+Beta_ACIER_COSTE_240626.xlsx,Acier,BME:ACX,ACX.MC,Acerinox,Yahoo publie (indicatif),-,,1.075,,1.2765,,
+Beta_ACIER_COSTE_240626.xlsx,Acier,HLSE:OUT1V,OUT1V.HE,Outokumpu,CIQ 5a quotidien,^GSPC,1218,0.5717,0.0761,1.352,-0.7803,0.2892
+Beta_ACIER_COSTE_240626.xlsx,Acier,HLSE:OUT1V,OUT1V.HE,Outokumpu,CIQ 5a quotidien,^STOXX,1241,1.3608,0.3036,1.352,0.0088,0.2892
+Beta_ACIER_COSTE_240626.xlsx,Acier,HLSE:OUT1V,OUT1V.HE,Outokumpu,CIQ 5a quotidien,^OMXH25,1248,1.2449,0.3375,1.352,-0.1071,0.2892
+Beta_ACIER_COSTE_240626.xlsx,Acier,HLSE:OUT1V,OUT1V.HE,Outokumpu,5a hebdo,^GSPC,261,0.7977,0.1352,1.352,-0.5543,0.2892
+Beta_ACIER_COSTE_240626.xlsx,Acier,HLSE:OUT1V,OUT1V.HE,Outokumpu,5a hebdo,^STOXX,261,1.3445,0.2728,1.352,-0.0075,0.2892
+Beta_ACIER_COSTE_240626.xlsx,Acier,HLSE:OUT1V,OUT1V.HE,Outokumpu,5a hebdo,^OMXH25,261,1.1643,0.2703,1.352,-0.1878,0.2892
+Beta_ACIER_COSTE_240626.xlsx,Acier,HLSE:OUT1V,OUT1V.HE,Outokumpu,2a hebdo,^GSPC,104,1.0234,0.2035,1.352,-0.3286,0.2892
+Beta_ACIER_COSTE_240626.xlsx,Acier,HLSE:OUT1V,OUT1V.HE,Outokumpu,2a hebdo,^STOXX,104,1.5782,0.3608,1.352,0.2262,0.2892
+Beta_ACIER_COSTE_240626.xlsx,Acier,HLSE:OUT1V,OUT1V.HE,Outokumpu,2a hebdo,^OMXH25,104,1.4256,0.3326,1.352,0.0736,0.2892
+Beta_ACIER_COSTE_240626.xlsx,Acier,HLSE:OUT1V,OUT1V.HE,Outokumpu,Outil defaut (5a mensuel),^OMXH25,60,1.6649,0.5134,1.352,0.3129,0.2892
+Beta_ACIER_COSTE_240626.xlsx,Acier,HLSE:OUT1V,OUT1V.HE,Outokumpu,Yahoo publie (indicatif),-,,1.474,,1.352,,
+Beta_ACIER_COSTE_240626.xlsx,Acier,Salzgitter AG,SZG.DE,Salzgitter AG,CIQ 5a quotidien,^GSPC,1236,0.7365,0.0535,1.7761,-1.0396,0.2173
+Beta_ACIER_COSTE_240626.xlsx,Acier,Salzgitter AG,SZG.DE,Salzgitter AG,CIQ 5a quotidien,^STOXX,1255,1.7992,0.2246,1.7761,0.0231,0.2173
+Beta_ACIER_COSTE_240626.xlsx,Acier,Salzgitter AG,SZG.DE,Salzgitter AG,CIQ 5a quotidien,^GDAXI,1273,1.5232,0.235,1.7761,-0.2529,0.2173
+Beta_ACIER_COSTE_240626.xlsx,Acier,Salzgitter AG,SZG.DE,Salzgitter AG,5a hebdo,^GSPC,261,1.1648,0.1078,1.7761,-0.6113,0.2173
+Beta_ACIER_COSTE_240626.xlsx,Acier,Salzgitter AG,SZG.DE,Salzgitter AG,5a hebdo,^STOXX,261,1.6652,0.1566,1.7761,-0.1108,0.2173
+Beta_ACIER_COSTE_240626.xlsx,Acier,Salzgitter AG,SZG.DE,Salzgitter AG,5a hebdo,^GDAXI,261,1.5234,0.1797,1.7761,-0.2527,0.2173
+Beta_ACIER_COSTE_240626.xlsx,Acier,Salzgitter AG,SZG.DE,Salzgitter AG,2a hebdo,^GSPC,104,1.396,0.0997,1.7761,-0.3801,0.2173
+Beta_ACIER_COSTE_240626.xlsx,Acier,Salzgitter AG,SZG.DE,Salzgitter AG,2a hebdo,^STOXX,104,1.7097,0.1115,1.7761,-0.0664,0.2173
+Beta_ACIER_COSTE_240626.xlsx,Acier,Salzgitter AG,SZG.DE,Salzgitter AG,2a hebdo,^GDAXI,104,1.6934,0.1577,1.7761,-0.0827,0.2173
+Beta_ACIER_COSTE_240626.xlsx,Acier,Salzgitter AG,SZG.DE,Salzgitter AG,Outil defaut (5a mensuel),^GDAXI,60,2.0067,0.3224,1.7761,0.2306,0.2173
+Beta_ACIER_COSTE_240626.xlsx,Acier,Salzgitter AG,SZG.DE,Salzgitter AG,Yahoo publie (indicatif),-,,2.18,,1.7761,,
