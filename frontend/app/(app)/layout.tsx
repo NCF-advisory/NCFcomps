@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 import { api, ApiError } from "@/lib/api";
 import { Toaster } from "@/components/toast";
+import { SECTIONS_MASQUEES, estMasquee } from "@/lib/sections";
 
 const NAV = [
   { href: "/comparables", label: "Comparables boursiers", num: "I" },
@@ -16,10 +17,22 @@ const NAV = [
   { href: "/historique", label: "Historique", num: "IV" },
 ];
 
+// Sections masquées temporairement (demande du 2026-07-16) : retirer de
+// SECTIONS_MASQUEES (@/lib/sections) pour réactiver. On garde les num d'origine
+// (I, II…) : seul « Comparables » reste visible, pas de renumérotation utile.
+const NAV_VISIBLE = NAV.filter((item) => !SECTIONS_MASQUEES.includes(item.href));
+
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [user, setUser] = useState<{ username: string; name: string | null } | null>(null);
+
+  // Accès direct par URL à une section masquée -> retour vers Comparables.
+  const masquee = estMasquee(pathname);
+
+  useEffect(() => {
+    if (masquee) router.replace("/comparables");
+  }, [masquee, router]);
 
   useEffect(() => {
     api
@@ -46,7 +59,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </Link>
 
         <nav className="mt-12 flex flex-col gap-1">
-          {NAV.map((item) => {
+          {NAV_VISIBLE.map((item) => {
             const active = pathname.startsWith(item.href);
             return (
               <Link
@@ -80,7 +93,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      <main className="min-w-0 flex-1 px-12 py-10">{children}</main>
+      <main className="min-w-0 flex-1 px-12 py-10">{masquee ? null : children}</main>
       <Toaster />
     </div>
   );
