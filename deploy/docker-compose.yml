@@ -39,7 +39,21 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     restart: unless-stopped
+    # Caddy central : réseau du projet (api/front) + réseau partagé « ncf-web »
+    # pour joindre l'appli NCFTime (alias « ncftime »). api et front restent isolés
+    # sur le réseau par défaut (ils ne rejoignent pas ncf-web).
+    networks:
+      - default
+      - web
 
 volumes:
   caddy_data:
   caddy_config:
+
+networks:
+  default: {}
+  # Réseau docker externe partagé avec la stack NCFTime.
+  # À créer une seule fois sur l'hôte :  docker network create ncf-web
+  web:
+    external: true
+    name: ncf-web

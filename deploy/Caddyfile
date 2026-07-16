@@ -18,3 +18,22 @@ comparables.novances-evaluation.fr {
 		Referrer-Policy "same-origin"
 	}
 }
+
+# Second site : appli NCFTime (Flask/gunicorn), stack compose séparée sans Caddy.
+# « ncftime » est l'alias du conteneur NCFTime sur le réseau partagé « ncf-web ».
+time.novances-evaluation.fr {
+	reverse_proxy ncftime:8000
+
+	# En-têtes de durcissement (mêmes que le bloc comparables).
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "same-origin"
+	}
+
+	# Limite la taille des requêtes (aucune n'a besoin de plus).
+	request_body {
+		max_size 1MB
+	}
+}
