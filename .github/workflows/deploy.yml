@@ -1,0 +1,34 @@
+# Déploiement continu vers le VPS OVH. Ne se lance qu'après un CI vert sur `main`.
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Uniquement si le CI a réussi ET que c'était sur la branche main.
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' }}
+    # Un seul déploiement à la fois (pas d'annulation : on laisse finir le précédent).
+    concurrency:
+      group: deploy-vps
+      cancel-in-progress: false
+    steps:
+      - name: Préparer la clé SSH
+        run: |
+          mkdir -p ~/.ssh
+          umask 077
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+      - name: Épingler l'hôte (known_hosts figé, pas de ssh-keyscan)
+        run: |
+          echo "51.255.166.224 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIApk/MR1igVknYy7er3rRqdkumbCpBA/gZ7DtSAC5NnI" > ~/.ssh/known_hosts
+      - name: Déclencher le déploiement
+        # L'argument `deploy` est un mot factice : côté serveur, la clé est verrouillée
+        # par une directive `command=` dans authorized_keys qui exécute la commande forcée
+        # (git pull --ff-only puis docker compose up -d --build dans /home/ubuntu/ncfcomps)
+        # quel que soit l'argument passé.
+        run: |
+          ssh -i ~/.ssh/deploy_key -o UserKnownHostsFile=~/.ssh/known_hosts ubuntu@51.255.166.224 deploy
