@@ -2,7 +2,7 @@
 # Remplacer le domaine par le vôtre (DNS A -> IP du VPS) avant de lancer.
 # /api/* va directement à l'API (cookies même origine, pas de CORS) ; le reste au site.
 
-comparables.ncf-advisory.fr {
+comparables.novances-evaluation.fr {
 	handle /api/* {
 		reverse_proxy api:8000
 	}
